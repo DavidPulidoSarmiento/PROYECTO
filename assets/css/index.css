@@ -51,6 +51,7 @@ body {
   padding: 5px 24px;
   cursor: pointer;
   font-size: var(--font-size-lg);
+  text-decoration: none;
 }
 
 .sectionuno {
@@ -67,8 +68,8 @@ body {
   position: absolute;
   border: var(--color-white) solid 1px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
-  max-height: 330px;
+  width: 600px;
+  height: 335px;
   text-align: left;
   left: 350px;
   background: var(--color-white);
@@ -81,7 +82,7 @@ body {
 
 .sectionunouno p{
   font-size: 1.4rem;
-  margin: 10px;
+  margin: 25px;
 }
 
 .cta-btn {
