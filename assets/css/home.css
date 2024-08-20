@@ -4,12 +4,8 @@
   box-sizing: 0px;
   font-family: var(--font-k2d);
 }
-
 body {
   background-color: var(--color-primario);
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 .encabezado {
@@ -18,12 +14,10 @@ body {
   align-items: center;
   padding: 10px 20px;
 }
-
 .container{
   max-width: 1600px;
   margin: 0 auto;
 }
-
 .logo {
   display: flex;
   flex-direction: column;
@@ -31,28 +25,24 @@ body {
   align-items: center;
   text-align: center; 
 }
-
 .logo img {
   height: 100px; 
   max-width: 100%; 
 }
-
 .logo p {
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-white);
 }
-
 .enmedio{
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center; 
 }
-
 .enmediose-btn{
     color: var(--color-white);
-    padding: var(--padding-3xs);
+    padding: var(--padding-xl);
     
 }
 .enmedio-btn{
@@ -61,3 +51,46 @@ body {
     padding: var(--padding-xl);
 }
 
+.sectionuno{
+  background: var(--color-white);
+  padding-top: 50px;
+  padding-bottom: 100px;
+}
+.sectionuno-uno h1{
+  font-size: 3rem;
+}
+.sectionuno-uno p{
+  font-size: 1.5rem;
+}
+.sectionuno-img{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+.sectionuno-img img{
+  height: 400px; 
+  max-width: 100%; 
+}
+.start-btn{
+  color: var(--color-white);
+  background: var(--color-primario);
+  border: none;
+  padding: var(--padding-3xs);
+  font-size: 2rem;
+  width: 100%;
+}
+
+.sectiondos{
+  background: var(--color-white);
+}
+.sectiondos-dos h1{
+  font-size: 2rem;
+}
+.sectiondos-dos p{
+  color: var(--color-primario);
+}
+.sectiondos-img{
+  display: flex;
+  justify-content: center;
+}
