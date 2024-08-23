@@ -31,19 +31,30 @@ header a{
     margin: auto;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
     border-radius: 15px;
-    margin-top: 80px
+    margin-top: 80px;
 }
 
-.title{
+.titulo{
+    display: flex;
     margin-bottom: 40px;
+    margin-top: 40px;
+    background: var(--color-white);
+    border: solid var(--color-black) 1px;
+    border-radius: 10px;
 }
-
+.title{
+    padding: var(--padding-8xs);
+}
+.title-serie{
+    padding: var(--padding-8xs);
+    color: var(--color-primario);
+}
 .siguiente{
-    margin-top: 100px;
-    margin-bottom: -10px;
-    margin-left: 1024px;
+    display: flex;
+    margin-top: 50px;
+    justify-content: flex-end;
+    align-self: flex-end;
 }
 .siguiente a{
     border-radius: 15px 0px 15px 0px;
@@ -51,4 +62,54 @@ header a{
     background: var(--color-secundario);
     text-decoration: none;
     padding: 10px 30px 10px 30px;
+}
+
+.contenido{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    grid-template-areas: "ejercicio ejercicio datos";
+}
+
+.ejercicio{
+    grid-area: ejercicio;
+    
+}
+.ejercicio img{
+    height: 500px;
+    width: 600px;
+}
+
+.datos{
+    display: flex;
+    grid-area: datos;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.cantidad{
+    font-size: 3.4rem;
+}
+.datos button{
+    width: 70%;
+    background: var(--color-secundario);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 15px;
+}
+.tiempo{
+    display: flex;
+    background: var(--color-white);
+    box-shadow: 0px 10px 10px 0px var(--color-primario);
+    width: 120px;
+    height: 120px;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+}
+.tiempo h1{
+    font-size: 3rem;
 }
