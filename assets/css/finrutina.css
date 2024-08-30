@@ -1,0 +1,49 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: 0px;
+    font-family: var(--font-k2d);
+}
+
+body{
+    background: var(--color-primario);
+}
+.container{
+    display: flex;
+    background: var(--color-white);
+    background-image: url('../image/logoGigav2.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 60%;
+    max-width: 1200px;
+    margin: auto;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    margin-top: 115px;
+    padding-top: 200px;
+    padding-bottom: 200px;
+}
+.titulo{
+    display: flex;
+    margin-bottom: 40px;
+    font-size: 1.4rem;
+    background: var(--color-white);
+    border: solid var(--color-black) 1px;
+    border-radius: 10px;
+    text-align: center;
+}
+.title{
+    padding: var(--padding-8xs);
+}
+.inicio button{
+    width: 100%;
+    background: var(--color-secundario);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 15px;
+}
