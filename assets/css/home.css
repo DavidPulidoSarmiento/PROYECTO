@@ -80,7 +80,9 @@ body {
   font-size: 2rem;
   width: 100%;
 }
-
+.sectiondoscontainer{
+  display: flex;
+}
 .sectiondos{
   background: var(--color-white);
 }
@@ -91,6 +93,21 @@ body {
   color: var(--color-primario);
 }
 .sectiondos-img{
-  display: flex;
-  justify-content: center;
+  width: 54%;
+  align-items: center;
+}
+
+.cls-1 {
+  fill: #3f3f3f;
+}
+.pecho:hover {
+  fill: var(--color-primario);
+}
+
+.cls-1, .cls-2{
+  stroke-width: 0px;
+}
+
+.cls-2 {
+  fill: #bebebe;
 }
