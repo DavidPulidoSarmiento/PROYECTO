@@ -44,6 +44,6 @@ body{
     padding: 10px;
     cursor: pointer;
     font-size: 18px;
-    color: #fff;
+    color: var(--color-white);
     border-radius: 15px;
 }
