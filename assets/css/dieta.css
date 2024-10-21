@@ -52,48 +52,36 @@ body {
     padding: var(--padding-xl);
 }
 
-
 section{
     display: flex;
     flex-direction: column;
-    
     background: var(--color-white);
     padding-top: 50px;
     padding-bottom: 100px;
 }
-.plan{
+.divcomidas{
     display: flex;
     flex-direction: column;
     width: 1200px;
     
 }
-.plan h1{
-    margin-top: 36px;
+.divcomidas h1{
+    margin-top: 20px;
+    font-size: 2rem;
 }
-.plan h3{
+.divcomidas h3{
     margin-top: 20px;
 }
-.checksentrenamiento{
-    
-    display: flex;
-    flex-direction: column;
-}
-.checksentrenamiento label{
-    margin-top: 20px;
+.comida{
+    color: var(--color-primario);
     font-size: 1.2rem;
-    
 }
-
-.checkboxx{
-    cursor: pointer;
-    background-color: #fff;
-    width: 14px;
-    height: 14px;
-    appearance: none;
-    border: 2px solid #888;
-    transition: background-color 0.3s ease-in-out;
+.valores{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    color: var(--color-black);
 }
-
 .btn {
     width: 100%;
     background: #8B0B2D;
