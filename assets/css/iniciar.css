@@ -97,3 +97,14 @@ body {
 .register-link:hover {
     text-decoration: underline;
 }
+
+.genero{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+.contitge{
+    flex-direction: row;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}

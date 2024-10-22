@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/dieta.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
     <title>dieta</title>
 </head>
@@ -23,5 +23,68 @@
             <a href="profile.html" class="profile-btn"><img src="assets/image/profile.svg" width="90" height="70"></a>
         </div>
     </header>
+    <section>
+        <div class="container">
+            <div class="user-form">
+                <h2>Perfil de usuario</h2>
+            <form>
+                <div class="item-form">
+                    <label for="name">Nombre</label>
+                    <input type="name" placeholder="nombre" required>  
+                </div>
+                <div class="item-form">
+                    <label for="email">Correo</label>
+                    <input type="email" placeholder="correo" required>
+                </div>
+                <div class="item-form">
+                    <label for="password">Contraseña</label>
+                    <input type="password" placeholder="contraseña" required>
+                </div>
+                <div class="item-form">
+                    <label for="password-confirm">Confirmar contraseña</label>
+                    <input type="password-confirm" placeholder="confirmar contraseña" required>
+                </div>
+                <div class="item-form">
+                    <label for="date">Fecha de nacimiento</label>
+                    <input type="date" placeholder="fecha de nacimiento" required>
+                </div>
+    
+                
+                <div class="item-form">
+                    <label for="stature">Estatura</label>
+                    <input type="stature" placeholder="estatura" required>
+                </div>
+                <div class="item-form">
+                    <label for="weight">Peso</label>
+                    <input type="weight" placeholder="peso" required>
+                </div>
+                <div class="item-form">
+                    <label for="special-condition">Condicion especial</label>
+                    <input type="special-condition" placeholder="condicion especial" required>
+                </div>
+                <div class="genero">
+                    <div class="conttige">
+                        <label for="genero">Genero</label>
+                    </div>
+                    <div class="contitge">
+                        <label>
+                            <input class="checkboxx" type="checkbox" id="Femenino" value="Femenino" /> Femenino
+                        </label>
+                        <label>
+                            <input class="checkboxx" type="checkbox" id="Masculino" value="Masculino" /> Masculino
+                        </label>
+                        <label>
+                            <input class="checkboxx" type="checkbox" id="Otro" value="Otro" /> Otro
+                        </label>                
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button type="submit">Actualizar</button>
+                    <button type="submit">Cancelar</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </section>
 </body>
 </html>

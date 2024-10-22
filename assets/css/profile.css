@@ -1,0 +1,120 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: 0px;
+    font-family: var(--font-k2d);
+}
+
+body {
+    background-color: var(--color-primario);
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+.container{
+    max-width: 1600px;
+    margin: 0 auto;
+}
+.logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+}
+.logo img {
+    height: 100px; 
+    max-width: 100%; 
+}
+.logo p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-white);
+}
+.enmedio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+}
+.enmediose-btn{
+    color: var(--color-white);
+    padding: var(--padding-xl);
+      
+}
+.enmedio-btn{
+    color: var(--color-white);
+    text-decoration: none;
+    padding: var(--padding-xl);
+}
+section{
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+.user-form {
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 10px;
+    color: var(--color-black);
+    width: 550px;
+}
+  
+.user-form h2 {
+  color: var(--color-black);
+  margin-bottom: 20px;
+}
+  
+.user-form form {
+  display: flex;
+  flex-direction: column;
+}
+  
+.user-form input {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: var(--color-black) solid 2px;
+  border-radius: 5px;
+}
+.genero{
+  display: flex;
+  flex-direction: column;    
+}
+.contitge{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    justify-content: space-between;
+}
+
+.user-form button {
+  background-color: var(--color-primario);
+  color: var(--color-white);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 200px;
+  margin-top: 15px;
+}
+
+.item-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-around;
+}
