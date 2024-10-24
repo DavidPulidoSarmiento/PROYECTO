@@ -14,30 +14,28 @@
             <h2>Regístrate</h2>
             <form id="registerForm">
                 <div class="textbox">
-                    <input type="name" placeholder="nombre" required>
+                    <input type="text" name="nombre" placeholder="nombre" required>
                 </div>
                 <div class="textbox">
-                    <input type="email" placeholder="correo" required>
+                    <input type="email" name="correo" placeholder="correo" required>
                 </div>
                 <div class="textbox">
-                    <input type="password" placeholder="contraseña" required>
+                    <input type="password" name="contraseña" placeholder="contraseña" required>
                 </div>
                 <div class="textbox">
-                    <input type="password-confirm" placeholder="confirmar contraseña" required>
+                    <input type="password" name="confirmar_contraseña" placeholder="confirmar contraseña" required>
                 </div>
                 <div class="textbox">
-                    <input type="date" placeholder="fecha de nacimiento" required>
-                </div>
-
-                
-                <div class="textbox">
-                    <input type="stature" placeholder="estatura" required>
+                    <input type="date" name="fecha_nacimiento" required>
                 </div>
                 <div class="textbox">
-                    <input type="weight" placeholder="peso" required>
+                    <input type="number" name="estatura" placeholder="estatura" required>
                 </div>
                 <div class="textbox">
-                    <input type="special-condition" placeholder="condicion especial" required>
+                    <input type="number" name="peso" placeholder="peso" required>
+                </div>
+                <div class="textbox">
+                    <input type="text" name="condicion_especial" placeholder="condicion especial" required>
                 </div>
                 <div class="genero">
                     <div class="conttige">
@@ -45,21 +43,21 @@
                     </div>
                     <div class="contitge">
                         <label>
-                            <input class="checkboxx" type="checkbox" id="Femenino" value="Femenino" /> Femenino
+                            <input class="checkboxx" type="checkbox" name="genero[]" value="Femenino" /> Femenino
                         </label>
                         <label>
-                            <input class="checkboxx" type="checkbox" id="Masculino" value="Masculino" /> Masculino
+                            <input class="checkboxx" type="checkbox" name="genero[]" value="Masculino" /> Masculino
                         </label>
-                         <label>
-                            <input class="checkboxx" type="checkbox" id="Otro" value="Otro" /> Otros
+                        <label>
+                            <input class="checkboxx" type="checkbox" name="genero[]" value="Otro" /> Otros
                         </label>
                     </div>
                 </div>
                 <button type="submit" class="btn">Regístrate</button>
                 <a href="iniciar.html" class="register-link">Iniciar sesión</a>
-            </form>
+            </form>            
         </div>
     </div>
-    <script src="login.js"></script>
+    <script src="assets/javascript/app.js"></script>
 </body>
 </html>

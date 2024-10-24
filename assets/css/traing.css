@@ -46,7 +46,7 @@ header a{
 .title{
     padding: var(--padding-8xs);
 }
-.title-serie{
+.title-ejercicio{
     padding: var(--padding-8xs);
     color: var(--color-primario);
 }
