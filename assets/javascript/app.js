@@ -22,7 +22,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
       if (data.success) {
           alert("Usuario registrado exitosamente.");
           // Redirigir o limpiar el formulario si es necesario
-          // location.href = "iniciar.html"; // Redirigir a la página de inicio de sesión
+          //   location.href = "iniciar.php"; // Redirigir a la página de inicio de sesión
           document.getElementById("registerForm").reset();
       } else {
           alert("Error: " + data.message);

@@ -1,3 +1,8 @@
+<?php 
+require 'conexion.php';
+session_start();
+var_dump($_SESSION);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,11 +21,11 @@
                 <p>GigaGains</p>
             </div>
             <div class="enmedio">
-                <a href="home.html" class="enmedio-btn">Inicio</a>
-                <a href="personalizar.html" class="enmediose-btn">Personalizar</a>
-                <a href="dieta.html" class="enmedio-btn">Dieta</a>
+                <a href="home.php" class="enmedio-btn">Inicio</a>
+                <a href="personalizar.php" class="enmediose-btn">Personalizar</a>
+                <a href="dieta.php" class="enmedio-btn">Dieta</a>
             </div>
-            <a href="profile.html" class="profile-btn"><img src="assets/image/profile.svg" width="90" height="70"></a>
+            <a href="profile.php" class="profile-btn"><img src="assets/image/profile.svg" width="90" height="70"></a>
         </div>
     </header>
 
@@ -31,13 +36,13 @@
                 <h3>Cambia tu objetivo</h3>
                 <div class="checksentrenamiento">
                     <label>
-                        <input class="checkboxx" type="checkbox" id="hipertrofia" value="hipertrofia" /> Hipertrofia
+                        <input class="radio" type="radio" id="hipertrofia" value="hipertrofia" /> Hipertrofia
                     </label>
                     <label>
-                        <input class="checkboxx" type="checkbox" id="fuerza" value="fuerza" /> Fuerza
+                        <input class="radio" type="radio" id="fuerza" value="fuerza" /> Fuerza
                     </label>
                     <label>
-                        <input class="checkboxx" type="checkbox" id="resistencia" value="resistencia" /> Resistencia
+                        <input class="radio" type="radio" id="resistencia" value="resistencia" /> Resistencia
                     </label>
                     <button class="btn">ACEPTAR</button>
                 </div>
@@ -46,13 +51,13 @@
                 <h3>Cambia tu objetivo</h2>
                 <div class="checksentrenamiento">
                     <label>
-                        <input class="checkboxx" type="checkbox" id="volumen" value="volumen" /> Volumen
+                        <input class="radio" type="radio" id="volumen" value="volumen" /> Volumen
                     </label>
                     <label>
-                        <input class="checkboxx" type="checkbox" id="definicion" value="definicion" /> Definición
+                        <input class="radio" type="radio" id="definicion" value="definicion" /> Definición
                     </label>
                     <label>
-                        <input class="checkboxx" type="checkbox" id="recomposicion" value="recomposicion" /> Recomposicion Corporal
+                        <input class="radio" type="radio" id="recomposicion" value="recomposicion" /> Recomposicion Corporal
                     </label>
                     <button class="btn">ACEPTAR</button>
                 </div>
