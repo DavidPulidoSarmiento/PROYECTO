@@ -2,16 +2,15 @@
 session_start();
 // Aquí debes incluir la conexión a tu base de datos
 include('conexion.php');
-include_once 'config.php';
 
 
-// Obtener el ID del usuario desde la sesión
-$userId = $_SESSION['user_id']; // Asegúrate de que este ID se haya guardado al iniciar sesión
+// Obtener el ID del usuario
+$usuario_id = $_SESSION['usuario_id'];
 
 // Recuperar los datos del usuario desde la base de datos
 $query = "SELECT * FROM usuarios WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $userId);
+$stmt = $conexion->prepare($query);
+$stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
