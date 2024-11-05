@@ -8,7 +8,7 @@ include('conexion.php');
 $usuario_id = $_SESSION['usuario_id'];
 
 // Recuperar los datos del usuario desde la base de datos
-$query = "SELECT * FROM usuarios WHERE id = ?";
+$query = "SELECT * FROM usuario WHERE id = ?";
 $stmt = $conexion->prepare($query);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
@@ -59,19 +59,11 @@ if ($result->num_rows > 0) {
                     </div>
                     <div class="item-form">
                         <label for="email">Correo</label>
-                        <input type="email" id="email" value="<?php echo htmlspecialchars($user['correo']); ?>" required>
-                    </div>
-                    <div class="item-form">
-                        <label for="password">Contraseña</label>
-                        <input type="password" id="password" placeholder="contraseña" required>
-                    </div>
-                    <div class="item-form">
-                        <label for="password-confirm">Confirmar contraseña</label>
-                        <input type="password" id="password-confirm" placeholder="confirmar contraseña" required>
+                        <input type="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                     </div>
                     <div class="item-form">
                         <label for="date">Fecha de nacimiento</label>
-                        <input type="date" id="date" value="<?php echo htmlspecialchars($user['fecha_nacimiento']); ?>" required>
+                        <input type="date" id="date" value="<?php echo htmlspecialchars($user['fecha_de_nacimiento']); ?>" required>
                     </div>
                     <div class="item-form">
                         <label for="stature">Estatura</label>
@@ -103,7 +95,7 @@ if ($result->num_rows > 0) {
                     </div>
                     <div class="buttons">
                         <button type="submit">Actualizar</button>
-                        <button type="button" onclick="window.location.href='home.html'">Cancelar</button>
+                        <button type="button" onclick="window.location.href='home.php'">Cancelar</button>
                     </div>
                 </form>
             </div>
