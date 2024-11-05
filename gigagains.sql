@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 03-11-2024 a las 17:16:01
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Nov 05, 2024 at 04:42 PM
+-- Server version: 8.0.39
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,22 +18,22 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `gigagains`
+-- Database: `gigagains`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `circuitos`
+-- Table structure for table `circuitos`
 --
 
 CREATE TABLE `circuitos` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `circuitos`
+-- Dumping data for table `circuitos`
 --
 
 INSERT INTO `circuitos` (`ID`, `nombre`) VALUES
@@ -46,83 +46,85 @@ INSERT INTO `circuitos` (`ID`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `circuitos_ejercicios`
+-- Table structure for table `circuitos_ejercicios`
 --
 
 CREATE TABLE `circuitos_ejercicios` (
-  `ID` int(11) NOT NULL,
-  `circuito_id` int(11) NOT NULL,
-  `ejercicio_id` int(11) NOT NULL,
-  `series` varchar(10) NOT NULL
+  `ID` int NOT NULL,
+  `circuito_id` int NOT NULL,
+  `ejercicio_id` int NOT NULL,
+  `series` varchar(10) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `circuitos_ejercicios`
+-- Dumping data for table `circuitos_ejercicios`
 --
 
 INSERT INTO `circuitos_ejercicios` (`ID`, `circuito_id`, `ejercicio_id`, `series`) VALUES
 (1, 1, 1, '8x3'),
 (2, 2, 2, '10x2'),
-(3, 1, 2, '8x3');
+(3, 1, 2, '8x3'),
+(4, 1, 3, '12x2');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `dietas`
+-- Table structure for table `dietas`
 --
 
 CREATE TABLE `dietas` (
-  `ID` int(11) NOT NULL,
-  `tipo` enum('V','D','R') NOT NULL,
+  `ID` int NOT NULL,
+  `tipo` enum('V','D','R') COLLATE utf8mb4_general_ci NOT NULL,
   `proteinas` decimal(5,2) NOT NULL,
   `carbohidratos` decimal(5,2) NOT NULL,
-  `calorias` int(11) NOT NULL
+  `calorias` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `dietas`
+-- Dumping data for table `dietas`
 --
 
 INSERT INTO `dietas` (`ID`, `tipo`, `proteinas`, `carbohidratos`, `calorias`) VALUES
-(1, 'V', 2.00, 1.00, 200),
-(2, 'D', 3.00, 1.00, 150),
-(3, 'R', 2.00, 1.50, 150);
+(1, 'V', '2.00', '1.00', 200),
+(2, 'D', '3.00', '1.00', 150),
+(3, 'R', '2.00', '1.50', 150);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ejercicios`
+-- Table structure for table `ejercicios`
 --
 
 CREATE TABLE `ejercicios` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `visual` varchar(255) NOT NULL,
-  `grupo_muscular_id` int(11) NOT NULL
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
+  `visual` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `grupo_muscular_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `ejercicios`
+-- Dumping data for table `ejercicios`
 --
 
 INSERT INTO `ejercicios` (`ID`, `nombre`, `descripcion`, `visual`, `grupo_muscular_id`) VALUES
 (1, 'Press banca plana', 'Ejercicio para el pecho', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 1),
-(2, 'Remo en barra', 'Ejercicio para la espalda', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2);
+(2, 'Remo en barra', 'Ejercicio para la espalda', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2),
+(3, 'Press Militar', 'Ejercicio para los hombros', 'static.strengthlevel.com', 2);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `grupos_musculares`
+-- Table structure for table `grupos_musculares`
 --
 
 CREATE TABLE `grupos_musculares` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `grupos_musculares`
+-- Dumping data for table `grupos_musculares`
 --
 
 INSERT INTO `grupos_musculares` (`ID`, `nombre`) VALUES
@@ -132,16 +134,16 @@ INSERT INTO `grupos_musculares` (`ID`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `musculos`
+-- Table structure for table `musculos`
 --
 
 CREATE TABLE `musculos` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `musculos`
+-- Dumping data for table `musculos`
 --
 
 INSERT INTO `musculos` (`ID`, `nombre`) VALUES
@@ -156,17 +158,17 @@ INSERT INTO `musculos` (`ID`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `musculos_grupos`
+-- Table structure for table `musculos_grupos`
 --
 
 CREATE TABLE `musculos_grupos` (
-  `ID` int(11) NOT NULL,
-  `musculo_id` int(11) NOT NULL,
-  `grupo_muscular_id` int(11) NOT NULL
+  `ID` int NOT NULL,
+  `musculo_id` int NOT NULL,
+  `grupo_muscular_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `musculos_grupos`
+-- Dumping data for table `musculos_grupos`
 --
 
 INSERT INTO `musculos_grupos` (`ID`, `musculo_id`, `grupo_muscular_id`) VALUES
@@ -180,18 +182,18 @@ INSERT INTO `musculos_grupos` (`ID`, `musculo_id`, `grupo_muscular_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `plan`
+-- Table structure for table `plan`
 --
 
 CREATE TABLE `plan` (
-  `ID` int(11) NOT NULL,
-  `tipo` varchar(100) NOT NULL,
-  `rutina_id` int(11) NOT NULL,
-  `dieta_id` int(11) NOT NULL
+  `ID` int NOT NULL,
+  `tipo` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `rutina_id` int NOT NULL,
+  `dieta_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `plan`
+-- Dumping data for table `plan`
 --
 
 INSERT INTO `plan` (`ID`, `tipo`, `rutina_id`, `dieta_id`) VALUES
@@ -200,16 +202,16 @@ INSERT INTO `plan` (`ID`, `tipo`, `rutina_id`, `dieta_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `roles`
+-- Table structure for table `roles`
 --
 
 CREATE TABLE `roles` (
-  `ID` int(11) NOT NULL,
-  `nombre` enum('usuario','administrador','super administrador') NOT NULL
+  `ID` int NOT NULL,
+  `nombre` enum('usuario','administrador','super administrador') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `roles`
+-- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`ID`, `nombre`) VALUES
@@ -220,16 +222,16 @@ INSERT INTO `roles` (`ID`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rutinas`
+-- Table structure for table `rutinas`
 --
 
 CREATE TABLE `rutinas` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `rutinas`
+-- Dumping data for table `rutinas`
 --
 
 INSERT INTO `rutinas` (`ID`, `nombre`) VALUES
@@ -240,17 +242,17 @@ INSERT INTO `rutinas` (`ID`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rutinas_circuitos`
+-- Table structure for table `rutinas_circuitos`
 --
 
 CREATE TABLE `rutinas_circuitos` (
-  `ID` int(11) NOT NULL,
-  `rutina_id` int(11) NOT NULL,
-  `circuito_id` int(11) NOT NULL
+  `ID` int NOT NULL,
+  `rutina_id` int NOT NULL,
+  `circuito_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `rutinas_circuitos`
+-- Dumping data for table `rutinas_circuitos`
 --
 
 INSERT INTO `rutinas_circuitos` (`ID`, `rutina_id`, `circuito_id`) VALUES
@@ -261,45 +263,45 @@ INSERT INTO `rutinas_circuitos` (`ID`, `rutina_id`, `circuito_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `ID` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha_de_nacimiento` date NOT NULL,
-  `fecha_de_registro` timestamp NOT NULL DEFAULT current_timestamp(),
-  `genero` enum('Masculino','Femenino','Otro') NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
+  `fecha_de_registro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `genero` enum('Masculino','Femenino','Otro') COLLATE utf8mb4_general_ci NOT NULL,
+  `contraseña` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `estatura` decimal(5,2) NOT NULL,
   `peso` decimal(5,2) NOT NULL,
-  `condicion_especial` varchar(255) DEFAULT NULL,
-  `id_plan` int(11) DEFAULT NULL,
-  `rol_id` int(11) DEFAULT 1
+  `condicion_especial` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_plan` int DEFAULT NULL,
+  `rol_id` int DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de_registro`, `genero`, `contraseña`, `estatura`, `peso`, `condicion_especial`, `id_plan`, `rol_id`) VALUES
-(1, 'David', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', 178.00, 80.00, 'ninguna', 1, 3),
-(2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', 178.00, 80.00, 'ninguna', 1, 2),
-(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', 178.00, 78.00, 'ninguna', NULL, 1);
+(1, 'David', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', '178.00', '80.00', 'ninguna', 1, 3),
+(2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', '178.00', '80.00', 'ninguna', 1, 2),
+(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 1, 1);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `circuitos`
+-- Indexes for table `circuitos`
 --
 ALTER TABLE `circuitos`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `circuitos_ejercicios`
+-- Indexes for table `circuitos_ejercicios`
 --
 ALTER TABLE `circuitos_ejercicios`
   ADD PRIMARY KEY (`ID`),
@@ -307,32 +309,32 @@ ALTER TABLE `circuitos_ejercicios`
   ADD KEY `ejercicio_id` (`ejercicio_id`);
 
 --
--- Indices de la tabla `dietas`
+-- Indexes for table `dietas`
 --
 ALTER TABLE `dietas`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `ejercicios`
+-- Indexes for table `ejercicios`
 --
 ALTER TABLE `ejercicios`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `grupo_muscular_id` (`grupo_muscular_id`);
 
 --
--- Indices de la tabla `grupos_musculares`
+-- Indexes for table `grupos_musculares`
 --
 ALTER TABLE `grupos_musculares`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `musculos`
+-- Indexes for table `musculos`
 --
 ALTER TABLE `musculos`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `musculos_grupos`
+-- Indexes for table `musculos_grupos`
 --
 ALTER TABLE `musculos_grupos`
   ADD PRIMARY KEY (`ID`),
@@ -340,7 +342,7 @@ ALTER TABLE `musculos_grupos`
   ADD KEY `grupo_muscular_id` (`grupo_muscular_id`);
 
 --
--- Indices de la tabla `plan`
+-- Indexes for table `plan`
 --
 ALTER TABLE `plan`
   ADD PRIMARY KEY (`ID`),
@@ -348,19 +350,19 @@ ALTER TABLE `plan`
   ADD KEY `dieta_id` (`dieta_id`);
 
 --
--- Indices de la tabla `roles`
+-- Indexes for table `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `rutinas`
+-- Indexes for table `rutinas`
 --
 ALTER TABLE `rutinas`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `rutinas_circuitos`
+-- Indexes for table `rutinas_circuitos`
 --
 ALTER TABLE `rutinas_circuitos`
   ADD PRIMARY KEY (`ID`),
@@ -368,7 +370,7 @@ ALTER TABLE `rutinas_circuitos`
   ADD KEY `circuito_id` (`circuito_id`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`ID`),
@@ -377,121 +379,121 @@ ALTER TABLE `usuario`
   ADD KEY `usuario_ibfk_rol` (`rol_id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `circuitos`
+-- AUTO_INCREMENT for table `circuitos`
 --
 ALTER TABLE `circuitos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `circuitos_ejercicios`
+-- AUTO_INCREMENT for table `circuitos_ejercicios`
 --
 ALTER TABLE `circuitos_ejercicios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `dietas`
+-- AUTO_INCREMENT for table `dietas`
 --
 ALTER TABLE `dietas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `ejercicios`
+-- AUTO_INCREMENT for table `ejercicios`
 --
 ALTER TABLE `ejercicios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `grupos_musculares`
+-- AUTO_INCREMENT for table `grupos_musculares`
 --
 ALTER TABLE `grupos_musculares`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `musculos`
+-- AUTO_INCREMENT for table `musculos`
 --
 ALTER TABLE `musculos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de la tabla `musculos_grupos`
+-- AUTO_INCREMENT for table `musculos_grupos`
 --
 ALTER TABLE `musculos_grupos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `plan`
+-- AUTO_INCREMENT for table `plan`
 --
 ALTER TABLE `plan`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `roles`
+-- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `rutinas`
+-- AUTO_INCREMENT for table `rutinas`
 --
 ALTER TABLE `rutinas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `rutinas_circuitos`
+-- AUTO_INCREMENT for table `rutinas_circuitos`
 --
 ALTER TABLE `rutinas_circuitos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `circuitos_ejercicios`
+-- Constraints for table `circuitos_ejercicios`
 --
 ALTER TABLE `circuitos_ejercicios`
   ADD CONSTRAINT `circuitos_ejercicios_ibfk_1` FOREIGN KEY (`circuito_id`) REFERENCES `circuitos` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `circuitos_ejercicios_ibfk_2` FOREIGN KEY (`ejercicio_id`) REFERENCES `ejercicios` (`ID`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `ejercicios`
+-- Constraints for table `ejercicios`
 --
 ALTER TABLE `ejercicios`
   ADD CONSTRAINT `ejercicios_ibfk_1` FOREIGN KEY (`grupo_muscular_id`) REFERENCES `grupos_musculares` (`ID`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `musculos_grupos`
+-- Constraints for table `musculos_grupos`
 --
 ALTER TABLE `musculos_grupos`
   ADD CONSTRAINT `musculos_grupos_ibfk_1` FOREIGN KEY (`musculo_id`) REFERENCES `musculos` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `musculos_grupos_ibfk_2` FOREIGN KEY (`grupo_muscular_id`) REFERENCES `grupos_musculares` (`ID`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `plan`
+-- Constraints for table `plan`
 --
 ALTER TABLE `plan`
   ADD CONSTRAINT `plan_ibfk_1` FOREIGN KEY (`rutina_id`) REFERENCES `rutinas` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `plan_ibfk_2` FOREIGN KEY (`dieta_id`) REFERENCES `dietas` (`ID`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `rutinas_circuitos`
+-- Constraints for table `rutinas_circuitos`
 --
 ALTER TABLE `rutinas_circuitos`
   ADD CONSTRAINT `rutinas_circuitos_ibfk_1` FOREIGN KEY (`rutina_id`) REFERENCES `rutinas` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `rutinas_circuitos_ibfk_2` FOREIGN KEY (`circuito_id`) REFERENCES `circuitos` (`ID`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `usuario`
+-- Constraints for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_plan`) REFERENCES `plan` (`ID`) ON DELETE SET NULL,
