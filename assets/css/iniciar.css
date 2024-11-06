@@ -29,7 +29,7 @@ body {
     position: relative;
     background: #fff;
     text-align: center;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 25px var(--color-black);
     border-radius: 10px;
 }
 
@@ -47,7 +47,7 @@ body {
 .textbox input {
     width: 100%;
     padding: 10px;
-    background: #f2f2f2;
+    background: var(--color-white);
     border: none;
     outline: none;
     color: #333;
@@ -63,7 +63,7 @@ body {
 .textbox-calendario input {
     width: 100%;
     padding: 10px;
-    background: #f2f2f2;
+    background: var(--color-white);
     border: none;
     outline: none;
     color: #757575; /* Cambia este valor al color que desees */
@@ -73,7 +73,7 @@ body {
 
 .btn {
     width: 100%;
-    background: #8B0B2D;
+    background: var(--color-primario);
     border: none;
     padding: 10px;
     cursor: pointer;
@@ -84,13 +84,13 @@ body {
 }
 
 .btn:hover {
-    background: #720926;
+    background: var(--color-primario);
 }
 
 .register-link {
     display: block;
     margin-top: 20px;
-    color: #8B0B2D;
+    color: var(--color-primario);
     text-decoration: none;
 }
 

@@ -1,8 +1,12 @@
 <?php
 session_start();
-// Aquí debes incluir la conexión a tu base de datos
 include('conexion.php');
 
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['usuario_id'])) {
+    echo "No has iniciado sesión.";
+    exit;
+}
 
 // Obtener el ID del usuario
 $usuario_id = $_SESSION['usuario_id'];
@@ -17,8 +21,30 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 } else {
-    // Manejar el caso donde no se encuentra el usuario
     echo "Usuario no encontrado";
+    exit;
+}
+
+// Verificar si se recibió la solicitud de actualización
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtener los datos del formulario
+    $nombre = $_POST['nombre'];
+    $email = $_POST['email'];
+    $fecha_de_nacimiento = $_POST['fecha_de_nacimiento'];
+    $estatura = $_POST['estatura'];
+    $peso = $_POST['peso'];
+    $condicion_especial = $_POST['condicion_especial'];
+    $genero = $_POST['genero'];
+
+    // Actualizar los datos en la base de datos
+    $update_query = "UPDATE usuario SET nombre = ?, email = ?, fecha_de_nacimiento = ?, estatura = ?, peso = ?, condicion_especial = ?, genero = ? WHERE id = ?";
+    $stmt = $conexion->prepare($update_query);
+    $stmt->bind_param("sssssssi", $nombre, $email, $fecha_de_nacimiento, $estatura, $peso, $condicion_especial, $genero, $usuario_id);
+    if ($stmt->execute()) {
+        echo "Datos actualizados con éxito";
+    } else {
+        echo "Error al actualizar los datos";
+    }
     exit;
 }
 ?>
@@ -41,13 +67,14 @@ if ($result->num_rows > 0) {
                 <p>GigaGains</p>
             </div>
             <div class="enmedio">
-                <a href="home.html" class="enmedio-btn">Inicio</a>
-                <a href="personalizar.html" class="enmedio-btn">Personalizar</a>
-                <a href="dieta.html" class="enmedio-btn">Dieta</a>
+                <a href="home.php" class="enmedio-btn">Inicio</a>
+                <a href="personalizar.php" class="enmedio-btn">Personalizar</a>
+                <a href="dieta.php" class="enmedio-btn">Dieta</a>
             </div>
             <a href="profile.php" class="profile-btn"><img src="assets/image/profile.svg" width="90" height="70"></a>
         </div>
     </header>
+
     <section>
         <div class="container">
             <div class="user-form">
@@ -83,24 +110,25 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="contitge">
                             <label>
-                                <input class="checkboxx" type="checkbox" id="Femenino" name="genero" value="Femenino" <?php echo ($user['genero'] === 'Femenino') ? 'checked' : ''; ?> /> Femenino
+                                <input class="checkboxx" type="radio" id="Femenino" name="genero" value="Femenino" <?php echo ($user['genero'] === 'Femenino') ? 'checked' : ''; ?> /> Femenino
                             </label>
                             <label>
-                                <input class="checkboxx" type="checkbox" id="Masculino" name="genero" value="Masculino" <?php echo ($user['genero'] === 'Masculino') ? 'checked' : ''; ?> /> Masculino
+                                <input class="checkboxx" type="radio" id="Masculino" name="genero" value="Masculino" <?php echo ($user['genero'] === 'Masculino') ? 'checked' : ''; ?> /> Masculino
                             </label>
                             <label>
-                                <input class="checkboxx" type="checkbox" id="Otro" name="genero" value="Otro" <?php echo ($user['genero'] === 'Otro') ? 'checked' : ''; ?> /> Otro
+                                <input class="checkboxx" type="radio" id="Otro" name="genero" value="Otro" <?php echo ($user['genero'] === 'Otro') ? 'checked' : ''; ?> /> Otro
                             </label>                
                         </div>
                     </div>
                     <div class="buttons">
                         <button type="submit">Actualizar</button>
-                        <button type="button" onclick="window.location.href='home.php'">Cancelar</button>
+                        <button type="button" onclick="window.location.href='profile.php'">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
-    <script src="assets/js/app.js"></script>
+
+    <script src="assets/javascript/profile.js"></script>
 </body>
 </html>

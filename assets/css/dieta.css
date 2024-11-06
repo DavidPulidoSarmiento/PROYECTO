@@ -84,7 +84,7 @@ section{
 }
 .btn {
     width: 100%;
-    background: #8B0B2D;
+    background: var(--color-primario);
     border: none;
     margin-top: 25px;
     padding: 10px;
@@ -97,5 +97,5 @@ section{
 }
 
 .btn:hover {
-    background: #720926;
+    background: var(--color-primario);
 }

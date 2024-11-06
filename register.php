@@ -2,7 +2,7 @@
 // Configuración de la base de datos
 $host = "localhost"; // o la dirección de tu servidor
 $usuario = "root"; // Cambia esto por tu usuario de MySQL
-$contraseña = ""; // Cambia esto por tu contraseña de MySQL
+$contraseña = "#Aprendiz2024"; // Cambia esto por tu contraseña de MySQL
 $base_de_datos = "gigagains"; // Nombre de tu base de datos
 
 // Crear conexión

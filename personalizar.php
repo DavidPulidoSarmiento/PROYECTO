@@ -19,7 +19,7 @@ $result_plan = $stmt->get_result();
 $plan = $result_plan->fetch_assoc();
 $id_plan = $plan['id_plan'];
 
-// Obtener rutina_id y dieta_id del plan
+// Obtener rutina_id y dieta_id del plan actual
 $query_detalles_plan = "SELECT rutina_id, dieta_id FROM plan WHERE ID = ?";
 $stmt = $conexion->prepare($query_detalles_plan);
 $stmt->bind_param("i", $id_plan);
@@ -39,20 +39,27 @@ $result_dietas = $conexion->query($query_dietas);
 
 // Procesar el formulario al ser enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['rutina'])) {
+    if (isset($_POST['rutina']) && isset($_POST['dieta'])) {
         $nueva_rutina_id = $_POST['rutina'];
-        $update_rutina = "UPDATE plan SET rutina_id = ? WHERE ID = ?";
-        $stmt = $conexion->prepare($update_rutina);
-        $stmt->bind_param("ii", $nueva_rutina_id, $id_plan);
-        $stmt->execute();
-    }
-
-    if (isset($_POST['dieta'])) {
         $nueva_dieta_id = $_POST['dieta'];
-        $update_dieta = "UPDATE plan SET dieta_id = ? WHERE ID = ?";
-        $stmt = $conexion->prepare($update_dieta);
-        $stmt->bind_param("ii", $nueva_dieta_id, $id_plan);
+
+        // Buscar el plan correspondiente a la combinación seleccionada
+        $query_plan_combinado = "SELECT ID FROM plan WHERE rutina_id = ? AND dieta_id = ?";
+        $stmt = $conexion->prepare($query_plan_combinado);
+        $stmt->bind_param("ii", $nueva_rutina_id, $nueva_dieta_id);
         $stmt->execute();
+        $result_plan_combinado = $stmt->get_result();
+        
+        if ($result_plan_combinado->num_rows > 0) {
+            $plan_combinado = $result_plan_combinado->fetch_assoc();
+            $nuevo_id_plan = $plan_combinado['ID'];
+
+            // Actualizar el plan del usuario con el nuevo plan seleccionado
+            $update_plan_usuario = "UPDATE usuario SET id_plan = ? WHERE ID = ?";
+            $stmt = $conexion->prepare($update_plan_usuario);
+            $stmt->bind_param("ii", $nuevo_id_plan, $usuario_id);
+            $stmt->execute();
+        }
     }
 
     // Redirigir para evitar reenvío del formulario
@@ -60,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -98,21 +106,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input class="radio" type="radio" name="rutina" value="<?php echo $rutina['ID']; ?>" <?php echo ($rutina['ID'] == $rutina_id) ? 'checked' : ''; ?> /> <?php echo $rutina['nombre']; ?>
                             </label>
                         <?php endwhile; ?>
-                        <button class="btn" type="submit">ACEPTAR</button>
                     </div>
-                </form>
-                
-                <h1>Personaliza tu dieta</h1>
-                <h3>Cambia tu objetivo</h3>
-                <form method="POST">
+
+                    <h1>Personaliza tu dieta</h1>
+                    <h3>Cambia tu objetivo</h3>
                     <div class="checksentrenamiento">
                         <?php while ($dieta = $result_dietas->fetch_assoc()): ?>
                             <label>
                                 <input class="radio" type="radio" name="dieta" value="<?php echo $dieta['ID']; ?>" <?php echo ($dieta['ID'] == $dieta_id) ? 'checked' : ''; ?> /> <?php echo $dieta['tipo']; ?>
                             </label>
                         <?php endwhile; ?>
-                        <button class="btn" type="submit">ACEPTAR</button>
                     </div>
+
+                    <button class="btn" type="submit">ACEPTAR</button>
                 </form>
             </div>
         </div>

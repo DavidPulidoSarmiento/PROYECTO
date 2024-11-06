@@ -67,6 +67,6 @@ if (isset($error)) {
             </form>
         </div>
     </div>
-    <script src="assets/javascript/app.js"></script>
+    <script src="assets/javascript/registerylogin.js"></script>
 </body>
 </html>

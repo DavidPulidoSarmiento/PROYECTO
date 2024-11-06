@@ -1,59 +1,39 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Llamada para obtener los datos del perfil al cargar la página
-    fetch('getUserProfile.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener los datos del perfil');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Rellenar el formulario con los datos del usuario
-            document.getElementById('name').value = data.name;
-            document.getElementById('email').value = data.email;
-            document.getElementById('date').value = data.date;
-            document.getElementById('stature').value = data.stature;
-            document.getElementById('weight').value = data.weight;
-            document.getElementById('special-condition').value = data.special_condition;
+document.getElementById("userProfileForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita el comportamiento predeterminado del formulario (recargar la página)
 
-            // Rellenar el género
-            if (data.genero) {
-                const genders = data.genero.split(','); // Suponiendo que los géneros están separados por comas
-                genders.forEach(gender => {
-                    const checkbox = document.getElementById(gender);
-                    if (checkbox) {
-                        checkbox.checked = true;
-                    }
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    // Obtiene los valores de los campos del formulario
+    var nombre = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    var fecha_de_nacimiento = document.getElementById("date").value;
+    var estatura = document.getElementById("stature").value;
+    var peso = document.getElementById("weight").value;
+    var condicion_especial = document.getElementById("special-condition").value;
+    var genero = document.querySelector('input[name="genero"]:checked').value;
 
-    // Manejo del evento de envío del formulario
-    const userProfileForm = document.getElementById('userProfileForm');
-    userProfileForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+    // Crea un objeto FormData para enviar los datos
+    var formData = new FormData();
+    formData.append("nombre", nombre);
+    formData.append("email", email);
+    formData.append("fecha_de_nacimiento", fecha_de_nacimiento);
+    formData.append("estatura", estatura);
+    formData.append("peso", peso);
+    formData.append("condicion_especial", condicion_especial);
+    formData.append("genero", genero);
 
-        // Recolectar los datos del formulario
-        const formData = new FormData(userProfileForm);
-        
-        fetch('updateUserProfile.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al actualizar el perfil');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert('Perfil actualizado exitosamente');
-            } else {
-                alert('Error al actualizar el perfil: ' + data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    // Enviar los datos al servidor mediante AJAX (Fetch API)
+    fetch("profile.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Muestra un mensaje o recarga la página si la actualización fue exitosa
+        alert(data); // Aquí puedes modificarlo para mostrar un mensaje más amigable
+        if (data === "Datos actualizados con éxito") {
+            window.location.reload(); // Recargar la página para ver los cambios
+        }
+    })
+    .catch(error => {
+        console.error("Error al actualizar los datos:", error);
     });
 });

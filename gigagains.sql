@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 05, 2024 at 04:42 PM
+-- Generation Time: Nov 06, 2024 at 02:37 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.1.10
 
@@ -64,7 +64,14 @@ INSERT INTO `circuitos_ejercicios` (`ID`, `circuito_id`, `ejercicio_id`, `series
 (1, 1, 1, '8x3'),
 (2, 2, 2, '10x2'),
 (3, 1, 2, '8x3'),
-(4, 1, 3, '12x2');
+(4, 1, 3, '12x2'),
+(5, 2, 3, 'xd'),
+(6, 3, 1, '12x2'),
+(7, 3, 1, '3x3'),
+(8, 3, 2, '12x2'),
+(9, 3, 2, '3x3'),
+(10, 3, 3, '12x2'),
+(11, 3, 3, '5x3');
 
 -- --------------------------------------------------------
 
@@ -85,9 +92,9 @@ CREATE TABLE `dietas` (
 --
 
 INSERT INTO `dietas` (`ID`, `tipo`, `proteinas`, `carbohidratos`, `calorias`) VALUES
-(1, 'V', '2.00', '1.00', 200),
-(2, 'D', '3.00', '1.00', 150),
-(3, 'R', '2.00', '1.50', 150);
+(1, 'V', '2.00', '6.00', 44),
+(2, 'D', '2.00', '3.00', 26),
+(3, 'R', '1.70', '3.50', 34);
 
 -- --------------------------------------------------------
 
@@ -110,7 +117,7 @@ CREATE TABLE `ejercicios` (
 INSERT INTO `ejercicios` (`ID`, `nombre`, `descripcion`, `visual`, `grupo_muscular_id`) VALUES
 (1, 'Press banca plana', 'Ejercicio para el pecho', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 1),
 (2, 'Remo en barra', 'Ejercicio para la espalda', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2),
-(3, 'Press Militar', 'Ejercicio para los hombros', 'static.strengthlevel.com', 2);
+(3, 'Press Militar', 'Ejercicio para los hombros', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2);
 
 -- --------------------------------------------------------
 
@@ -197,7 +204,15 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`ID`, `tipo`, `rutina_id`, `dieta_id`) VALUES
-(1, 'plan1', 1, 1);
+(1, 'plan1', 1, 1),
+(2, 'plan 2', 1, 2),
+(3, 'plan 3', 1, 3),
+(4, 'plan 4', 2, 1),
+(5, 'plan 5', 2, 2),
+(6, 'plan 6', 2, 3),
+(7, 'plan 7', 3, 1),
+(8, 'plan 8', 3, 2),
+(9, 'plan 9', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -277,7 +292,7 @@ CREATE TABLE `usuario` (
   `estatura` decimal(5,2) NOT NULL,
   `peso` decimal(5,2) NOT NULL,
   `condicion_especial` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `id_plan` int DEFAULT NULL,
+  `id_plan` int DEFAULT '1',
   `rol_id` int DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -286,9 +301,10 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de_registro`, `genero`, `contraseña`, `estatura`, `peso`, `condicion_especial`, `id_plan`, `rol_id`) VALUES
-(1, 'David', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', '178.00', '80.00', 'ninguna', 1, 3),
+(1, 'David Alfredo Pulido', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Femenino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', '178.00', '80.00', 'ninguna', 1, 3),
 (2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', '178.00', '80.00', 'ninguna', 1, 2),
-(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 1, 1);
+(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 1, 1),
+(6, 'Negronda', 'juan@gmail.com', '2006-01-01', '2024-11-06 12:03:29', 'Masculino', '$2y$10$D96EH/TJJusRnsSpRMgIluYV2pzDiqrHK76khX9xrAx9d2mMNSRDi', '178.00', '72.00', 'Ninguna', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -392,7 +408,7 @@ ALTER TABLE `circuitos`
 -- AUTO_INCREMENT for table `circuitos_ejercicios`
 --
 ALTER TABLE `circuitos_ejercicios`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `dietas`
@@ -428,7 +444,7 @@ ALTER TABLE `musculos_grupos`
 -- AUTO_INCREMENT for table `plan`
 --
 ALTER TABLE `plan`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -452,7 +468,7 @@ ALTER TABLE `rutinas_circuitos`
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

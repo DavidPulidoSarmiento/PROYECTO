@@ -1,0 +1,162 @@
+<?php 
+require 'conexion.php';
+session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+
+// Obtener el peso del usuario y el tipo de dieta (ID del plan de dieta)
+$stmt = $conexion->prepare("SELECT peso, id_plan FROM usuario WHERE ID = ?");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$resultado_usuario = $stmt->get_result();
+$usuario = $resultado_usuario->fetch_assoc();
+
+// Asegurarnos de que el usuario tiene un peso y un plan de dieta asociado
+if (!$usuario || !isset($usuario['peso']) || !isset($usuario['id_plan'])) {
+    echo "Datos de usuario no encontrados o incompletos.";
+    exit();
+}
+
+// Obtener el tipo de dieta según el ID del plan del usuario
+$tipo_dieta = $usuario['id_plan'];
+
+// Obtener los valores nutricionales de la dieta basada en el tipo
+$stmt = $conexion->prepare("SELECT proteinas, carbohidratos, calorias FROM dietas WHERE ID = ?");
+$stmt->bind_param("i", $tipo_dieta);
+$stmt->execute();
+$resultado_dieta = $stmt->get_result();
+
+if ($resultado_dieta->num_rows === 1) {
+    $dieta = $resultado_dieta->fetch_assoc();
+    
+    // Calcular las cantidades de nutrientes por comida
+    $proteinas_por_kg = $dieta['proteinas']; // en gramos por kg
+    $carbohidratos_por_kg = $dieta['carbohidratos']; // en gramos por kg
+    $calorias_por_kg = $dieta['calorias']; // en calorías por kg
+
+    $peso_usuario = $usuario['peso']; // Peso en kg
+    
+    // Calcular los nutrientes totales según el peso del usuario
+    $proteinas_totales = $proteinas_por_kg * $peso_usuario;
+    $carbohidratos_totales = $carbohidratos_por_kg * $peso_usuario;
+    $calorias_totales = $calorias_por_kg * $peso_usuario;
+    
+    // Distribuir los nutrientes por comida según los porcentajes
+    $proteinas_desayuno = $proteinas_totales * 0.40;
+    $carbohidratos_desayuno = $carbohidratos_totales * 0.40;
+    $calorias_desayuno = $calorias_totales * 0.40;
+    
+    $proteinas_almuerzo = $proteinas_totales * 0.35;
+    $carbohidratos_almuerzo = $carbohidratos_totales * 0.35;
+    $calorias_almuerzo = $calorias_totales * 0.35;
+    
+    $proteinas_cena = $proteinas_totales * 0.25;
+    $carbohidratos_cena = $carbohidratos_totales * 0.25;
+    $calorias_cena = $calorias_totales * 0.25;
+    
+} else {
+    echo "Dieta no encontrada.";
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/dieta.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
+    <title>Dieta</title>
+</head>
+<body>
+    <header>
+        <div class="encabezado container">
+            <div class="logo">
+                <img src="assets/image/logoGiGa.svg" alt="GigaGains">
+                <p>GigaGains</p>
+            </div>
+            <div class="enmedio">
+                <a href="home.php" class="enmedio-btn">Inicio</a>
+                <a href="personalizar.php" class="enmedio-btn">Personalizar</a>
+                <a href="dieta.php" class="enmediose-btn">Dieta</a>
+            </div>
+            <a href="profile.php" class="profile-btn"><img src="assets/image/profile.svg" width="90" height="70"></a>
+        </div>
+    </header>
+
+    <section>
+        <div class="container">
+            <div class="divcomidas">
+                <h1>Tus comidas pendientes son: 3</h1> <!-- Cambia este número si es necesario -->
+                
+                <!-- Comida #1 (Desayuno) -->
+                <div class="comida">
+                    <h3>Comida #1 (Desayuno)</h3>
+                    <div class="valores-nutricionales">
+                        <div class="valores">
+                            <p>Proteínas</p>
+                            <p><?php echo number_format($proteinas_desayuno, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Carbohidratos</p>
+                            <p><?php echo number_format($carbohidratos_desayuno, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Calorías totales</p>
+                            <p><?php echo number_format($calorias_desayuno, 0); ?> kcal</p>
+                        </div> 
+                        <button class="btn">COMPLETADO</button>
+                    </div>
+                </div>
+
+                <!-- Comida #2 (Almuerzo) -->
+                <div class="comida">
+                    <h3>Comida #2 (Almuerzo)</h3>
+                    <div class="valores-nutricionales">
+                        <div class="valores">
+                            <p>Proteínas</p>
+                            <p><?php echo number_format($proteinas_almuerzo, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Carbohidratos</p>
+                            <p><?php echo number_format($carbohidratos_almuerzo, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Calorías totales</p>
+                            <p><?php echo number_format($calorias_almuerzo, 0); ?> kcal</p>
+                        </div>
+                        <button class="btn">COMPLETAR</button>
+                    </div>
+                </div>
+
+                <!-- Comida #3 (Cena) -->
+                <div class="comida">
+                    <h3>Comida #3 (Cena)</h3>
+                    <div class="valores-nutricionales">
+                        <div class="valores">
+                            <p>Proteínas</p>
+                            <p><?php echo number_format($proteinas_cena, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Carbohidratos</p>
+                            <p><?php echo number_format($carbohidratos_cena, 2); ?> gr</p>
+                        </div>
+                        <div class="valores">
+                            <p>Calorías totales</p>
+                            <p><?php echo number_format($calorias_cena, 0); ?> kcal</p>
+                        </div>
+                        <button class="btn">COMPLETAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

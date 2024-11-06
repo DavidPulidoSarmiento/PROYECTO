@@ -53,7 +53,7 @@ body {
 
 .sectionuno {
   background-color: var(--color-white);
-  color: rgb(0, 0, 0);
+  color: var(--color-black);
   padding: 50px 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -64,7 +64,7 @@ body {
 .sectionunouno{
   position: absolute;
   border: var(--color-white) solid 1px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px var(--color-black);;
   width: 600px;
   height: 335px;
   text-align: left;
@@ -83,7 +83,7 @@ body {
 }
 
 .cta-btn {
-  background-color: #C70039;
+  background-color: var(--color-secundario);
   color: var(--color-white);
   border: none;
   padding: 10px 10px;
@@ -198,7 +198,7 @@ body {
 }
 .sectiondos-grid {
   align-self: stretch;
-  background: linear-gradient(180deg, #900c3f, #c70039 55.5%);
+  background: linear-gradient(180deg, var(--color-primario), var(--color-secundario) 55.5%);
   flex-direction: row;
   justify-content: space-between;
   padding: 51px 375px 39px;
@@ -222,7 +222,7 @@ body {
   flex-direction: row;
 }
 .sectiontres-opinion{
-  background: white;
+  background: var(--color-white);
   display: flex;
   padding: 20px;
   margin: 10px;
@@ -230,7 +230,7 @@ body {
   width: 250px;
   height: 150px;
   vertical-align: top;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px var(--color-black);
   flex-direction: column;
   justify-content: center;
   gap: 20px;

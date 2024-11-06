@@ -31,6 +31,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
   .catch(error => console.error("Error:", error));
 });
 
+
 document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
@@ -55,11 +56,13 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     .then(data => {
         // Manejar la respuesta del servidor
         if (data === "success") {
-            window.location.href = "home.html"; // Redirigir a la página principal
+            window.location.href = "home.php"; // Redirigir a la página principal
         } else {
             alert(data); // Mostrar mensaje de error
         }
     })
     .catch(error => console.error('Error:', error));
 });
+
+
 
