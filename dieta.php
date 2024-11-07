@@ -63,17 +63,69 @@ if ($resultado_dieta->num_rows === 1) {
     echo "Dieta no encontrada.";
     exit();
 }
-?>
 
+// Obtener las últimas completaciones de comidas del usuario
+$stmt = $conexion->prepare("SELECT meal, last_completed FROM meal_completions WHERE usuario_id = ?");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result_completions = $stmt->get_result();
+
+// Inicializar un array para almacenar las últimas completaciones
+$completions = [
+    'desayuno' => null,
+    'almuerzo' => null,
+    'cena' => null
+];
+
+// Llenar el array con los datos obtenidos
+while ($row = $result_completions->fetch_assoc()) {
+    $completions[$row['meal']] = $row['last_completed'];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dieta</title>
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/dieta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
-    <title>Dieta</title>
+    <style>
+        /* Estilos básicos para botones */
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745; /* Verde para COMPLETAR */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .btn.completed {
+            background-color: #6c757d; /* Gris para COMPLETADO */
+            cursor: default;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .comida {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .valores-nutricionales {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .valores {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -112,7 +164,29 @@ if ($resultado_dieta->num_rows === 1) {
                             <p>Calorías totales</p>
                             <p><?php echo number_format($calorias_desayuno, 0); ?> kcal</p>
                         </div> 
-                        <button class="btn">COMPLETADO</button>
+                        <?php
+                            $meal = 'desayuno';
+                            $last_completed = $completions[$meal];
+                            $can_complete = true;
+                            $button_text = 'COMPLETAR';
+                            $button_class = 'btn';
+                            $current_time = new DateTime();
+                            
+                            if ($last_completed) {
+                                $last_completed_time = new DateTime($last_completed);
+                                $interval = $current_time->diff($last_completed_time);
+                                $hours_passed = ($interval->days * 24) + $interval->h + ($interval->i / 60);
+                                
+                                if ($hours_passed < 24) {
+                                    $can_complete = false;
+                                    $button_text = 'COMPLETADO';
+                                    $button_class .= ' completed';
+                                }
+                            }
+                        ?>
+                        <button class="<?php echo $button_class; ?>" <?php echo !$can_complete ? 'disabled' : ''; ?> onclick="completeMeal('<?php echo $meal; ?>', this)">
+                            <?php echo $button_text; ?>
+                        </button>
                     </div>
                 </div>
 
@@ -132,7 +206,28 @@ if ($resultado_dieta->num_rows === 1) {
                             <p>Calorías totales</p>
                             <p><?php echo number_format($calorias_almuerzo, 0); ?> kcal</p>
                         </div>
-                        <button class="btn">COMPLETAR</button>
+                        <?php
+                            $meal = 'almuerzo';
+                            $last_completed = $completions[$meal];
+                            $can_complete = true;
+                            $button_text = 'COMPLETAR';
+                            $button_class = 'btn';
+                            
+                            if ($last_completed) {
+                                $last_completed_time = new DateTime($last_completed);
+                                $interval = $current_time->diff($last_completed_time);
+                                $hours_passed = ($interval->days * 24) + $interval->h + ($interval->i / 60);
+                                
+                                if ($hours_passed < 24) {
+                                    $can_complete = false;
+                                    $button_text = 'COMPLETADO';
+                                    $button_class .= ' completed';
+                                }
+                            }
+                        ?>
+                        <button class="<?php echo $button_class; ?>" <?php echo !$can_complete ? 'disabled' : ''; ?> onclick="completeMeal('<?php echo $meal; ?>', this)">
+                            <?php echo $button_text; ?>
+                        </button>
                     </div>
                 </div>
 
@@ -152,11 +247,34 @@ if ($resultado_dieta->num_rows === 1) {
                             <p>Calorías totales</p>
                             <p><?php echo number_format($calorias_cena, 0); ?> kcal</p>
                         </div>
-                        <button class="btn">COMPLETAR</button>
+                        <?php
+                            $meal = 'cena';
+                            $last_completed = $completions[$meal];
+                            $can_complete = true;
+                            $button_text = 'COMPLETAR';
+                            $button_class = 'btn';
+                            
+                            if ($last_completed) {
+                                $last_completed_time = new DateTime($last_completed);
+                                $interval = $current_time->diff($last_completed_time);
+                                $hours_passed = ($interval->days * 24) + $interval->h + ($interval->i / 60);
+                                
+                                if ($hours_passed < 24) {
+                                    $can_complete = false;
+                                    $button_text = 'COMPLETADO';
+                                    $button_class .= ' completed';
+                                }
+                            }
+                        ?>
+                        <button class="<?php echo $button_class; ?>" <?php echo !$can_complete ? 'disabled' : ''; ?> onclick="completeMeal('<?php echo $meal; ?>', this)">
+                            <?php echo $button_text; ?>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script src="assets/javascript/dieta.js"></script>
 </body>
 </html>

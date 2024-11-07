@@ -29,12 +29,12 @@ $detalles_plan = $result_detalles->fetch_assoc();
 $rutina_id = $detalles_plan['rutina_id'];
 $dieta_id = $detalles_plan['dieta_id'];
 
-// Obtener rutinas
-$query_rutinas = "SELECT ID, nombre FROM rutinas";
+// Obtener rutinas (solo los 3 primeros)
+$query_rutinas = "SELECT ID, nombre FROM rutinas LIMIT 3";
 $result_rutinas = $conexion->query($query_rutinas);
 
-// Obtener dietas
-$query_dietas = "SELECT ID, tipo FROM dietas";
+// Obtener dietas (solo las 3 primeras)
+$query_dietas = "SELECT ID, tipo FROM dietas LIMIT 3";
 $result_dietas = $conexion->query($query_dietas);
 
 // Procesar el formulario al ser enviado
@@ -101,21 +101,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h3>Cambia tu objetivo</h3>
                 <form method="POST">
                     <div class="checksentrenamiento">
-                        <?php while ($rutina = $result_rutinas->fetch_assoc()): ?>
-                            <label>
-                                <input class="radio" type="radio" name="rutina" value="<?php echo $rutina['ID']; ?>" <?php echo ($rutina['ID'] == $rutina_id) ? 'checked' : ''; ?> /> <?php echo $rutina['nombre']; ?>
-                            </label>
-                        <?php endwhile; ?>
+                        <?php 
+                        // Verificar si hay rutinas disponibles
+                        if ($result_rutinas->num_rows > 0):
+                            while ($rutina = $result_rutinas->fetch_assoc()):
+                        ?>
+                                <label>
+                                    <input class="radio" type="radio" name="rutina" value="<?php echo htmlspecialchars($rutina['ID']); ?>" <?php echo ($rutina['ID'] == $rutina_id) ? 'checked' : ''; ?> /> <?php echo htmlspecialchars($rutina['nombre']); ?>
+                                </label>
+                        <?php 
+                            endwhile; 
+                        else:
+                        ?>
+                            <p>No hay rutinas disponibles.</p>
+                        <?php endif; ?>
                     </div>
 
                     <h1>Personaliza tu dieta</h1>
                     <h3>Cambia tu objetivo</h3>
                     <div class="checksentrenamiento">
-                        <?php while ($dieta = $result_dietas->fetch_assoc()): ?>
-                            <label>
-                                <input class="radio" type="radio" name="dieta" value="<?php echo $dieta['ID']; ?>" <?php echo ($dieta['ID'] == $dieta_id) ? 'checked' : ''; ?> /> <?php echo $dieta['tipo']; ?>
-                            </label>
-                        <?php endwhile; ?>
+                        <?php 
+                        // Verificar si hay dietas disponibles
+                        if ($result_dietas->num_rows > 0):
+                            while ($dieta = $result_dietas->fetch_assoc()):
+                        ?>
+                                <label>
+                                    <input class="radio" type="radio" name="dieta" value="<?php echo htmlspecialchars($dieta['ID']); ?>" <?php echo ($dieta['ID'] == $dieta_id) ? 'checked' : ''; ?> /> <?php echo htmlspecialchars($dieta['tipo']); ?>
+                                </label>
+                        <?php 
+                            endwhile; 
+                        else:
+                        ?>
+                            <p>No hay dietas disponibles.</p>
+                        <?php endif; ?>
                     </div>
 
                     <button class="btn" type="submit">ACEPTAR</button>

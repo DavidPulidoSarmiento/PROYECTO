@@ -1,9 +1,20 @@
-<?php 
-require 'conexion.php';
+<?php
+// update_routine.php
+header('Content-Type: application/json');
 session_start();
+require 'conexion.php';
 
+// Verificar si la solicitud es AJAX y es POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || 
+    !isset($_SERVER['HTTP_X_REQUESTED_WITH']) || 
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
+    echo json_encode(['success' => false, 'message' => 'Solicitud inválida.']);
+    exit();
+}
+
+// Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+    echo json_encode(['success' => false, 'message' => 'No has iniciado sesión.']);
     exit();
 }
 
@@ -18,7 +29,7 @@ $result = $stmt->get_result();
 $user_plan = $result->fetch_assoc();
 
 if (!$user_plan || !isset($user_plan['id_plan'])) {
-    echo "Datos de usuario no encontrados o incompletos.";
+    echo json_encode(['success' => false, 'message' => 'Datos de usuario no encontrados o incompletos.']);
     exit();
 }
 
@@ -39,7 +50,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 if (count($circuitos) == 0) {
-    echo "No hay circuitos asociados a tu plan.";
+    echo json_encode(['success' => false, 'message' => 'No hay circuitos asociados a tu plan.']);
     exit();
 }
 
@@ -62,11 +73,11 @@ while ($row = $result->fetch_assoc()) {
 }
 
 if (count($ejercicios) == 0) {
-    echo "No hay ejercicios en este circuito.";
+    echo json_encode(['success' => false, 'message' => 'No hay ejercicios en este circuito.']);
     exit();
 }
 
-// Obtener o crear el progreso del usuario
+// Obtener el progreso del usuario
 $sql_progress = "SELECT current_exercise_index, last_routine_date FROM user_routine_progress WHERE usuario_id = ?";
 $stmt = $conexion->prepare($sql_progress);
 $stmt->bind_param("i", $usuario_id);
@@ -109,7 +120,10 @@ if ($result_progress->num_rows > 0) {
     $stmt_insert->execute();
 }
 
-// Verificar si el usuario ha completado todos los ejercicios
+// Incrementar el índice del ejercicio
+$current_exercise_index++;
+
+// Verificar si hay más ejercicios
 if ($current_exercise_index >= count($ejercicios)) {
     // Rutina completada, actualizar la fecha de completación
     $current_datetime = new DateTime();
@@ -120,95 +134,18 @@ if ($current_exercise_index >= count($ejercicios)) {
     $stmt_complete->bind_param("si", $current_datetime_str, $usuario_id);
     $stmt_complete->execute();
     
-    // Redirigir al usuario al fin de la rutina
-    header("Location: finrutina.html");
+    // Indicar que la rutina ha sido completada y redirigir
+    echo json_encode(['success' => true, 'redirect' => 'finrutina.html']);
+    exit();
+} else {
+    // Actualizar el índice del ejercicio actual
+    $sql_update_progress = "UPDATE user_routine_progress SET current_exercise_index = ? WHERE usuario_id = ?";
+    $stmt_update = $conexion->prepare($sql_update_progress);
+    $stmt_update->bind_param("ii", $current_exercise_index, $usuario_id);
+    $stmt_update->execute();
+    
+    // Indicar que el ejercicio ha sido actualizado
+    echo json_encode(['success' => true]);
     exit();
 }
-
-// Obtener el ejercicio actual
-$ejercicio_actual = $ejercicios[$current_exercise_index];
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUTINA</title>
-    <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/traing.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
-    <style>
-        /* Estilos básicos */
-        .btn {
-            padding: 10px 20px;
-            background-color: #007bff; /* Azul para SIGUIENTE */
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <a href="home.php">SALIR</a>
-    </header>
-    <div class="container">
-        <div class="titulo">
-            <h1 class="title">Ejercicio</h1>
-            <h1 class="title-ejercicio">#<?php echo htmlspecialchars($ejercicio_actual['ejercicio_id']); ?></h1>
-        </div>
-        <div class="contenido">
-            <div class="ejercicio">
-                <img src="<?php echo htmlspecialchars($ejercicio_actual['visual']); ?>" alt="gif">
-            </div>
-            <div class="datos">
-                <h1><?php echo htmlspecialchars($ejercicio_actual['nombre']); ?></h1>
-                <h1 class="cantidad">Series: <?php echo htmlspecialchars($ejercicio_actual['series']); ?></h1>
-                <h1>Descanso 3min</h1>
-            </div>
-        </div>
-        <div class="siguiente">
-            <button class="btn" type="button" onclick="goToNextExercise()">SIGUIENTE</button>
-        </div>
-    </div>
-
-    <script>
-        function goToNextExercise() {
-            // Confirmar la acción
-            if (!confirm(`¿Estás seguro de que deseas marcar este ejercicio como completado?`)) {
-                return;
-            }
-
-            // Enviar solicitud AJAX para avanzar al siguiente ejercicio
-            fetch('update_routine.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest' // Para identificar la solicitud como AJAX
-                },
-                body: JSON.stringify({ action: 'next' })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    if (data.redirect) {
-                        // Redirigir al fin de la rutina
-                        window.location.href = data.redirect;
-                    } else {
-                        // Recargar la página para mostrar el siguiente ejercicio
-                        window.location.reload();
-                    }
-                } else {
-                    alert(data.message || 'Ocurrió un error al avanzar al siguiente ejercicio.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Ocurrió un error al avanzar al siguiente ejercicio.');
-            });
-        }
-    </script>
-</body>
-</html>

@@ -39,6 +39,8 @@ public class home_administrador extends javax.swing.JFrame {
         llenarComboBoxEjercicios();
         llenarComboBoxCircuitos();
         llenarComboBoxRutina();
+        cargarCircuitos();
+        inicializarEventos();
     }
     
     public void ListarCircuito() {
@@ -141,6 +143,13 @@ public class home_administrador extends javax.swing.JFrame {
             combocircuito.addItem(nombre);
         }
     }
+    private void cargarCircuitos() {
+        CircuitoDAO dao = new CircuitoDAO();
+        List<String> nombresCircuitos = dao.obtenerNombresCircuitos();
+        for (String nombre : nombresCircuitos) {
+            comboxcircuito.addItem(nombre);
+        }
+    }
     private void llenarComboBoxRutina() {
         List<String> nombres = client.obtenerNombresRutinas();
         comborutinas.removeAllItems(); 
@@ -149,7 +158,51 @@ public class home_administrador extends javax.swing.JFrame {
             comborutinas.addItem(nombre);
         }
     }
-    
+    private void inicializarEventos() {
+        comboxcircuito.addActionListener(e -> {
+            String nombreCircuitoSeleccionado = (String) comboxcircuito.getSelectedItem();
+            if (nombreCircuitoSeleccionado != null) {
+                actualizarTablaEjercicios(nombreCircuitoSeleccionado);
+            }
+        });
+        comborutinas.addActionListener(e -> {
+            String nombreCircuitoSeleccionado = (String) comborutinas.getSelectedItem();
+            if (nombreCircuitoSeleccionado != null) {
+                actualizarTablaCircuitos(nombreCircuitoSeleccionado);
+            }
+        });
+    }
+    private void actualizarTablaEjercicios(String nombreCircuito) {
+        CircuitoDAO dao = new CircuitoDAO();
+        List<Circuito> listaEjercicios = dao.obtenerEjerciciosPorCircuito(nombreCircuito);
+        // Limpiar la tabla antes de agregar nuevos datos
+        DefaultTableModel modelo = (DefaultTableModel) TableCircuitoEjercicio.getModel();
+        modelo.setRowCount(0);
+        // Agregar filas con datos de los ejercicios
+        for (Circuito ejercicio : listaEjercicios) {
+            Object[] fila = {
+                ejercicio.getIDCircuitoEj(),
+                ejercicio.getNombre_ejercicio(),
+                ejercicio.getSeries()
+            };
+            modelo.addRow(fila);
+        }
+    }
+    private void actualizarTablaCircuitos(String nombreRutina) {
+        RutinaDAO dao = new RutinaDAO();
+        List<Rutina> listaRutinas = dao.obtenerCircuitoporRutina(nombreRutina);
+        // Limpiar la tabla antes de agregar nuevos datos
+        DefaultTableModel modelo = (DefaultTableModel) TableCircuitoEjercicio.getModel();
+        modelo.setRowCount(0);
+        // Agregar filas con datos de los ejercicios
+        for (Rutina rutina : listaRutinas) {
+            Object[] fila = {
+                rutina.getIdcircuito(),
+                rutina.getNombrecircuito()
+            };
+            modelo.addRow(fila);
+        }
+    }
     public void LimpiarTable() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
@@ -194,7 +247,6 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel43 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
         TableCircuitoEjercicio = new javax.swing.JTable();
-        btnEditarCircuitoEj = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -234,7 +286,6 @@ public class home_administrador extends javax.swing.JFrame {
         btnBorrarRutina1 = new javax.swing.JButton();
         btnCrearRutinaCI = new javax.swing.JButton();
         comborutinas = new javax.swing.JComboBox<>();
-        btnActualizarRuCi = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtIdUsuario = new javax.swing.JTextField();
@@ -508,7 +559,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnBorrarCiEjActionPerformed(evt);
             }
         });
-        jPanel3.add(btnBorrarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, -1, -1));
+        jPanel3.add(btnBorrarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
 
         btnCancelarCiEj.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnCancelarCiEj.setForeground(new java.awt.Color(144, 12, 63));
@@ -518,7 +569,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnCancelarCiEjActionPerformed(evt);
             }
         });
-        jPanel3.add(btnCancelarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 70, -1, -1));
+        jPanel3.add(btnCancelarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, -1));
 
         combocejercicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         combocejercicio.addActionListener(new java.awt.event.ActionListener() {
@@ -557,16 +608,6 @@ public class home_administrador extends javax.swing.JFrame {
         }
 
         jPanel3.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 110, 480, -1));
-
-        btnEditarCircuitoEj.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
-        btnEditarCircuitoEj.setForeground(new java.awt.Color(144, 12, 63));
-        btnEditarCircuitoEj.setText("ACTUALIZAR");
-        btnEditarCircuitoEj.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarCircuitoEjActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnEditarCircuitoEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
 
         jTabbedPane1.addTab("tab1", jPanel3);
 
@@ -858,7 +899,7 @@ public class home_administrador extends javax.swing.JFrame {
                 Iniciar15ActionPerformed(evt);
             }
         });
-        jPanel5.add(Iniciar15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 70, -1, -1));
+        jPanel5.add(Iniciar15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, -1));
 
         btnBorrarRutina1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnBorrarRutina1.setForeground(new java.awt.Color(144, 12, 63));
@@ -868,7 +909,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnBorrarRutina1ActionPerformed(evt);
             }
         });
-        jPanel5.add(btnBorrarRutina1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, -1, -1));
+        jPanel5.add(btnBorrarRutina1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
 
         btnCrearRutinaCI.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnCrearRutinaCI.setForeground(new java.awt.Color(144, 12, 63));
@@ -887,16 +928,6 @@ public class home_administrador extends javax.swing.JFrame {
             }
         });
         jPanel5.add(comborutinas, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 120, -1));
-
-        btnActualizarRuCi.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
-        btnActualizarRuCi.setForeground(new java.awt.Color(144, 12, 63));
-        btnActualizarRuCi.setText("ACTUALIZAR");
-        btnActualizarRuCi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarRuCiActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnActualizarRuCi, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
 
         jTabbedPane1.addTab("tab3", jPanel5);
 
@@ -1598,7 +1629,6 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         LimpiarRutinaCi();
         btnBorrarRutina1.setEnabled(false);
-        btnActualizarRuCi.setEnabled(false);
         btnCrearRutinaCI.setEnabled(true);
     }//GEN-LAST:event_Iniciar15ActionPerformed
 
@@ -1698,13 +1728,21 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnBorrarCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCiEjActionPerformed
         // TODO add your handling code here:
+        if (!"".equals(txtIDCircuitoEj.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIDCircuitoEj.getText());
+                cirDao.EliminarCircuitoEj(id);
+                LimpiarTable();
+                LimpiarCircuitoEj();
+            }
+        }
     }//GEN-LAST:event_btnBorrarCiEjActionPerformed
 
     private void btnCancelarCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCiEjActionPerformed
         // TODO add your handling code here:
         LimpiarCircuitoEj();
         btnBorrarCiEj.setEnabled(false);
-        btnEditarCircuitoEj.setEnabled(false);
         btnCrearCiEj.setEnabled(true);
     }//GEN-LAST:event_btnCancelarCiEjActionPerformed
 
@@ -1714,15 +1752,13 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void TableCircuitoEjercicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableCircuitoEjercicioMouseClicked
         // TODO add your handling code here:
+        btnBorrarCiEj.setEnabled(true);
+        btnCrearCiEj.setEnabled(false);
+        int fila = TableCircuitoEjercicio.rowAtPoint(evt.getPoint());
+        txtIDCircuitoEj.setText(TableCircuitoEjercicio.getValueAt(fila, 0).toString());
+        combocejercicio.setSelectedItem(TableCircuitoEjercicio.getValueAt(fila, 1));
+        txtSeries.setText(TableCircuitoEjercicio.getValueAt(fila, 2).toString());
     }//GEN-LAST:event_TableCircuitoEjercicioMouseClicked
-
-    private void btnActualizarRuCiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarRuCiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnActualizarRuCiActionPerformed
-
-    private void btnEditarCircuitoEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCircuitoEjActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarCircuitoEjActionPerformed
 
     private void txtIDCircuitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDCircuitoActionPerformed
         // TODO add your handling code here:
@@ -1960,7 +1996,6 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JTable TableRutina1;
     private javax.swing.JTable TableUsuario;
     private javax.swing.JButton btnActualizarEjercicios;
-    private javax.swing.JButton btnActualizarRuCi;
     private javax.swing.JButton btnBorrarCiEj;
     private javax.swing.JButton btnBorrarCircuito;
     private javax.swing.JButton btnBorrarEjercicios;
@@ -1979,7 +2014,6 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JButton btnCrearRutina;
     private javax.swing.JButton btnCrearRutinaCI;
     private javax.swing.JButton btnEditarCircuito;
-    private javax.swing.JButton btnEditarCircuitoEj;
     private javax.swing.JButton btnEditarPlan;
     private javax.swing.JButton btnEditarRutina;
     private javax.swing.JButton btnEditarUsuario;

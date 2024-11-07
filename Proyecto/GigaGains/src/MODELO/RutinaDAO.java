@@ -124,4 +124,31 @@ public class RutinaDAO {
         }
         return nombres;
     }
+    
+    
+    public List<Rutina> obtenerCircuitoporRutina(String nombreRutina) {
+    List<Rutina> listaRutinas = new ArrayList<>();
+    String sql = "SELECT ce.ID AS idcircuito, e.nombre AS nombrecircuito" +
+                 "FROM rutinas_circuitos ce " +
+                 "JOIN rutinas e ON ce.ejercicio_id = e.id " +
+                 "WHERE ce.Estado = TRUE";
+
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, nombreRutina);  // Filtro por nombre de circuito
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Rutina rutina = new Rutina();
+            rutina.setIdcircuito(rs.getInt("idcircuito"));
+            rutina.setNombrecircuito(rs.getString("nombrecircuito"));
+            listaRutinas.add(rutina);  // Agrega a la lista de ejercicios
+        }
+        } 
+    catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return listaRutinas;
+    }
 }

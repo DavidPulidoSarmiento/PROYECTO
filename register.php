@@ -1,16 +1,10 @@
 <?php
 // Configuración de la base de datos
-$host = "localhost"; // o la dirección de tu servidor
-$usuario = "root"; // Cambia esto por tu usuario de MySQL
-$contraseña = ""; // Cambia esto por tu contraseña de MySQL
-$base_de_datos = "gigagains"; // Nombre de tu base de datos
-
-// Crear conexión
-$conn = new mysqli($host, $usuario, $contraseña, $base_de_datos);
+require 'conexion.php'; // Asegúrate de que este archivo esté configurado correctamente
 
 // Verificar la conexión
-if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Error de conexión: " . $conn->connect_error]));
+if ($conexion->connect_error) {
+    die(json_encode(["success" => false, "message" => "Error de conexión: " . $conexion->connect_error]));
 }
 
 // Obtener los datos del formulario
@@ -26,12 +20,12 @@ $genero = isset($_POST['genero']) ? implode(", ", $_POST['genero']) : '';
 // Insertar en la base de datos
 $sql = "INSERT INTO usuario (nombre, email, contraseña, fecha_de_nacimiento, estatura, peso, condicion_especial, genero) VALUES ('$nombre', '$correo', '$contraseña', '$fecha_nacimiento', '$estatura', '$peso', '$condicion_especial', '$genero')";
 
-if ($conn->query($sql) === TRUE) {
+if ($conexion->query($sql) === TRUE) {
     echo json_encode(["success" => true]);
 } else {
-    echo json_encode(["success" => false, "message" => "Error: " . $conn->error]);
+    echo json_encode(["success" => false, "message" => "Error: " . $conexion->error]);
 }
 
 // Cerrar la conexión
-$conn->close();
+$conexion->close();
 ?>

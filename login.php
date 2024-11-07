@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificar si el correo existe
     if ($resultado->num_rows === 1) {
         $usuario = $resultado->fetch_assoc();
-        var_dump($usuario); // Agrega esto para ver qué trae
+        
         
         // Verificar la contraseña
         if (password_verify($contraseña, $usuario['contraseña'])) {

@@ -72,30 +72,10 @@ section{
 .divcomidas h3{
     margin-top: 20px;
 }
-.comida{
-    color: var(--color-primario);
-    font-size: 1.2rem;
-}
+
 .valores{
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     color: var(--color-black);
-}
-.btn {
-    width: 100%;
-    background: var(--color-primario);
-    border: none;
-    margin-top: 25px;
-    padding: 10px;
-    width: 200px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #fff;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: var(--color-primario);
 }
