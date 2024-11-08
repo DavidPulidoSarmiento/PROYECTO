@@ -295,6 +295,54 @@ public class CircuitoDAO {
         }
     }
 }
+    public boolean ModificarCircuito_Ejercicio(Circuito circuito) {
+        String sqlCircuito = "SELECT ID FROM circuitos WHERE nombre = ?";
+        String sqlEjercicio = "SELECT ID FROM ejercicios WHERE nombre = ?";
+        String sqlUpdate = "UPDATE circuitos_ejercicios SET circuito_id = ?, ejercicio_id = ?, series = ? WHERE ID = ? AND Estado = TRUE";  // Solo actualiza si el estado es TRUE
+        try {
+            con = cn.getConnection();
+        
+        // Obtener el ID del circuito a partir de su nombre
+        ps = con.prepareStatement(sqlCircuito);
+        ps.setString(1, circuito.getNombre());
+        rs = ps.executeQuery();
+        
+        int idCircuito = 0;
+        if (rs.next()) {
+            idCircuito = rs.getInt("ID");
+        } else {
+            System.out.println("Circuito no encontrado.");
+            return false;
+        }
+
+        // Obtener el ID del ejercicio a partir de su nombre
+        ps = con.prepareStatement(sqlEjercicio);
+        ps.setString(1, circuito.getNombre_ejercicio());
+        rs = ps.executeQuery();
+        
+        int idEjercicio = 0;
+        if (rs.next()) {
+            idEjercicio = rs.getInt("ID");
+        } else {
+            System.out.println("Ejercicio no encontrado.");
+            return false;
+        }
+
+        // Insertar en circuitos_ejercicios con los IDs obtenidos
+        ps = con.prepareStatement(sqlUpdate);
+     
+        ps.setInt(1, idCircuito);
+        ps.setInt(2, idEjercicio);
+        ps.setString(3, circuito.getSeries());
+        ps.setInt(4, circuito.getIDCircuitoEj());
+        ps.executeUpdate();
+        return true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error al modificar ejercicio: " + e.getMessage());
+            return false;
+        }
+    }
 }
 
 

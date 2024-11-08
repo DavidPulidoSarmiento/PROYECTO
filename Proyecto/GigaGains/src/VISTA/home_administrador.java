@@ -33,28 +33,17 @@ public class home_administrador extends javax.swing.JFrame {
     
     public home_administrador() {
         initComponents();
-        this.setBounds(0,0,1350,750);
+        this.setBounds(0,0,1350,725);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         llenarComboBoxMusculosOcupados();
         llenarComboBoxEjercicios();
-        llenarComboBoxCircuitos();
         llenarComboBoxRutina();
         cargarCircuitos();
         inicializarEventos();
     }
     
-    public void ListarCircuito() {
-        List<Circuito> ListarCir = cirDao.ListarCircuitos();
-        modelo = (DefaultTableModel) TableCircuito.getModel();
-        Object[] ob = new Object[2];
-        for (int i = 0; i < ListarCir.size(); i++) {
-            ob[0] = ListarCir.get(i).getId();
-            ob[1] = ListarCir.get(i).getNombre();
-            modelo.addRow(ob);
-        }
-        
-        TableCircuito.setModel(modelo);
-    }
+    
     
     public void ListarRutina(){
         List<Rutina> ListarRu = client.ListarRutina();
@@ -67,7 +56,18 @@ public class home_administrador extends javax.swing.JFrame {
         }
         TableRutina.setModel(modelo);
     }
-    
+    public void ListarCircuito() {
+        List<Circuito> ListarCir = cirDao.ListarCircuitos();
+        modelo = (DefaultTableModel) TableCircuito.getModel();
+        Object[] ob = new Object[2];
+        for (int i = 0; i < ListarCir.size(); i++) {
+            ob[0] = ListarCir.get(i).getId();
+            ob[1] = ListarCir.get(i).getNombre();
+            modelo.addRow(ob);
+        }
+        
+        TableCircuito.setModel(modelo);
+    }
     public void ListarUsuario(){
         List<Usuario> ListarUs = user.ListarUsuario();
         modelo = (DefaultTableModel) TableUsuario.getModel();
@@ -133,29 +133,23 @@ public class home_administrador extends javax.swing.JFrame {
             combocejercicio.addItem(nombre);
         }
     }
-    private void llenarComboBoxCircuitos() {
-        List<String> nombres = cirDao.obtenerNombresCircuitos();
+    private void cargarCircuitos() {
+        List<String> nombresCircuitos = cirDao.obtenerNombresCircuitos();
         comboxcircuito.removeAllItems(); 
         combocircuito.removeAllItems();
-
-        for (String nombre : nombres) {
+        for (String nombre : nombresCircuitos) {
             comboxcircuito.addItem(nombre);
             combocircuito.addItem(nombre);
         }
     }
-    private void cargarCircuitos() {
-        CircuitoDAO dao = new CircuitoDAO();
-        List<String> nombresCircuitos = dao.obtenerNombresCircuitos();
-        for (String nombre : nombresCircuitos) {
-            comboxcircuito.addItem(nombre);
-        }
-    }
+    
     private void llenarComboBoxRutina() {
         List<String> nombres = client.obtenerNombresRutinas();
         comborutinas.removeAllItems(); 
-
+        comborutinas1.removeAllItems(); 
         for (String nombre : nombres) {
             comborutinas.addItem(nombre);
+            comborutinas1.addItem(nombre);
         }
     }
     private void inicializarEventos() {
@@ -163,20 +157,23 @@ public class home_administrador extends javax.swing.JFrame {
             String nombreCircuitoSeleccionado = (String) comboxcircuito.getSelectedItem();
             if (nombreCircuitoSeleccionado != null) {
                 actualizarTablaEjercicios(nombreCircuitoSeleccionado);
-            }
+                btnCrearCiEj.setEnabled(true);
+            } 
         });
         comborutinas.addActionListener(e -> {
             String nombreCircuitoSeleccionado = (String) comborutinas.getSelectedItem();
             if (nombreCircuitoSeleccionado != null) {
                 actualizarTablaCircuitos(nombreCircuitoSeleccionado);
+                btnCrearRutinaCI.setEnabled(true);
             }
         });
     }
+    
     private void actualizarTablaEjercicios(String nombreCircuito) {
-        CircuitoDAO dao = new CircuitoDAO();
-        List<Circuito> listaEjercicios = dao.obtenerEjerciciosPorCircuito(nombreCircuito);
+        
+        List<Circuito> listaEjercicios = cirDao.obtenerEjerciciosPorCircuito(nombreCircuito);
         // Limpiar la tabla antes de agregar nuevos datos
-        DefaultTableModel modelo = (DefaultTableModel) TableCircuitoEjercicio.getModel();
+        modelo = (DefaultTableModel) TableCircuitoEjercicio.getModel();
         modelo.setRowCount(0);
         // Agregar filas con datos de los ejercicios
         for (Circuito ejercicio : listaEjercicios) {
@@ -189,10 +186,10 @@ public class home_administrador extends javax.swing.JFrame {
         }
     }
     private void actualizarTablaCircuitos(String nombreRutina) {
-        RutinaDAO dao = new RutinaDAO();
-        List<Rutina> listaRutinas = dao.obtenerCircuitoporRutina(nombreRutina);
+        
+        List<Rutina> listaRutinas = client.obtenerCircuitoporRutina(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
-        DefaultTableModel modelo = (DefaultTableModel) TableCircuitoEjercicio.getModel();
+        modelo = (DefaultTableModel) TableRutinaCircuito.getModel();
         modelo.setRowCount(0);
         // Agregar filas con datos de los ejercicios
         for (Rutina rutina : listaRutinas) {
@@ -214,6 +211,8 @@ public class home_administrador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
+        jFrame2 = new javax.swing.JFrame();
         jPanel2 = new javax.swing.JPanel();
         logo = new javax.swing.JLabel();
         btnCircuito = new javax.swing.JButton();
@@ -221,6 +220,7 @@ public class home_administrador extends javax.swing.JFrame {
         btnRutina = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnPlan = new javax.swing.JButton();
+        btnDieta = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -247,6 +247,7 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel43 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
         TableCircuitoEjercicio = new javax.swing.JTable();
+        btnEditarCircuito1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -277,7 +278,7 @@ public class home_administrador extends javax.swing.JFrame {
         TableRutina = new javax.swing.JTable();
         btnBorrarRutina = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        TableRutina1 = new javax.swing.JTable();
+        TableRutinaCircuito = new javax.swing.JTable();
         combocircuito = new javax.swing.JComboBox<>();
         xd = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
@@ -286,6 +287,7 @@ public class home_administrador extends javax.swing.JFrame {
         btnBorrarRutina1 = new javax.swing.JButton();
         btnCrearRutinaCI = new javax.swing.JButton();
         comborutinas = new javax.swing.JComboBox<>();
+        btnEditarRutina1 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtIdUsuario = new javax.swing.JTextField();
@@ -326,9 +328,26 @@ public class home_administrador extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         TablePlan = new javax.swing.JTable();
         jLabel37 = new javax.swing.JLabel();
-        txtIDRutinaPlan = new javax.swing.JTextField();
         jLabel38 = new javax.swing.JLabel();
         txtIdDietaPlan = new javax.swing.JTextField();
+        comborutinas1 = new javax.swing.JComboBox<>();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel44 = new javax.swing.JLabel();
+        txtIdDieta = new javax.swing.JTextField();
+        jLabel45 = new javax.swing.JLabel();
+        txtTipoDieta = new javax.swing.JTextField();
+        jLabel46 = new javax.swing.JLabel();
+        txtIdDietaPlan1 = new javax.swing.JTextField();
+        btnCrearDieta = new javax.swing.JButton();
+        btnEditarDieta = new javax.swing.JButton();
+        btnBorrarDieta = new javax.swing.JButton();
+        btnCancelarDieta = new javax.swing.JButton();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        TableDieta = new javax.swing.JTable();
+        jLabel47 = new javax.swing.JLabel();
+        txtIdDietaPlan2 = new javax.swing.JTextField();
+        jLabel48 = new javax.swing.JLabel();
+        txtIdDietaPlan3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(144, 12, 63));
@@ -351,7 +370,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnCircuitoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCircuito, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, -1, -1));
+        jPanel2.add(btnCircuito, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 50, -1, -1));
 
         btnEjercicios.setBackground(new java.awt.Color(144, 12, 63));
         btnEjercicios.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -362,7 +381,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnEjerciciosActionPerformed(evt);
             }
         });
-        jPanel2.add(btnEjercicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, -1, -1));
+        jPanel2.add(btnEjercicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, -1, -1));
 
         btnRutina.setBackground(new java.awt.Color(144, 12, 63));
         btnRutina.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -373,7 +392,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnRutinaActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRutina, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 60, -1, -1));
+        jPanel2.add(btnRutina, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, -1, -1));
 
         btnUsuario.setBackground(new java.awt.Color(144, 12, 63));
         btnUsuario.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -384,7 +403,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnUsuarioActionPerformed(evt);
             }
         });
-        jPanel2.add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 60, -1, -1));
+        jPanel2.add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 50, -1, -1));
 
         btnPlan.setBackground(new java.awt.Color(144, 12, 63));
         btnPlan.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -395,7 +414,18 @@ public class home_administrador extends javax.swing.JFrame {
                 btnPlanActionPerformed(evt);
             }
         });
-        jPanel2.add(btnPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 60, -1, -1));
+        jPanel2.add(btnPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 50, -1, -1));
+
+        btnDieta.setBackground(new java.awt.Color(144, 12, 63));
+        btnDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        btnDieta.setForeground(new java.awt.Color(255, 255, 255));
+        btnDieta.setText("DIETA");
+        btnDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDietaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 50, -1, -1));
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(0, 0, 1350, 130);
@@ -404,6 +434,11 @@ public class home_administrador extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTabbedPane1.setBackground(new java.awt.Color(144, 12, 63));
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTabbedPane1.setEnabled(false);
+        jTabbedPane1.setName(""); // NOI18N
 
         jPanel3.setBackground(new java.awt.Color(144, 12, 63));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -559,7 +594,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnBorrarCiEjActionPerformed(evt);
             }
         });
-        jPanel3.add(btnBorrarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
+        jPanel3.add(btnBorrarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, -1, -1));
 
         btnCancelarCiEj.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnCancelarCiEj.setForeground(new java.awt.Color(144, 12, 63));
@@ -569,7 +604,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnCancelarCiEjActionPerformed(evt);
             }
         });
-        jPanel3.add(btnCancelarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, -1));
+        jPanel3.add(btnCancelarCiEj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 70, -1, -1));
 
         combocejercicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         combocejercicio.addActionListener(new java.awt.event.ActionListener() {
@@ -609,7 +644,17 @@ public class home_administrador extends javax.swing.JFrame {
 
         jPanel3.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 110, 480, -1));
 
-        jTabbedPane1.addTab("tab1", jPanel3);
+        btnEditarCircuito1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnEditarCircuito1.setForeground(new java.awt.Color(144, 12, 63));
+        btnEditarCircuito1.setText("ACTUALIZAR");
+        btnEditarCircuito1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarCircuito1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnEditarCircuito1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
+
+        jTabbedPane1.addTab("", jPanel3);
 
         jPanel4.setBackground(new java.awt.Color(144, 12, 63));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -743,7 +788,7 @@ public class home_administrador extends javax.swing.JFrame {
         });
         jPanel4.add(btnBorrarEjercicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
-        jTabbedPane1.addTab("tab2", jPanel4);
+        jTabbedPane1.addTab("", jPanel4);
 
         jPanel5.setBackground(new java.awt.Color(144, 12, 63));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -844,7 +889,7 @@ public class home_administrador extends javax.swing.JFrame {
         });
         jPanel5.add(btnBorrarRutina, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
-        TableRutina1.setModel(new javax.swing.table.DefaultTableModel(
+        TableRutinaCircuito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -852,16 +897,16 @@ public class home_administrador extends javax.swing.JFrame {
                 "ID", "Circuitos"
             }
         ));
-        TableRutina1.addMouseListener(new java.awt.event.MouseAdapter() {
+        TableRutinaCircuito.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TableRutina1MouseClicked(evt);
+                TableRutinaCircuitoMouseClicked(evt);
             }
         });
-        jScrollPane6.setViewportView(TableRutina1);
-        if (TableRutina1.getColumnModel().getColumnCount() > 0) {
-            TableRutina1.getColumnModel().getColumn(0).setMinWidth(50);
-            TableRutina1.getColumnModel().getColumn(0).setPreferredWidth(50);
-            TableRutina1.getColumnModel().getColumn(0).setMaxWidth(50);
+        jScrollPane6.setViewportView(TableRutinaCircuito);
+        if (TableRutinaCircuito.getColumnModel().getColumnCount() > 0) {
+            TableRutinaCircuito.getColumnModel().getColumn(0).setMinWidth(50);
+            TableRutinaCircuito.getColumnModel().getColumn(0).setPreferredWidth(50);
+            TableRutinaCircuito.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
         jPanel5.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 110, 480, -1));
@@ -899,7 +944,7 @@ public class home_administrador extends javax.swing.JFrame {
                 Iniciar15ActionPerformed(evt);
             }
         });
-        jPanel5.add(Iniciar15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, -1));
+        jPanel5.add(Iniciar15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 70, -1, -1));
 
         btnBorrarRutina1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnBorrarRutina1.setForeground(new java.awt.Color(144, 12, 63));
@@ -909,7 +954,7 @@ public class home_administrador extends javax.swing.JFrame {
                 btnBorrarRutina1ActionPerformed(evt);
             }
         });
-        jPanel5.add(btnBorrarRutina1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
+        jPanel5.add(btnBorrarRutina1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, -1, -1));
 
         btnCrearRutinaCI.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btnCrearRutinaCI.setForeground(new java.awt.Color(144, 12, 63));
@@ -929,7 +974,17 @@ public class home_administrador extends javax.swing.JFrame {
         });
         jPanel5.add(comborutinas, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 120, -1));
 
-        jTabbedPane1.addTab("tab3", jPanel5);
+        btnEditarRutina1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnEditarRutina1.setForeground(new java.awt.Color(144, 12, 63));
+        btnEditarRutina1.setText("ACTUALIZAR");
+        btnEditarRutina1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarRutina1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnEditarRutina1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, -1, -1));
+
+        jTabbedPane1.addTab("", jPanel5);
 
         jPanel6.setBackground(new java.awt.Color(144, 12, 63));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1127,7 +1182,7 @@ public class home_administrador extends javax.swing.JFrame {
         jPanel6.add(txtPlanUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 40, 40, -1));
         jPanel6.add(txtContraseñaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 40, 110, -1));
 
-        jTabbedPane1.addTab("tab4", jPanel6);
+        jTabbedPane1.addTab("", jPanel6);
 
         jPanel7.setBackground(new java.awt.Color(144, 12, 63));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1234,13 +1289,6 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel37.setText("ID_Dieta");
         jPanel7.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
 
-        txtIDRutinaPlan.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtIDRutinaPlanKeyTyped(evt);
-            }
-        });
-        jPanel7.add(txtIDRutinaPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 70, -1));
-
         jLabel38.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel38.setForeground(new java.awt.Color(255, 255, 255));
         jLabel38.setText("ID_Rutina");
@@ -1253,7 +1301,156 @@ public class home_administrador extends javax.swing.JFrame {
         });
         jPanel7.add(txtIdDietaPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, 70, -1));
 
-        jTabbedPane1.addTab("tab5", jPanel7);
+        comborutinas1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comborutinas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comborutinas1ActionPerformed(evt);
+            }
+        });
+        jPanel7.add(comborutinas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 120, -1));
+
+        jTabbedPane1.addTab("", jPanel7);
+
+        jPanel8.setBackground(new java.awt.Color(144, 12, 63));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel44.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel44.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel44.setText("ID");
+        jPanel8.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        txtIdDieta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdDietaKeyTyped(evt);
+            }
+        });
+        jPanel8.add(txtIdDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 40, -1));
+
+        jLabel45.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel45.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel45.setText("Tipo");
+        jPanel8.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
+
+        txtTipoDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTipoDietaActionPerformed(evt);
+            }
+        });
+        txtTipoDieta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoDietaKeyTyped(evt);
+            }
+        });
+        jPanel8.add(txtTipoDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 110, -1));
+
+        jLabel46.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel46.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel46.setText("Proteinas");
+        jPanel8.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
+
+        txtIdDietaPlan1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdDietaPlan1KeyTyped(evt);
+            }
+        });
+        jPanel8.add(txtIdDietaPlan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, 70, -1));
+
+        btnCrearDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnCrearDieta.setForeground(new java.awt.Color(144, 12, 63));
+        btnCrearDieta.setText("CREAR");
+        btnCrearDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearDietaActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnCrearDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        btnEditarDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnEditarDieta.setForeground(new java.awt.Color(144, 12, 63));
+        btnEditarDieta.setText("ACTUALIZAR");
+        btnEditarDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarDietaActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnEditarDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
+
+        btnBorrarDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnBorrarDieta.setForeground(new java.awt.Color(144, 12, 63));
+        btnBorrarDieta.setText("BORRAR");
+        btnBorrarDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarDietaActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnBorrarDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
+
+        btnCancelarDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        btnCancelarDieta.setForeground(new java.awt.Color(144, 12, 63));
+        btnCancelarDieta.setText("CANCELAR");
+        btnCancelarDieta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarDietaActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnCancelarDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, -1, -1));
+
+        TableDieta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Tipo", "Proteinas", "Carbos", "Calorias"
+            }
+        ));
+        TableDieta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableDietaMouseClicked(evt);
+            }
+        });
+        jScrollPane9.setViewportView(TableDieta);
+        if (TableDieta.getColumnModel().getColumnCount() > 0) {
+            TableDieta.getColumnModel().getColumn(0).setMinWidth(50);
+            TableDieta.getColumnModel().getColumn(0).setPreferredWidth(50);
+            TableDieta.getColumnModel().getColumn(0).setMaxWidth(50);
+            TableDieta.getColumnModel().getColumn(2).setMinWidth(100);
+            TableDieta.getColumnModel().getColumn(2).setPreferredWidth(100);
+            TableDieta.getColumnModel().getColumn(2).setMaxWidth(100);
+            TableDieta.getColumnModel().getColumn(3).setMinWidth(100);
+            TableDieta.getColumnModel().getColumn(3).setPreferredWidth(100);
+            TableDieta.getColumnModel().getColumn(3).setMaxWidth(100);
+            TableDieta.getColumnModel().getColumn(4).setMinWidth(100);
+            TableDieta.getColumnModel().getColumn(4).setPreferredWidth(100);
+            TableDieta.getColumnModel().getColumn(4).setMaxWidth(100);
+        }
+
+        jPanel8.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1290, -1));
+
+        jLabel47.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel47.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel47.setText("Carbos");
+        jPanel8.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, -1));
+
+        txtIdDietaPlan2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdDietaPlan2KeyTyped(evt);
+            }
+        });
+        jPanel8.add(txtIdDietaPlan2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 70, -1));
+
+        jLabel48.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel48.setText("Calorias");
+        jPanel8.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, -1));
+
+        txtIdDietaPlan3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdDietaPlan3KeyTyped(evt);
+            }
+        });
+        jPanel8.add(txtIdDietaPlan3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 40, 70, -1));
+
+        jTabbedPane1.addTab("", jPanel8);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 1350, 600));
 
@@ -1281,6 +1478,9 @@ public class home_administrador extends javax.swing.JFrame {
         btnEditarCircuito.setEnabled(false);
         btnBorrarCircuito.setEnabled(false);
         btnCrearCircuito.setEnabled(true);
+        btnCrearCiEj.setEnabled(false);
+        btnEditarCircuito1.setEnabled(false);
+        btnBorrarCiEj.setEnabled(false);
         LimpiarCircuito();
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_btnCircuitoActionPerformed
@@ -1325,6 +1525,8 @@ public class home_administrador extends javax.swing.JFrame {
 
             // Limpiar los campos después de registrar
             LimpiarEjercicio();
+            LimpiarTable();
+            ListarEjercicio();
         
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
@@ -1353,8 +1555,8 @@ public class home_administrador extends javax.swing.JFrame {
                 ej.setNombreMusculo((String)jComboBoxMusculosOcupados.getSelectedItem());
                 ejDao.ModificarEjercicio(ej);
                 JOptionPane.showMessageDialog(null, "Cliente Modificado");
-                LimpiarTable();
                 LimpiarEjercicio();
+                LimpiarTable();
                 ListarEjercicio();
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
@@ -1392,7 +1594,7 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutinaActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIDRutina.getText()) || !"".equals(txtNombreRutina.getText())){
+        if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())){
             cl.setId(Integer.parseInt(txtIDRutina.getText()));
             cl.setNombre(txtNombreRutina.getText());
             client.RegistrarRutina(cl);
@@ -1617,9 +1819,9 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tableEjerciciosMouseEntered
 
-    private void TableRutina1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableRutina1MouseClicked
+    private void TableRutinaCircuitoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableRutinaCircuitoMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_TableRutina1MouseClicked
+    }//GEN-LAST:event_TableRutinaCircuitoMouseClicked
 
     private void combocircuitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocircuitoActionPerformed
         // TODO add your handling code here:
@@ -1628,6 +1830,7 @@ public class home_administrador extends javax.swing.JFrame {
     private void Iniciar15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Iniciar15ActionPerformed
         // TODO add your handling code here:
         LimpiarRutinaCi();
+        LimpiarTable();
         btnBorrarRutina1.setEnabled(false);
         btnCrearRutinaCI.setEnabled(true);
     }//GEN-LAST:event_Iniciar15ActionPerformed
@@ -1659,7 +1862,9 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ejercicio registrado");
 
             // Limpiar los campos después de registrar
+            LimpiarTable();
             LimpiarCircuito();
+            ListarCircuito();
         
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
@@ -1672,7 +1877,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIDCircuito.getText()) || !"".equals(txtNombreCircuito.getText())) {
+            if (!"".equals(txtIDCircuito.getText()) && !"".equals(txtNombreCircuito.getText())) {
                 cir.setId(Integer.parseInt(txtIDCircuito.getText()));
                 cir.setNombre(txtNombreCircuito.getText());
                 cirDao.ModificarCircuito(cir);
@@ -1724,6 +1929,22 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCiEjActionPerformed
         // TODO add your handling code here:
+        if (!txtIDCircuitoEj.getText().isEmpty() || 
+        !txtSeries.getText().isEmpty()) {
+            
+            cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
+            cir.setSeries(txtSeries.getText());
+            cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
+            cir.setNombre((String) comboxcircuito.getSelectedItem());
+            cirDao.RegistrarCircuito_ejercicio(cir);
+            JOptionPane.showMessageDialog(null, "Ejercicio registrado");
+
+            // Limpiar los campos después de registrar
+            LimpiarCircuitoEj();
+        
+    } else {
+        JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+    }
     }//GEN-LAST:event_btnCrearCiEjActionPerformed
 
     private void btnBorrarCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCiEjActionPerformed
@@ -1733,7 +1954,7 @@ public class home_administrador extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIDCircuitoEj.getText());
                 cirDao.EliminarCircuitoEj(id);
-                LimpiarTable();
+                
                 LimpiarCircuitoEj();
             }
         }
@@ -1742,8 +1963,10 @@ public class home_administrador extends javax.swing.JFrame {
     private void btnCancelarCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCiEjActionPerformed
         // TODO add your handling code here:
         LimpiarCircuitoEj();
+        LimpiarTable();
+        btnCrearCiEj.setEnabled(false);
+        btnEditarCircuito1.setEnabled(false);
         btnBorrarCiEj.setEnabled(false);
-        btnCrearCiEj.setEnabled(true);
     }//GEN-LAST:event_btnCancelarCiEjActionPerformed
 
     private void combocejercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocejercicioActionPerformed
@@ -1753,6 +1976,7 @@ public class home_administrador extends javax.swing.JFrame {
     private void TableCircuitoEjercicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableCircuitoEjercicioMouseClicked
         // TODO add your handling code here:
         btnBorrarCiEj.setEnabled(true);
+        btnEditarCircuito1.setEnabled(true);
         btnCrearCiEj.setEnabled(false);
         int fila = TableCircuitoEjercicio.rowAtPoint(evt.getPoint());
         txtIDCircuitoEj.setText(TableCircuitoEjercicio.getValueAt(fila, 0).toString());
@@ -1775,11 +1999,6 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void txtNombreCircuitoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCircuitoKeyTyped
         // TODO add your handling code here:
-        char c = evt.getKeyChar();
-    // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
-        evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
-    }
     }//GEN-LAST:event_txtNombreCircuitoKeyTyped
 
     private void txtIDCircuitoEjKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDCircuitoEjKeyTyped
@@ -1808,7 +2027,7 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtNombreEjercicioKeyTyped
@@ -1817,7 +2036,7 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtDescripcionEjercicioKeyTyped
@@ -1835,7 +2054,7 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtNombreRutinaKeyTyped
@@ -1862,21 +2081,20 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtNombreUsuarioKeyTyped
 
     private void txtEmailUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailUsuarioKeyTyped
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_txtEmailUsuarioKeyTyped
 
     private void txtGeneroUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGeneroUsuarioKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtGeneroUsuarioKeyTyped
@@ -1903,7 +2121,7 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtCondEspecialUsuarioKeyTyped
@@ -1930,28 +2148,100 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         char c = evt.getKeyChar();
     // Verificar si el carácter ingresado no es una letra o un espacio
-    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ') {
+    if (!Character.isLetter(c) && c != 'ñ' && c != 'Ñ' && c != ' ') {
         evt.consume();  // Descartar el carácter que no sea letra o 'ñ'/'Ñ'
     }
     }//GEN-LAST:event_txtTipoPlanKeyTyped
 
+    private void btnEditarCircuito1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCircuito1ActionPerformed
+        // TODO add your handling code here:
+        if ("".equals(txtIDCircuitoEj.getText())) {
+            JOptionPane.showMessageDialog(null, "seleccione una fila");
+        } else {
+
+            if (!"".equals(txtIDCircuitoEj.getText()) || !"".equals(txtSeries.getText())) {
+                cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
+                cir.setSeries(txtSeries.getText());
+                cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
+                cir.setNombre((String) comboxcircuito.getSelectedItem());
+                cirDao.ModificarCircuito_Ejercicio(cir);
+                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                LimpiarCircuitoEj();
+                LimpiarTable();
+                btnCrearCiEj.setEnabled(false);
+                btnEditarCircuito1.setEnabled(false);
+                btnBorrarCiEj.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
+            }
+        }
+    }//GEN-LAST:event_btnEditarCircuito1ActionPerformed
+
+    private void btnEditarRutina1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarRutina1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarRutina1ActionPerformed
+
     private void txtIdDietaPlanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaPlanKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-    // Verificar si el carácter ingresado no es un número o es un carácter especial
-    if (!Character.isDigit(c)) {
-        evt.consume();  // Descartar el carácter que no sea número
-    }
+        // Verificar si el carácter ingresado no es un número o es un carácter especial
+        if (!Character.isDigit(c)) {
+            evt.consume();  // Descartar el carácter que no sea número
+        }
     }//GEN-LAST:event_txtIdDietaPlanKeyTyped
 
-    private void txtIDRutinaPlanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDRutinaPlanKeyTyped
+    private void comborutinas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comborutinas1ActionPerformed
         // TODO add your handling code here:
-        char c = evt.getKeyChar();
-    // Verificar si el carácter ingresado no es un número o es un carácter especial
-    if (!Character.isDigit(c)) {
-        evt.consume();  // Descartar el carácter que no sea número
-    }
-    }//GEN-LAST:event_txtIDRutinaPlanKeyTyped
+    }//GEN-LAST:event_comborutinas1ActionPerformed
+
+    private void btnDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDietaActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(5);
+    }//GEN-LAST:event_btnDietaActionPerformed
+
+    private void txtIdDietaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdDietaKeyTyped
+
+    private void txtTipoDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoDietaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoDietaActionPerformed
+
+    private void txtTipoDietaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoDietaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoDietaKeyTyped
+
+    private void txtIdDietaPlan1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaPlan1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdDietaPlan1KeyTyped
+
+    private void btnCrearDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearDietaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrearDietaActionPerformed
+
+    private void btnEditarDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarDietaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarDietaActionPerformed
+
+    private void btnBorrarDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarDietaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBorrarDietaActionPerformed
+
+    private void btnCancelarDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarDietaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarDietaActionPerformed
+
+    private void TableDietaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableDietaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TableDietaMouseClicked
+
+    private void txtIdDietaPlan2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaPlan2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdDietaPlan2KeyTyped
+
+    private void txtIdDietaPlan3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaPlan3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdDietaPlan3KeyTyped
 
     /**
      * @param args the command line arguments
@@ -1991,31 +2281,39 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JButton Iniciar18;
     private javax.swing.JTable TableCircuito;
     private javax.swing.JTable TableCircuitoEjercicio;
+    private javax.swing.JTable TableDieta;
     private javax.swing.JTable TablePlan;
     private javax.swing.JTable TableRutina;
-    private javax.swing.JTable TableRutina1;
+    private javax.swing.JTable TableRutinaCircuito;
     private javax.swing.JTable TableUsuario;
     private javax.swing.JButton btnActualizarEjercicios;
     private javax.swing.JButton btnBorrarCiEj;
     private javax.swing.JButton btnBorrarCircuito;
+    private javax.swing.JButton btnBorrarDieta;
     private javax.swing.JButton btnBorrarEjercicios;
     private javax.swing.JButton btnBorrarPlan;
     private javax.swing.JButton btnBorrarRutina;
     private javax.swing.JButton btnBorrarRutina1;
     private javax.swing.JButton btnBorrarUsuario;
     private javax.swing.JButton btnCancelarCiEj;
+    private javax.swing.JButton btnCancelarDieta;
     private javax.swing.JButton btnCancelarEjercicios;
     private javax.swing.JButton btnCancelarPlan;
     private javax.swing.JButton btnCircuito;
     private javax.swing.JButton btnCrearCiEj;
     private javax.swing.JButton btnCrearCircuito;
+    private javax.swing.JButton btnCrearDieta;
     private javax.swing.JButton btnCrearEjercicios;
     private javax.swing.JButton btnCrearPlan;
     private javax.swing.JButton btnCrearRutina;
     private javax.swing.JButton btnCrearRutinaCI;
+    private javax.swing.JButton btnDieta;
     private javax.swing.JButton btnEditarCircuito;
+    private javax.swing.JButton btnEditarCircuito1;
+    private javax.swing.JButton btnEditarDieta;
     private javax.swing.JButton btnEditarPlan;
     private javax.swing.JButton btnEditarRutina;
+    private javax.swing.JButton btnEditarRutina1;
     private javax.swing.JButton btnEditarUsuario;
     private javax.swing.JButton btnEjercicios;
     private javax.swing.JButton btnPlan;
@@ -2024,8 +2322,11 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> combocejercicio;
     private javax.swing.JComboBox<String> combocircuito;
     private javax.swing.JComboBox<String> comborutinas;
+    private javax.swing.JComboBox<String> comborutinas1;
     private javax.swing.JComboBox<String> comboxcircuito;
     private javax.swing.JComboBox<String> jComboBoxMusculosOcupados;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JFrame jFrame2;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -2052,6 +2353,11 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2062,6 +2368,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -2069,6 +2376,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel logo;
     private javax.swing.JTable tableEjercicios;
@@ -2084,8 +2392,11 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDCircuitoEj;
     private javax.swing.JTextField txtIDRutina;
     private javax.swing.JTextField txtIDRutina1;
-    private javax.swing.JTextField txtIDRutinaPlan;
+    private javax.swing.JTextField txtIdDieta;
     private javax.swing.JTextField txtIdDietaPlan;
+    private javax.swing.JTextField txtIdDietaPlan1;
+    private javax.swing.JTextField txtIdDietaPlan2;
+    private javax.swing.JTextField txtIdDietaPlan3;
     private javax.swing.JTextField txtIdEjercicio;
     private javax.swing.JTextField txtIdPlan;
     private javax.swing.JTextField txtIdUsuario;
@@ -2096,6 +2407,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JTextField txtPesoUsuario;
     private javax.swing.JTextField txtPlanUsuario;
     private javax.swing.JTextField txtSeries;
+    private javax.swing.JTextField txtTipoDieta;
     private javax.swing.JTextField txtTipoPlan;
     private javax.swing.JTextField txtVisualEjercicio;
     private javax.swing.JLabel xd;
@@ -2144,6 +2456,6 @@ public class home_administrador extends javax.swing.JFrame {
         txtIdPlan.setText("");
         txtTipoPlan.setText("");
         txtIdDietaPlan.setText("");
-        txtIDRutinaPlan.setText("");
+        comborutinas1.setSelectedItem(null);
     }
 }

@@ -10,8 +10,9 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
-        this.setBounds(0, 0, 1350, 750);
+        this.setBounds(0,0,1350,725);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public void validar() {

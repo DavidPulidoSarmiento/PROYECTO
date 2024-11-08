@@ -128,10 +128,11 @@ public class RutinaDAO {
     
     public List<Rutina> obtenerCircuitoporRutina(String nombreRutina) {
     List<Rutina> listaRutinas = new ArrayList<>();
-    String sql = "SELECT ce.ID AS idcircuito, e.nombre AS nombrecircuito" +
-                 "FROM rutinas_circuitos ce " +
-                 "JOIN rutinas e ON ce.ejercicio_id = e.id " +
-                 "WHERE ce.Estado = TRUE";
+    String sql = "SELECT rc.ID AS idcircuito, rc.rutina_id, rc.circuito_id r.nombre AS nombrecircuito" +
+                 "FROM rutinas_circuitos rc " +
+                 "JOIN rutinas r ON rc.rutina_id = r.id " +
+                 "JOIN circuitos c ON rc.circuito_id = c.id " +
+                 "WHERE r.nombre = ? AND rc.Estado = TRUE";
 
     try {
         con = cn.getConnection();
