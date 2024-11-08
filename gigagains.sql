@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 07, 2024 at 03:29 PM
+-- Generation Time: Nov 08, 2024 at 05:32 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.1.10
 
@@ -42,7 +42,8 @@ INSERT INTO `circuitos` (`ID`, `nombre`, `Estado`) VALUES
 (2, 'Dia 2', 1),
 (3, 'Día 3', 1),
 (4, 'Día 4', 1),
-(5, 'Día 5', 1);
+(5, 'Día 5', 0),
+(6, 'Día 6', 0);
 
 -- --------------------------------------------------------
 
@@ -66,9 +67,10 @@ INSERT INTO `circuitos_ejercicios` (`ID`, `circuito_id`, `ejercicio_id`, `series
 (1, 1, 1, '8x3', 1),
 (2, 2, 2, '10x2', 1),
 (3, 1, 2, '8x3', 1),
-(4, 1, 3, '12x2', 1),
-(5, 2, 3, 'xd', 1),
+(4, 1, 3, '12x20', 1),
+(5, 2, 3, '12x2', 1),
 (6, 3, 1, '12x2', 1),
+(7, 3, 3, '3x3', 1),
 (12, 3, 1, '8x3', 1);
 
 -- --------------------------------------------------------
@@ -117,7 +119,9 @@ CREATE TABLE `ejercicios` (
 INSERT INTO `ejercicios` (`ID`, `nombre`, `descripcion`, `visual`, `grupo_muscular_id`, `Estado`) VALUES
 (1, 'Press banca plana', 'Ejercicio para el pecho', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 1, 1),
 (2, 'Remo en barra', 'Ejercicio para la espalda', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2, 1),
-(3, 'Press Militar', 'Ejercicio para los hombros', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2, 1);
+(3, 'Press Militar', 'Ejercicio para los hombros', 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg', 2, 1),
+(4, 'Sentadilla Bulgara', 'Ejercicio para las piernas', 'static.strengthlevel.com', 3, 1),
+(5, 'xdddd', 'xdxd', 'xd', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -137,7 +141,8 @@ CREATE TABLE `grupos_musculares` (
 
 INSERT INTO `grupos_musculares` (`ID`, `nombre`, `Estado`) VALUES
 (1, 'Pecho Hombro y Triceps', 1),
-(2, 'Espalda biceps y antebrazos', 1);
+(2, 'Espalda biceps y antebrazos', 1),
+(3, 'Piernas', 1);
 
 -- --------------------------------------------------------
 
@@ -183,7 +188,9 @@ INSERT INTO `musculos` (`ID`, `nombre`, `Estado`) VALUES
 (4, 'Biceps', 1),
 (5, 'Triceps', 1),
 (6, 'Antebrazo', 1),
-(7, 'hombro posterior', 1);
+(7, 'hombro posterior', 1),
+(8, 'Cuádriceps', 1),
+(9, 'Gluteo', 1);
 
 -- --------------------------------------------------------
 
@@ -208,7 +215,9 @@ INSERT INTO `musculos_grupos` (`ID`, `musculo_id`, `grupo_muscular_id`, `Estado`
 (3, 5, 1, 1),
 (4, 2, 2, 1),
 (5, 4, 2, 1),
-(6, 6, 2, 1);
+(6, 6, 2, 1),
+(7, 8, 3, 1),
+(8, 9, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -355,7 +364,7 @@ INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de
 (2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', '178.00', '80.00', 'ninguna', 1, 2, 1),
 (4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 1, 1, 1),
 (6, 'Negronda', 'juan@gmail.com', '2006-01-01', '2024-11-06 12:03:29', 'Masculino', '$2y$10$D96EH/TJJusRnsSpRMgIluYV2pzDiqrHK76khX9xrAx9d2mMNSRDi', '178.00', '72.00', 'Ninguna', 1, 1, 1),
-(7, 'Victor', 'victor@gmail.com', '2005-10-11', '2024-11-07 11:41:12', 'Otro', '$2y$10$E3um/pSOkv.9RrFMakzjC.CuVs3M89IsKtf33VfZEId.XEAjvM2hy', '165.00', '66.00', 'NInguna', 1, 1, 1);
+(7, 'Victor', 'victor@gmail.com', '2005-10-11', '2024-11-07 11:41:12', 'Otro', '$2y$10$E3um/pSOkv.9RrFMakzjC.CuVs3M89IsKtf33VfZEId.XEAjvM2hy', '165.00', '66.00', 'NInguna', 1, 1, 0);
 
 --
 -- Indexes for dumped tables
@@ -467,7 +476,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT for table `circuitos`
 --
 ALTER TABLE `circuitos`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `circuitos_ejercicios`
@@ -491,7 +500,7 @@ ALTER TABLE `ejercicios`
 -- AUTO_INCREMENT for table `grupos_musculares`
 --
 ALTER TABLE `grupos_musculares`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `meal_completions`
@@ -503,13 +512,13 @@ ALTER TABLE `meal_completions`
 -- AUTO_INCREMENT for table `musculos`
 --
 ALTER TABLE `musculos`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `musculos_grupos`
 --
 ALTER TABLE `musculos_grupos`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `plan`
