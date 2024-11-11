@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost'; // Cambia si es necesario
 $usuario = 'root'; // Tu usuario de la base de datos
-$contraseña = '#Aprendiz2024'; // Tu contraseña de la base de datos
+$contraseña = ''; // Tu contraseña de la base de datos
 $base_de_datos = 'gigagains'; // Tu base de datos
 
 // Crear la conexión

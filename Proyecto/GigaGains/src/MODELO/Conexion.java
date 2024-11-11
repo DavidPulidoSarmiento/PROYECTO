@@ -9,7 +9,7 @@ public class Conexion {
     public Connection getConnection () {
         try{
             String myBD = "jdbc:mysql://localhost:3306/gigagains?serverTimezone=UTC";
-            con = DriverManager.getConnection (myBD, "root", "#Aprendiz2024");
+            con = DriverManager.getConnection (myBD, "root", "");
             return con;
         } catch (SQLException e){
             System.out.print(e.toString());

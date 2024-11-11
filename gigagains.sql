@@ -155,7 +155,7 @@ CREATE TABLE `meal_completions` (
   `usuario_id` int NOT NULL,
   `meal` enum('desayuno','almuerzo','cena') NOT NULL,
   `last_completed` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `meal_completions`
@@ -323,7 +323,7 @@ CREATE TABLE `user_routine_progress` (
   `usuario_id` int NOT NULL,
   `current_exercise_index` int DEFAULT '0',
   `last_routine_date` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_routine_progress`

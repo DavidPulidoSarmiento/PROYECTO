@@ -2,16 +2,7 @@
 package VISTA;
 
 
-import MODELO.Circuito;
-import MODELO.CircuitoDAO;
-import MODELO.Ejercicio;
-import MODELO.EjercicioDAO;
-import MODELO.Plan;
-import MODELO.PlanDAO;
-import MODELO.Rutina;
-import MODELO.RutinaDAO;
-import MODELO.Usuario;
-import MODELO.UsuarioDAO;
+import MODELO.*;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +19,8 @@ public class home_administrador extends javax.swing.JFrame {
     PlanDAO plaDao = new PlanDAO();
     Circuito cir = new Circuito();
     CircuitoDAO cirDao = new CircuitoDAO();
+    Dieta die = new Dieta();
+    DietaDAO dieDao = new DietaDAO();
     DefaultTableModel modelo = new DefaultTableModel();
     
     
@@ -103,7 +96,20 @@ public class home_administrador extends javax.swing.JFrame {
     }
     tableEjercicios.setModel(modelo);
     }
-    
+    public void ListarDieta(){
+        List<Dieta> ListarDie = dieDao.ListarDieta();
+        modelo = (DefaultTableModel) TableDieta.getModel();
+        Object[] ob = new Object[5];
+        for (int i = 0; i < ListarDie.size(); i++){
+            ob[0] = ListarDie.get(i).getId();
+            ob[1] = ListarDie.get(i).getTipo();
+            ob[2] = ListarDie.get(i).getProteinas();
+            ob[3] = ListarDie.get(i).getCarbohidratos();
+            ob[4] = ListarDie.get(i).getCalorias();
+            modelo.addRow(ob);
+        }
+        TableDieta.setModel(modelo);
+    }
     public void ListarPlan(){
         List<Plan> ListarPla = plaDao.ListarPlan();
         modelo = (DefaultTableModel) TablePlan.getModel();
@@ -194,7 +200,7 @@ public class home_administrador extends javax.swing.JFrame {
         // Agregar filas con datos de los ejercicios
         for (Rutina rutina : listaRutinas) {
             Object[] fila = {
-                rutina.getIdcircuito(),
+                rutina.getIdru_cir(),
                 rutina.getNombrecircuito()
             };
             modelo.addRow(fila);
@@ -1492,6 +1498,9 @@ public class home_administrador extends javax.swing.JFrame {
         btnEditarRutina.setEnabled(false);
         btnBorrarRutina.setEnabled(false);
         btnCrearRutina.setEnabled(true);
+        btnCrearRutinaCI.setEnabled(false);
+        btnEditarRutina1.setEnabled(false);
+        btnBorrarRutina1.setEnabled(false);
         LimpiarRutina();
         LimpiarRutinaCi();
         jTabbedPane1.setSelectedIndex(2);
@@ -1821,6 +1830,12 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void TableRutinaCircuitoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableRutinaCircuitoMouseClicked
         // TODO add your handling code here:
+        btnBorrarRutina1.setEnabled(true);
+        btnEditarRutina1.setEnabled(true);
+        btnCrearRutinaCI.setEnabled(false);
+        int fila = TableRutinaCircuito.rowAtPoint(evt.getPoint());
+        txtIDRutina1.setText(TableRutinaCircuito.getValueAt(fila, 0).toString());
+        combocircuito.setSelectedItem(TableRutinaCircuito.getValueAt(fila, 1));
     }//GEN-LAST:event_TableRutinaCircuitoMouseClicked
 
     private void combocircuitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocircuitoActionPerformed
@@ -1831,16 +1846,44 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         LimpiarRutinaCi();
         LimpiarTable();
+        btnCrearRutinaCI.setEnabled(false);
+        btnEditarRutina1.setEnabled(false);
         btnBorrarRutina1.setEnabled(false);
-        btnCrearRutinaCI.setEnabled(true);
     }//GEN-LAST:event_Iniciar15ActionPerformed
 
     private void btnBorrarRutina1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarRutina1ActionPerformed
         // TODO add your handling code here:
+        if (!"".equals(txtIDRutina1.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIDRutina1.getText());
+                client.EliminarRutinasCi(id);
+                
+                LimpiarRutinaCi();
+                LimpiarTable();
+                btnCrearRutinaCI.setEnabled(false);
+                btnEditarRutina1.setEnabled(false);
+                btnBorrarRutina1.setEnabled(false);
+            }
+        }
     }//GEN-LAST:event_btnBorrarRutina1ActionPerformed
 
     private void btnCrearRutinaCIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutinaCIActionPerformed
         // TODO add your handling code here:
+        if (!txtIDRutina1.getText().isEmpty()) {
+            
+            cl.setIdru_cir(Integer.parseInt(txtIDRutina1.getText()));
+            cl.setNombre((String) comborutinas.getSelectedItem());
+            cl.setNombrecircuito((String) combocircuito.getSelectedItem());
+            client.RegistrarRutina_Circuito(cl);
+            JOptionPane.showMessageDialog(null, "Ejercicio registrado");
+
+            // Limpiar los campos después de registrar
+            LimpiarRutinaCi();
+        
+    } else {
+        JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+    }
     }//GEN-LAST:event_btnCrearRutinaCIActionPerformed
 
     private void comborutinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comborutinasActionPerformed
@@ -1956,6 +1999,10 @@ public class home_administrador extends javax.swing.JFrame {
                 cirDao.EliminarCircuitoEj(id);
                 
                 LimpiarCircuitoEj();
+                LimpiarTable();
+                btnCrearCiEj.setEnabled(false);
+                btnEditarCircuito1.setEnabled(false);
+                btnBorrarCiEj.setEnabled(false);
             }
         }
     }//GEN-LAST:event_btnBorrarCiEjActionPerformed
@@ -2179,6 +2226,25 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnEditarRutina1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarRutina1ActionPerformed
         // TODO add your handling code here:
+        if ("".equals(txtIDRutina1.getText())) {
+            JOptionPane.showMessageDialog(null, "seleccione una fila");
+        } else {
+
+            if (!"".equals(txtIDRutina1.getText())) {
+                cl.setIdru_cir(Integer.parseInt(txtIDRutina1.getText()));
+                cl.setNombre((String) comborutinas.getSelectedItem());
+                cl.setNombrecircuito((String) combocircuito.getSelectedItem());
+                client.ModificarRutina_circuito(cl);
+                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                LimpiarRutinaCi();
+                LimpiarTable();
+                btnCrearRutinaCI.setEnabled(false);
+                btnEditarRutina1.setEnabled(false);
+                btnBorrarRutina1.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
+            }
+        }
     }//GEN-LAST:event_btnEditarRutina1ActionPerformed
 
     private void txtIdDietaPlanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdDietaPlanKeyTyped
@@ -2196,6 +2262,8 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDietaActionPerformed
         // TODO add your handling code here:
+        LimpiarTable();
+        ListarDieta();
         jTabbedPane1.setSelectedIndex(5);
     }//GEN-LAST:event_btnDietaActionPerformed
 
