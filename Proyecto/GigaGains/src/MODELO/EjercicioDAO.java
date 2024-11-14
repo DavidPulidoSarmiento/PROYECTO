@@ -7,13 +7,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase DAO que proporciona métodos para interactuar con la base de datos 
+ * en relación a los ejercicios. Permite registrar, listar, modificar y 
+ * eliminar ejercicios, así como obtener los nombres de los músculos ocupados.
+ */
 public class EjercicioDAO {
+
+    /** Conexión a la base de datos */
     Connection con;
+
+    /** Objeto de la clase {@link Conexion} para manejar la conexión a la base de datos */
     Conexion cn = new Conexion();
+
+    /** Declaración de la sentencia SQL */
     PreparedStatement ps;
+
+    /** Resultado de la consulta SQL */
     ResultSet rs;
 
-    // Método para registrar un ejercicio
+    /**
+     * Registra un nuevo ejercicio en la base de datos.
+     * Este método primero obtiene el ID del grupo muscular asociado con el ejercicio
+     * y luego inserta el ejercicio en la tabla `ejercicios`.
+     * 
+     * @param ej El objeto {@link Ejercicio} que se desea registrar.
+     * @return {@code true} si el ejercicio se registró correctamente, 
+     *         {@code false} si ocurrió algún error.
+     */
     public boolean RegistrarEjercicio(Ejercicio ej) {
         String sqlMusculo = "SELECT ID FROM grupos_musculares WHERE nombre = ?";
         String sqlEjercicio = "INSERT INTO ejercicios(id, nombre, descripcion, visual, grupo_muscular_id, Estado) VALUES (?, ?, ?, ?, ?, TRUE)";  // Estado a TRUE por defecto
@@ -47,7 +68,11 @@ public class EjercicioDAO {
         }
     }
 
-    // Método para listar ejercicios cuyo estado sea TRUE
+    /**
+     * Obtiene una lista de los ejercicios cuyo estado es {@code TRUE}.
+     * 
+     * @return Una lista de objetos {@link Ejercicio} que representan los ejercicios activos.
+     */
     public List<Ejercicio> ListarEjercicio() {
         List<Ejercicio> listaEj = new ArrayList<>();
         String sql = "SELECT e.ID, e.nombre, e.descripcion, e.visual, m.nombre AS nombre_musculo " +
@@ -74,7 +99,13 @@ public class EjercicioDAO {
         return listaEj;
     }
 
-    // Método para "eliminar" un ejercicio (actualiza su Estado a FALSE)
+    /**
+     * Elimina un ejercicio cambiando su estado a {@code FALSE}.
+     * 
+     * @param id El ID del ejercicio que se desea "eliminar" (actualizar su estado).
+     * @return {@code true} si el estado se actualizó correctamente a {@code FALSE},
+     *         {@code false} si ocurrió un error.
+     */
     public boolean EliminarEjercicio(int id) {
         String sql = "UPDATE ejercicios SET Estado = FALSE WHERE ID = ?";  // Cambia el estado a FALSE en lugar de eliminar
         try {
@@ -89,7 +120,16 @@ public class EjercicioDAO {
         }
     }
 
-    // Método para modificar un ejercicio
+    /**
+     * Modifica los detalles de un ejercicio en la base de datos.
+     * Este método actualiza los atributos de un ejercicio, incluyendo el nombre, 
+     * descripción, visualización y el grupo muscular asociado, si el ejercicio 
+     * tiene un estado {@code TRUE}.
+     * 
+     * @param ej El objeto {@link Ejercicio} con los nuevos datos a actualizar.
+     * @return {@code true} si el ejercicio fue actualizado correctamente, 
+     *         {@code false} si ocurrió algún error o no se encontró el grupo muscular.
+     */
     public boolean ModificarEjercicio(Ejercicio ej) {
         String sqlMusculo = "SELECT ID FROM grupos_musculares WHERE nombre = ?";
         String sqlUpdate = "UPDATE ejercicios SET nombre = ?, descripcion = ?, visual = ?, grupo_muscular_id = ? WHERE ID = ? AND Estado = TRUE";  // Solo actualiza si el estado es TRUE
@@ -123,7 +163,11 @@ public class EjercicioDAO {
         }
     }
 
-    // Método para obtener los nombres de los músculos ocupados
+    /**
+     * Obtiene una lista con los nombres de todos los músculos ocupados (de la tabla `grupos_musculares`).
+     * 
+     * @return Una lista de cadenas con los nombres de los grupos musculares.
+     */
     public List<String> obtenerNombresMusculosOcupados() {
         List<String> nombres = new ArrayList<>();
         String sql = "SELECT nombre FROM grupos_musculares";

@@ -7,13 +7,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de acceso a datos para la entidad {@link Usuario}.
+ * Proporciona métodos para interactuar con la base de datos relacionadas con los usuarios.
+ */
 public class UsuarioDAO {
+    
+    /** Conexión a la base de datos */
     Connection con;
+    
+    /** Objeto de conexión con la base de datos */
     Conexion cn = new Conexion();
+    
+    /** Sentencia preparada para ejecutar consultas SQL */
     PreparedStatement ps;
+    
+    /** Resultado de una consulta SQL */
     ResultSet rs;
     
-    // Método para listar usuarios activos (Estado = TRUE)
+    /**
+     * Obtiene una lista de los usuarios activos (Estado = TRUE) desde la base de datos.
+     * 
+     * @return Lista de objetos {@link Usuario} que representan los usuarios activos en el sistema.
+     */
     public List<Usuario> ListarUsuario() {
         List<Usuario> ListaUs = new ArrayList<>();
         String sql = "SELECT * FROM usuario WHERE Estado = TRUE";  // Filtramos solo usuarios activos
@@ -42,7 +58,13 @@ public class UsuarioDAO {
         return ListaUs;
     }
 
-    // Método para modificar los datos de un usuario
+    /**
+     * Modifica los datos de un usuario en la base de datos.
+     * Este método solo permite modificar los usuarios cuyo estado es {@code TRUE}.
+     * 
+     * @param usu El objeto {@link Usuario} que contiene los datos a modificar.
+     * @return {@code true} si la modificación fue exitosa, {@code false} si ocurrió un error.
+     */
     public boolean ModificarUsuario(Usuario usu) {
         String sql = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=? WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
         try {
@@ -73,7 +95,13 @@ public class UsuarioDAO {
         }
     }
 
-    // Método para "eliminar" un usuario cambiando su estado a FALSE (inactivo)
+    /**
+     * "Elimina" un usuario cambiando su estado a {@code FALSE}.
+     * Esto no elimina físicamente al usuario de la base de datos, sino que lo marca como inactivo.
+     * 
+     * @param id El identificador único del usuario a eliminar.
+     * @return {@code true} si la operación fue exitosa, {@code false} si ocurrió un error.
+     */
     public boolean EliminarUsuario(int id) {
         String sql = "UPDATE usuario SET Estado = FALSE WHERE id = ?";  // Cambiar estado a FALSE en lugar de eliminar físicamente
         try {

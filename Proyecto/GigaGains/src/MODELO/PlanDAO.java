@@ -8,42 +8,59 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+/**
+ * Clase que maneja las operaciones de acceso a datos relacionadas con los planes de entrenamiento.
+ * Permite registrar, listar, modificar y eliminar planes, así como obtener nombres de dietas.
+ */
 public class PlanDAO {
-    Conexion cn = new Conexion();
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
     
-    // Método para registrar un plan
+    /** Instancia de la clase Conexion para manejar la conexión a la base de datos */
+    Conexion cn = new Conexion();
+    
+    /** Conexión a la base de datos */
+    Connection con;
+    
+    /** Sentencia SQL preparada para la ejecución de consultas */
+    PreparedStatement ps;
+    
+    /** Resultado de la consulta SQL */
+    ResultSet rs;
+
+    /**
+     * Registra un nuevo plan en la base de datos.
+     * 
+     * @param pla Objeto de tipo Plan con los datos del nuevo plan.
+     * @return `true` si el plan fue registrado correctamente, `false` en caso contrario.
+     */
     public boolean RegistrarPlan(Plan pla) {
         String sqlDieta = "SELECT ID FROM dietas WHERE tipo = ?";
         String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
         String sql = "INSERT INTO plan (id, tipo, dieta_id, rutina_id, Estado) VALUES  (?,?,?,?, TRUE)";  // Se agrega la columna Estado y se establece en TRUE
         try {
             con = cn.getConnection();     
-        ps = con.prepareStatement(sqlDieta);
-        ps.setString(1, pla.getNombre_dieta());
-        rs = ps.executeQuery();
+            ps = con.prepareStatement(sqlDieta);
+            ps.setString(1, pla.getNombre_dieta());
+            rs = ps.executeQuery();
         
-        int idDieta = 0;
-        if (rs.next()) {
-            idDieta = rs.getInt("ID");
-        } else {
-            System.out.println("Dieta no encontrada.");
-            return false;
-        }
+            int idDieta = 0;
+            if (rs.next()) {
+                idDieta = rs.getInt("ID");
+            } else {
+                System.out.println("Dieta no encontrada.");
+                return false;
+            }
 
-        ps = con.prepareStatement(sqlRutina);
-        ps.setString(1, pla.getNombre_rutina());
-        rs = ps.executeQuery();
+            ps = con.prepareStatement(sqlRutina);
+            ps.setString(1, pla.getNombre_rutina());
+            rs = ps.executeQuery();
         
-        int idRutina = 0;
-        if (rs.next()) {
-            idRutina = rs.getInt("ID");
-        } else {
-            System.out.println("Ejercicio no encontrado.");
-            return false;
-        }
+            int idRutina = 0;
+            if (rs.next()) {
+                idRutina = rs.getInt("ID");
+            } else {
+                System.out.println("Ejercicio no encontrado.");
+                return false;
+            }
             
             ps = con.prepareStatement(sql);
             ps.setInt(1, pla.getId());
@@ -64,7 +81,11 @@ public class PlanDAO {
         }
     }
     
-    // Método para listar los planes cuyo estado sea TRUE
+    /**
+     * Lista los planes cuyo estado es `TRUE` (activos).
+     * 
+     * @return Una lista de objetos `Plan` representando los planes activos.
+     */
     public List<Plan> ListarPlan() {
         List<Plan> listaPla = new ArrayList<>();
         String sql = "SELECT p.ID AS ID, p.tipo AS tipo, d.tipo AS nombre_dieta, r.nombre AS nombre_rutina FROM plan p INNER JOIN dietas d ON p.dieta_id = d.ID INNER JOIN rutinas r ON p.rutina_id = r.ID WHERE p.Estado = TRUE";
@@ -87,7 +108,12 @@ public class PlanDAO {
         return listaPla;
     }
     
-    // Método para cambiar el estado del plan a FALSE (en lugar de eliminarlo)
+    /**
+     * Cambia el estado de un plan a `FALSE` (en lugar de eliminarlo físicamente de la base de datos).
+     * 
+     * @param id El identificador del plan que se desea eliminar (desactivar).
+     * @return `true` si el estado fue actualizado correctamente, `false` en caso contrario.
+     */
     public boolean EliminarPlan(int id) {
         String sql = "UPDATE plan SET Estado = FALSE WHERE id = ?";  // Cambia el estado a FALSE en lugar de eliminar
         try {
@@ -108,7 +134,13 @@ public class PlanDAO {
         }
     }
     
-    // Método para modificar un plan
+    /**
+     * Modifica un plan existente en la base de datos.
+     * Solo modifica planes cuyo estado es `TRUE`.
+     * 
+     * @param pla Objeto de tipo Plan con los datos modificados del plan.
+     * @return `true` si el plan fue modificado correctamente, `false` en caso contrario.
+     */
     public boolean ModificarPlan(Plan pla) {
         String sqlDieta = "SELECT ID FROM dietas WHERE tipo = ?";
         String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
@@ -116,7 +148,7 @@ public class PlanDAO {
         try {
             con = cn.getConnection();
             
-            // Obtener el ID del circuito a partir de su nombre
+            // Obtener el ID de la dieta a partir de su nombre
             ps = con.prepareStatement(sqlDieta);
             ps.setString(1, pla.getNombre_dieta());
             rs = ps.executeQuery();
@@ -129,7 +161,7 @@ public class PlanDAO {
                 return false;
             }
             
-            // Obtener el ID del circuito a partir de su nombre
+            // Obtener el ID de la rutina a partir de su nombre
             ps = con.prepareStatement(sqlRutina);
             ps.setString(1, pla.getNombre_rutina());
             rs = ps.executeQuery();
@@ -161,9 +193,14 @@ public class PlanDAO {
         }
     }
     
+    /**
+     * Obtiene una lista de los nombres de las dietas activas en la base de datos.
+     * 
+     * @return Una lista de nombres de dietas activas.
+     */
     public List<String> obtenerNombresDietas() {
         List<String> nombres = new ArrayList<>();
-        String sql = "SELECT tipo FROM dietas WHERE Estado = TRUE";  // Solo nombres de rutinas activas
+        String sql = "SELECT tipo FROM dietas WHERE Estado = TRUE";  // Solo nombres de dietas activas
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
