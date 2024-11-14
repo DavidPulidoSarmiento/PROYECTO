@@ -248,6 +248,7 @@ public class CircuitoDAO {
         con = cn.getConnection();
         
         // Obtener el ID del circuito a partir de su nombre
+        
         ps = con.prepareStatement(sqlCircuito);
         ps.setString(1, circuito.getNombre());
         rs = ps.executeQuery();

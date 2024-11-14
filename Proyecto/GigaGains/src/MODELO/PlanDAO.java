@@ -16,14 +16,40 @@ public class PlanDAO {
     
     // Método para registrar un plan
     public boolean RegistrarPlan(Plan pla) {
-        String sql = "INSERT INTO plan (id, tipo, rutina_id, dieta_id, Estado) VALUES  (?,?,?,?, TRUE)";  // Se agrega la columna Estado y se establece en TRUE
+        String sqlDieta = "SELECT ID FROM dietas WHERE tipo = ?";
+        String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
+        String sql = "INSERT INTO plan (id, tipo, dieta_id, rutina_id, Estado) VALUES  (?,?,?,?, TRUE)";  // Se agrega la columna Estado y se establece en TRUE
         try {
-            con = cn.getConnection();
+            con = cn.getConnection();     
+        ps = con.prepareStatement(sqlDieta);
+        ps.setString(1, pla.getNombre_dieta());
+        rs = ps.executeQuery();
+        
+        int idDieta = 0;
+        if (rs.next()) {
+            idDieta = rs.getInt("ID");
+        } else {
+            System.out.println("Dieta no encontrada.");
+            return false;
+        }
+
+        ps = con.prepareStatement(sqlRutina);
+        ps.setString(1, pla.getNombre_rutina());
+        rs = ps.executeQuery();
+        
+        int idRutina = 0;
+        if (rs.next()) {
+            idRutina = rs.getInt("ID");
+        } else {
+            System.out.println("Ejercicio no encontrado.");
+            return false;
+        }
+            
             ps = con.prepareStatement(sql);
             ps.setInt(1, pla.getId());
             ps.setString(2, pla.getTipo());
-            ps.setInt(3, pla.getId_dieta());
-            ps.setInt(4, pla.getId_rutina());
+            ps.setInt(3, idDieta);
+            ps.setInt(4, idRutina);
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -40,24 +66,25 @@ public class PlanDAO {
     
     // Método para listar los planes cuyo estado sea TRUE
     public List<Plan> ListarPlan() {
-        List<Plan> ListaPla = new ArrayList<>();
-        String sql = "SELECT * FROM plan WHERE Estado = TRUE";  // Solo listar los planes con estado TRUE
+        List<Plan> listaPla = new ArrayList<>();
+        String sql = "SELECT p.ID AS ID, p.tipo AS tipo, d.tipo AS nombre_dieta, r.nombre AS nombre_rutina FROM plan p INNER JOIN dietas d ON p.dieta_id = d.ID INNER JOIN rutinas r ON p.rutina_id = r.ID WHERE p.Estado = TRUE";
+        
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Plan pla = new Plan();
-                pla.setId(rs.getInt("id"));
+                pla.setId(rs.getInt("ID"));
                 pla.setTipo(rs.getString("tipo"));
-                pla.setId_dieta(rs.getInt("dieta_id"));
-                pla.setId_rutina(rs.getInt("rutina_id"));
-                ListaPla.add(pla);
+                pla.setNombre_dieta(rs.getString("nombre_dieta"));
+                pla.setNombre_rutina(rs.getString("nombre_rutina"));
+                listaPla.add(pla);
             }
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            System.out.println("Error al listar el plan: " + e.getMessage());
         }
-        return ListaPla;
+        return listaPla;
     }
     
     // Método para cambiar el estado del plan a FALSE (en lugar de eliminarlo)
@@ -83,13 +110,42 @@ public class PlanDAO {
     
     // Método para modificar un plan
     public boolean ModificarPlan(Plan pla) {
-        String sql = "UPDATE plan SET tipo = ?, dieta_id = ?, rutina_id = ? WHERE id = ? AND Estado = TRUE";  // Solo modifica si el plan está activo (Estado = TRUE)
+        String sqlDieta = "SELECT ID FROM dietas WHERE tipo = ?";
+        String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
+        String sqlUpdate = "UPDATE plan SET tipo = ?, dieta_id = ?, rutina_id = ? WHERE ID = ? AND Estado = TRUE";  // Solo modifica si el plan está activo (Estado = TRUE)
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            
+            // Obtener el ID del circuito a partir de su nombre
+            ps = con.prepareStatement(sqlDieta);
+            ps.setString(1, pla.getNombre_dieta());
+            rs = ps.executeQuery();
+        
+            int idDieta = 0;
+            if (rs.next()) {
+                idDieta = rs.getInt("ID");
+            } else {
+                System.out.println("Dieta no encontrada.");
+                return false;
+            }
+            
+            // Obtener el ID del circuito a partir de su nombre
+            ps = con.prepareStatement(sqlRutina);
+            ps.setString(1, pla.getNombre_rutina());
+            rs = ps.executeQuery();
+        
+            int idRutina = 0;
+            if (rs.next()) {
+                idRutina = rs.getInt("ID");
+            } else {
+                System.out.println("Dieta no encontrada.");
+                return false;
+            }
+
+            ps = con.prepareStatement(sqlUpdate);
             ps.setString(1, pla.getTipo());
-            ps.setInt(2, pla.getId_dieta());
-            ps.setInt(3, pla.getId_rutina());
+            ps.setInt(2, idDieta);
+            ps.setInt(3, idRutina);
             ps.setInt(4, pla.getId());
             ps.execute();
             return true;
@@ -103,5 +159,21 @@ public class PlanDAO {
                 System.out.println(e.toString());
             }
         }
+    }
+    
+    public List<String> obtenerNombresDietas() {
+        List<String> nombres = new ArrayList<>();
+        String sql = "SELECT tipo FROM dietas WHERE Estado = TRUE";  // Solo nombres de rutinas activas
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                nombres.add(rs.getString("tipo"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nombres;
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 08, 2024 at 05:32 PM
+-- Generation Time: Nov 14, 2024 at 02:58 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.1.10
 
@@ -81,7 +81,7 @@ INSERT INTO `circuitos_ejercicios` (`ID`, `circuito_id`, `ejercicio_id`, `series
 
 CREATE TABLE `dietas` (
   `ID` int NOT NULL,
-  `tipo` enum('V','D','R') COLLATE utf8mb4_general_ci NOT NULL,
+  `tipo` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `proteinas` decimal(5,2) NOT NULL,
   `carbohidratos` decimal(5,2) NOT NULL,
   `calorias` int NOT NULL,
@@ -93,9 +93,9 @@ CREATE TABLE `dietas` (
 --
 
 INSERT INTO `dietas` (`ID`, `tipo`, `proteinas`, `carbohidratos`, `calorias`, `Estado`) VALUES
-(1, 'V', '2.00', '6.00', 44, 1),
-(2, 'D', '2.00', '3.00', 26, 1),
-(3, 'R', '1.70', '3.50', 34, 1);
+(1, 'Volumen', '2.00', '6.00', 44, 1),
+(2, 'Definición ', '2.00', '3.00', 26, 1),
+(3, 'Recomposición Muscular', '1.70', '3.50', 34, 1);
 
 -- --------------------------------------------------------
 
@@ -238,15 +238,18 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`ID`, `tipo`, `rutina_id`, `dieta_id`, `Estado`) VALUES
-(1, 'plan1', 1, 1, 1),
-(2, 'plan 2', 1, 2, 1),
-(3, 'plan 3', 1, 3, 1),
-(4, 'plan 4', 2, 1, 1),
-(5, 'plan 5', 2, 2, 1),
-(6, 'plan 6', 2, 3, 1),
-(7, 'plan 7', 3, 1, 1),
-(8, 'plan 8', 3, 2, 1),
-(9, 'plan 9', 3, 3, 1);
+(1, 'plan1', 1, 1, 0),
+(2, 'plan 2', 1, 2, 0),
+(3, 'plan 3', 1, 3, 0),
+(4, 'plan 4', 2, 1, 0),
+(5, 'plan 5', 2, 2, 0),
+(6, 'plan 6', 2, 3, 0),
+(7, 'plan 7', 3, 1, 0),
+(8, 'plan 8', 3, 2, 0),
+(9, 'plan 9', 3, 3, 0),
+(10, 'plan1', 1, 1, 1),
+(11, 'plan2', 2, 2, 1),
+(12, 'plan3', 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -360,10 +363,10 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de_registro`, `genero`, `contraseña`, `estatura`, `peso`, `condicion_especial`, `id_plan`, `rol_id`, `Estado`) VALUES
-(1, 'David Alfredo', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', '178.00', '80.00', 'ninguna', 1, 3, 1),
-(2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', '178.00', '80.00', 'ninguna', 1, 2, 1),
-(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 1, 1, 1),
-(6, 'Negronda', 'juan@gmail.com', '2006-01-01', '2024-11-06 12:03:29', 'Masculino', '$2y$10$D96EH/TJJusRnsSpRMgIluYV2pzDiqrHK76khX9xrAx9d2mMNSRDi', '178.00', '72.00', 'Ninguna', 1, 1, 1),
+(1, 'David Alfredo', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', '178.00', '80.00', 'ninguna', 10, 3, 1),
+(2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', '178.00', '80.00', 'ninguna', 10, 2, 1),
+(4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', '178.00', '78.00', 'ninguna', 11, 1, 1),
+(6, 'Negronda', 'juan@gmail.com', '2006-01-01', '2024-11-06 12:03:29', 'Masculino', '$2y$10$D96EH/TJJusRnsSpRMgIluYV2pzDiqrHK76khX9xrAx9d2mMNSRDi', '178.00', '72.00', 'Ninguna', 12, 1, 1),
 (7, 'Victor', 'victor@gmail.com', '2005-10-11', '2024-11-07 11:41:12', 'Otro', '$2y$10$E3um/pSOkv.9RrFMakzjC.CuVs3M89IsKtf33VfZEId.XEAjvM2hy', '165.00', '66.00', 'NInguna', 1, 1, 0);
 
 --
@@ -524,7 +527,7 @@ ALTER TABLE `musculos_grupos`
 -- AUTO_INCREMENT for table `plan`
 --
 ALTER TABLE `plan`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `roles`

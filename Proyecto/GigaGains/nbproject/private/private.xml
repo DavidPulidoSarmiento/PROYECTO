@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Propietario/Desktop/Proyectito/GigaGains/src/MODELO/CircuitoDAO.java</file>
-            <file>file:/C:/Users/Propietario/Desktop/Proyectito/GigaGains/src/VISTA/Login.java</file>
-            <file>file:/C:/Users/Propietario/Desktop/Proyectito/GigaGains/src/VISTA/home_administrador.java</file>
-            <file>file:/C:/Users/Propietario/Desktop/Proyectito/GigaGains/src/MODELO/Circuito.java</file>
+            <file>file:/D:/xampp/htdocs/PROYECTO/Proyecto/GigaGains/src/VISTA/home_administrador.java</file>
+            <file>file:/D:/xampp/htdocs/PROYECTO/Proyecto/GigaGains/src/MODELO/Plan.java</file>
+            <file>file:/D:/xampp/htdocs/PROYECTO/Proyecto/GigaGains/src/MODELO/CircuitoDAO.java</file>
+            <file>file:/D:/xampp/htdocs/PROYECTO/Proyecto/GigaGains/src/MODELO/EjercicioDAO.java</file>
+            <file>file:/D:/xampp/htdocs/PROYECTO/Proyecto/GigaGains/src/MODELO/PlanDAO.java</file>
         </group>
     </open-files>
 </project-private>

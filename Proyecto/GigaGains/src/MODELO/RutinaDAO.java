@@ -128,11 +128,7 @@ public class RutinaDAO {
     
     public List<Rutina> obtenerCircuitoporRutina(String nombreRutina) {
     List<Rutina> listaRutinas = new ArrayList<>();
-    String sql = "SELECT rc.ID AS idcircuito, rc.rutina_id, rc.circuito_id r.nombre AS nombrecircuito" +
-                 "FROM rutinas_circuitos rc " +
-                 "JOIN rutinas r ON rc.rutina_id = r.id " +
-                 "JOIN circuitos c ON rc.circuito_id = c.id " +
-                 "WHERE r.nombre = ? AND rc.Estado = TRUE";
+    String sql = "SELECT rc.ID AS idcircuito, rc.circuito_id, c.nombre AS nombrecircuito FROM rutinas_circuitos rc JOIN rutinas r ON rc.rutina_id = r.id  JOIN circuitos c ON rc.circuito_id = c.id  WHERE r.nombre = ? AND rc.Estado = TRUE";
 
     try {
         con = cn.getConnection();
@@ -142,7 +138,7 @@ public class RutinaDAO {
 
         while (rs.next()) {
             Rutina rutina = new Rutina();
-            rutina.setIdcircuito(rs.getInt("idcircuito"));
+            rutina.setIdru_cir(rs.getInt("idcircuito"));
             rutina.setNombrecircuito(rs.getString("nombrecircuito"));
             listaRutinas.add(rutina);  // Agrega a la lista de ejercicios
         }
@@ -152,4 +148,128 @@ public class RutinaDAO {
     }
     return listaRutinas;
     }
+    
+    public boolean RegistrarRutina_Circuito(Rutina rutina) {
+    String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
+    String sqlCircuito = "SELECT ID FROM circuitos WHERE nombre = ?";
+    String sqlCEjercicio = "INSERT INTO rutinas_circuitos(id, rutina_id, circuito_id) VALUES (?, ?, ?)";
+    
+    try {
+        con = cn.getConnection();
+        
+        
+        ps = con.prepareStatement(sqlRutina);
+        ps.setString(1, rutina.getNombre());
+        rs = ps.executeQuery();
+        
+        int idRutina = 0;
+        if (rs.next()) {
+            idRutina = rs.getInt("ID");
+        } else {
+            System.out.println("Ejercicio no encontrado.");
+            return false;
+        }
+        
+        
+        ps = con.prepareStatement(sqlCircuito);
+        ps.setString(1, rutina.getNombrecircuito());
+        rs = ps.executeQuery();
+        
+        int idCircuito = 0;
+        if (rs.next()) {
+            idCircuito = rs.getInt("ID");
+        } else {
+            System.out.println("Circuito no encontrado.");
+            return false;
+        }
+
+
+        // Insertar en circuitos_ejercicios con los IDs obtenidos
+        ps = con.prepareStatement(sqlCEjercicio);
+        ps.setInt(1, rutina.getIdru_cir());
+        ps.setInt(2, idRutina);
+        ps.setInt(3, idCircuito);
+        ps.executeUpdate();
+        return true;
+        
+    } catch (SQLException e) {
+        System.out.println("Error al registrar ejercicio en el circuito: " + e.getMessage());
+        return false;
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión: " + e.getMessage());
+        }
+    }
 }
+    public boolean ModificarRutina_circuito(Rutina rutina) {
+        String sqlRutina = "SELECT ID FROM rutinas WHERE nombre = ?";
+        String sqlCircuito = "SELECT ID FROM circuitos WHERE nombre = ?";
+        String sqlUpdate = "UPDATE rutinas_circuitos SET rutina_id = ?, circuito_id = ? WHERE ID = ? AND Estado = TRUE";  // Solo actualiza si el estado es TRUE
+        try {
+        con = cn.getConnection();
+        
+        
+        ps = con.prepareStatement(sqlRutina);
+        ps.setString(1, rutina.getNombre());
+        rs = ps.executeQuery();
+        
+        int idRutina = 0;
+        if (rs.next()) {
+            idRutina = rs.getInt("ID");
+        } else {
+            System.out.println("Ejercicio no encontrado.");
+            return false;
+        }
+        
+        
+        ps = con.prepareStatement(sqlCircuito);
+        ps.setString(1, rutina.getNombrecircuito());
+        rs = ps.executeQuery();
+        
+        int idCircuito = 0;
+        if (rs.next()) {
+            idCircuito = rs.getInt("ID");
+        } else {
+            System.out.println("Circuito no encontrado.");
+            return false;
+        }
+
+
+        // Insertar en circuitos_ejercicios con los IDs obtenidos
+        ps = con.prepareStatement(sqlUpdate);
+        ps.setInt(1, idRutina);
+        ps.setInt(2, idCircuito);
+        ps.setInt(3, rutina.getIdru_cir());
+        ps.executeUpdate();
+        return true;
+        
+    } catch (SQLException e) {
+            System.out.println("Error al modificar ejercicio: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean EliminarRutinasCi(int id) {
+        String sql = "UPDATE rutinas_circuitos SET Estado = FALSE WHERE id = ?";  // Cambia el Estado a FALSE
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+}
+
