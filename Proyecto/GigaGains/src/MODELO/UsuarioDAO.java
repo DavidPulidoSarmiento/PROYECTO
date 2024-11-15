@@ -152,7 +152,54 @@ public class UsuarioDAO {
         }
     }
 }
+    public boolean ModificarUsuarioADMIN(Usuario usu) {
+    String sqlPlan = "SELECT id FROM plan WHERE tipo = ?";  // Obtener el id del plan por su nombre
+    String sqlUpdate = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, " +
+                       "genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=?, rol_id=? " +
+                       "WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
+    
+    try {
+        con = cn.getConnection();
 
+        // Obtener el ID del plan basado en su nombre
+        ps = con.prepareStatement(sqlPlan);
+        ps.setString(1, usu.getNombrePlan());  // Usamos el nombre del plan que se pasa con el Usuario
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            int idPlan = rs.getInt("id");
+
+            // Ahora que tenemos el id del plan, podemos actualizar el usuario
+            ps = con.prepareStatement(sqlUpdate);
+            ps.setString(1, usu.getNombre());
+            ps.setString(2, usu.getEmail());
+            ps.setString(3, usu.getFecha_de_nacimiento());
+            ps.setString(4, usu.getFecha_de_registro());
+            ps.setString(5, usu.getGenero());
+            ps.setString(6, usu.getContraseña());
+            ps.setDouble(7, usu.getEstatura());
+            ps.setDouble(8, usu.getPeso());
+            ps.setString(9, usu.getCondicion_especial());
+            ps.setInt(10, idPlan);  // Establecemos el ID del plan
+            ps.setInt(11, usu.getRol_id());
+            ps.setInt(12, usu.getId());
+            ps.executeUpdate();
+            return true;
+        } else {
+            System.out.println("Plan no encontrado: " + usu.getNombrePlan());
+            return false;
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al modificar usuario: " + e.getMessage());
+        return false;
+    } finally {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión: " + e.getMessage());
+        }
+    }
+}
 
     /**
      * "Elimina" un usuario cambiando su estado a {@code FALSE}.

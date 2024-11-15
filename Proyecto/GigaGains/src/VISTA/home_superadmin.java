@@ -23,6 +23,7 @@ public class home_superadmin extends javax.swing.JFrame {
     DietaDAO dieDao = new DietaDAO();
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel modelofalso = new DefaultTableModel();
+    DefaultTableModel modelodos = new DefaultTableModel();
     
     
     public home_superadmin() {
@@ -30,13 +31,13 @@ public class home_superadmin extends javax.swing.JFrame {
         this.setBounds(0,0,1350,725);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        cargarCircuitos();
         inicializarEventos();
         llenarComboBoxMusculosOcupados();
         llenarComboBoxEjercicios();
         llenarComboBoxRutina();
         llenarComboBoxDieta();
         llenarComboBoxNombresPlanes();
+        cargarCircuitos();
         
     }
     
@@ -317,15 +318,15 @@ public class home_superadmin extends javax.swing.JFrame {
         
         List<Rutina> listaRutinas = client.obtenerCircuitoporRutina(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
-        modelo = (DefaultTableModel) TableRutinaCircuito.getModel();
-        modelo.setRowCount(0);
+        modelodos = (DefaultTableModel) TableRutinaCircuito.getModel();
+        modelodos.setRowCount(0);
         // Agregar filas con datos de los ejercicios
         for (Rutina rutina : listaRutinas) {
             Object[] fila = {
                 rutina.getIdru_cir(),
                 rutina.getNombrecircuito()
             };
-            modelo.addRow(fila);
+            modelodos.addRow(fila);
         }
     }
     private void actualizarTablaCircuitosFalsa(String nombreRutina) {
@@ -346,6 +347,12 @@ public class home_superadmin extends javax.swing.JFrame {
     public void LimpiarTable() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
+            i = i - 1;
+        }
+    }
+    public void LimpiarTabledos() {
+        for (int i = 0; i < modelodos.getRowCount(); i++) {
+            modelodos.removeRow(i);
             i = i - 1;
         }
     }
@@ -548,13 +555,16 @@ public class home_superadmin extends javax.swing.JFrame {
         btnBorrarPlan1 = new javax.swing.JButton();
         btnCancelarPlan1 = new javax.swing.JButton();
 
+        jFrame1.getContentPane().setLayout(new java.awt.BorderLayout());
+
+        jFrame2.getContentPane().setLayout(new java.awt.BorderLayout());
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(144, 12, 63));
         setSize(new java.awt.Dimension(1350, 725));
         getContentPane().setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/logoGiGa.png"))); // NOI18N
@@ -2213,6 +2223,7 @@ public class home_superadmin extends javax.swing.JFrame {
     private void btnRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutinaActionPerformed
         // TODO add your handling code here:
                 LimpiarTable();
+                LimpiarTabledos();
         LimpiarTableFalsa();
         ListarRutina();
         ListarRutinaFalsa();
@@ -2227,6 +2238,9 @@ public class home_superadmin extends javax.swing.JFrame {
         LimpiarRutina();
         LimpiarRutinaFalso();
         LimpiarRutinaCi();
+        LimpiarRutinaCiFalsa();
+        
+        
         jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_btnRutinaActionPerformed
 
@@ -2284,7 +2298,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdEjercicio.getText()) || !"".equals(txtNombreEjercicio.getText()) || !"".equals(txtDescripcionEjercicio.getText()) || !"".equals(txtVisualEjercicio.getText())) {
+            if (!"".equals(txtIdEjercicio.getText()) && !"".equals(txtNombreEjercicio.getText()) && !"".equals(txtDescripcionEjercicio.getText()) && !"".equals(txtVisualEjercicio.getText())) {
                 ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
                 ej.setNombre(txtNombreEjercicio.getText());
                 ej.setDescripcion(txtDescripcionEjercicio.getText());
@@ -2307,7 +2321,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIDRutina.getText()) || !"".equals(txtNombreRutina.getText())) {
+            if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())) {
                 cl.setId(Integer.parseInt(txtIDRutina.getText()));
                 cl.setNombre(txtNombreRutina.getText());
                 client.ModificarRutina(cl);
@@ -2350,6 +2364,16 @@ public class home_superadmin extends javax.swing.JFrame {
                 ejDao.EliminarEjercicio(id);
                 LimpiarTable();
                 LimpiarTableFalsa();
+                
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+        
+                LimpiarTable();
+                LimpiarTableFalsa();
                 ListarEjercicio();
                 ListarEjercicioFalso();
                 btnActualizarEjercicios.setEnabled(false);
@@ -2370,9 +2394,29 @@ public class home_superadmin extends javax.swing.JFrame {
                 int id = Integer.parseInt(txtIDRutina.getText());
                 client.EliminarRutina(id);
                 LimpiarTable();
-        LimpiarTableFalsa();
-        ListarRutina();
-        ListarRutinaFalsa();
+                
+                LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+                
+                
+                LimpiarRutinaCi();
+                LimpiarRutinaCiFalsa();
+                
+                LimpiarTable();
+                LimpiarTableFalsa();
+                LimpiarTabledos();
+                LimpiarRutina();
+                LimpiarRutinaFalso();
+                
+                ListarRutina();
+                ListarRutinaFalsa();
+        
+        
         btnEditarRutina.setEnabled(false);
         btnBorrarRutina.setEnabled(false);
         btnCrearRutina.setEnabled(true);
@@ -2380,9 +2424,6 @@ public class home_superadmin extends javax.swing.JFrame {
         btnEditarRutina1.setEnabled(false);
         btnBorrarRutina1.setEnabled(false);
         btnBorrarRutina2.setEnabled(false);
-        LimpiarRutina();
-        LimpiarRutinaFalso();
-        LimpiarRutinaCi();
             }
         }
     }//GEN-LAST:event_btnBorrarRutinaActionPerformed
@@ -2412,7 +2453,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdUsuario.getText()) || !"".equals(txtNombreUsuario.getText()) || !"".equals(txtEmailUsuario.getText()) || !"".equals(txtFechaNacimiento.getText()) || !"".equals(txtFechaRegistro.getText()) || !"".equals(txtGeneroUsuario.getText()) || !"".equals(txtContraseñaUsuario.getText()) || !"".equals(txtEstaturaUsuario.getText()) ||  !"".equals(txtPesoUsuario.getText()) || !"".equals(txtCondEspecialUsuario.getText())) {
+            if (!"".equals(txtIdUsuario.getText()) && !"".equals(txtNombreUsuario.getText()) && !"".equals(txtEmailUsuario.getText()) && !"".equals(txtFechaNacimiento.getText()) && !"".equals(txtFechaRegistro.getText()) && !"".equals(txtGeneroUsuario.getText()) && !"".equals(txtContraseñaUsuario.getText()) && !"".equals(txtEstaturaUsuario.getText()) &&  !"".equals(txtPesoUsuario.getText()) && !"".equals(txtCondEspecialUsuario.getText())) {
                 us.setId(Integer.parseInt(txtIdUsuario.getText()));
                 us.setNombre(txtNombreUsuario.getText());
                 us.setEmail(txtEmailUsuario.getText());
@@ -2424,7 +2465,8 @@ public class home_superadmin extends javax.swing.JFrame {
                 us.setPeso(Double.parseDouble(txtPesoUsuario.getText()));
                 us.setCondicion_especial(txtCondEspecialUsuario.getText());
                 us.setNombrePlan((String)comboxplanes.getSelectedItem());
-                user.ModificarUsuario(us);
+                us.setRol_id(Integer.parseInt(txtRol.getText()));
+                user.ModificarUsuarioADMIN(us);
                 JOptionPane.showMessageDialog(null, "Usuario Modificado");
                 LimpiarTable();
                 LimpiarUsuario();
@@ -2480,7 +2522,7 @@ public class home_superadmin extends javax.swing.JFrame {
 
     private void btnCrearPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPlanActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIdPlan.getText()) || !"".equals(txtTipoPlan.getText())){
+        if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())){
             pla.setId(Integer.parseInt(txtIdPlan.getText()));
             pla.setTipo(txtTipoPlan.getText());
             pla.setNombre_dieta((String) combodietaname.getSelectedItem());
@@ -2504,7 +2546,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdPlan.getText()) || !"".equals(txtTipoPlan.getText())) {
+            if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())) {
                 pla.setId(Integer.parseInt(txtIdPlan.getText()));
                 pla.setTipo(txtTipoPlan.getText());
                 pla.setNombre_rutina((String)comborutinaname.getSelectedItem());
@@ -2527,6 +2569,14 @@ public class home_superadmin extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIdPlan.getText());
                 plaDao.EliminarPlan(id);
+                LimpiarTable();
+                LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+        llenarComboBoxEjercicios();
+        llenarComboBoxRutina();
+        llenarComboBoxDieta();
+        llenarComboBoxNombresPlanes();
+        cargarCircuitos();
                 LimpiarTable();
                 LimpiarTableFalsa();
                 LimpiarPlan();
@@ -2611,7 +2661,7 @@ public class home_superadmin extends javax.swing.JFrame {
         // TODO add your handling code here:
         LimpiarRutinaCi();
         LimpiarRutinaCiFalsa();
-        LimpiarTable();
+        LimpiarTabledos();
         LimpiarTableFalsa();
         btnCrearRutinaCI.setEnabled(false);
         btnEditarRutina1.setEnabled(false);
@@ -2628,7 +2678,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 
                 LimpiarRutinaCi();
                 LimpiarRutinaCiFalsa();
-                LimpiarTable();
+                LimpiarTabledos();
                 LimpiarTableFalsa();
                 btnCrearRutinaCI.setEnabled(false);
                 btnEditarRutina1.setEnabled(false);
@@ -2649,6 +2699,8 @@ public class home_superadmin extends javax.swing.JFrame {
 
             // Limpiar los campos después de registrar
             LimpiarRutinaCi();
+            LimpiarTabledos();
+            LimpiarTableFalsa();
         
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
@@ -2710,12 +2762,26 @@ public class home_superadmin extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIDCircuito.getText());
                 cirDao.EliminarCircuito(id);
+                
+                LimpiarTable();
+                LimpiarTableFalsa();
+                
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+                
+                LimpiarCircuitoEj();
+                LimpiarCircuitoEjFalso();
                 LimpiarTable();
                 LimpiarTableFalsa();
                 LimpiarCircuitoFalso();
                 LimpiarCircuito();
                 ListarCircuito();
                 ListarCircuitoFalso();
+                
             }
         }
     }//GEN-LAST:event_btnBorrarCircuitoActionPerformed
@@ -2742,7 +2808,7 @@ public class home_superadmin extends javax.swing.JFrame {
 
     private void btnCrearCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCiEjActionPerformed
         // TODO add your handling code here:
-        if (!txtIDCircuitoEj.getText().isEmpty() || 
+        if (!txtIDCircuitoEj.getText().isEmpty() && 
         !txtSeries.getText().isEmpty()) {
             
             cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
@@ -2968,7 +3034,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIDCircuitoEj.getText()) || !"".equals(txtSeries.getText())) {
+            if (!"".equals(txtIDCircuitoEj.getText()) && !"".equals(txtSeries.getText())) {
                 cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
                 cir.setSeries(txtSeries.getText());
                 cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
@@ -2999,7 +3065,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 client.ModificarRutina_circuito(cl);
                 JOptionPane.showMessageDialog(null, "Cliente Modificado");
                 LimpiarRutinaCi();
-                LimpiarTable();
+                LimpiarTabledos();
                 btnCrearRutinaCI.setEnabled(false);
                 btnEditarRutina1.setEnabled(false);
                 btnBorrarRutina1.setEnabled(false);
@@ -3061,7 +3127,7 @@ public class home_superadmin extends javax.swing.JFrame {
 
     private void btnCrearDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearDietaActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIdDieta.getText()) || !"".equals(txtTipoDieta.getText()) || !"".equals(txtIdDietaPlan1.getText()) || !"".equals(txtIdDietaPlan2.getText()) || !"".equals(txtIdDietaPlan3.getText())){
+        if (!"".equals(txtIdDieta.getText()) && !"".equals(txtTipoDieta.getText()) && !"".equals(txtIdDietaPlan1.getText()) && !"".equals(txtIdDietaPlan2.getText()) && !"".equals(txtIdDietaPlan3.getText())){
             die.setId(Integer.parseInt(txtIdDieta.getText()));
             die.setTipo(txtTipoDieta.getText());
             die.setProteinas(Integer.parseInt(txtIdDietaPlan1.getText()));
@@ -3085,7 +3151,7 @@ public class home_superadmin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdDieta.getText()) || !"".equals(txtTipoDieta.getText()) || !"".equals(txtIdDietaPlan1.getText()) || !"".equals(txtIdDietaPlan2.getText()) || !"".equals(txtIdDietaPlan3.getText())) {
+            if (!"".equals(txtIdDieta.getText()) && !"".equals(txtTipoDieta.getText()) && !"".equals(txtIdDietaPlan1.getText()) && !"".equals(txtIdDietaPlan2.getText()) && !"".equals(txtIdDietaPlan3.getText())) {
                 die.setId(Integer.parseInt(txtIdDieta.getText()));
                 die.setTipo(txtTipoDieta.getText());
                 die.setProteinas(Integer.parseInt(txtIdDietaPlan1.getText()));
@@ -3111,8 +3177,18 @@ public class home_superadmin extends javax.swing.JFrame {
                 dieDao.EliminarDieta(id);
                 LimpiarTable();
                 LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+        llenarComboBoxEjercicios();
+        llenarComboBoxRutina();
+        llenarComboBoxDieta();
+        llenarComboBoxNombresPlanes();
+        cargarCircuitos();
+        
+                
                 LimpiarDieta();
                 LimpiarDietaFalsa();
+                LimpiarTable();
+                LimpiarTableFalsa();
                 ListarDieta();
                 ListarDietaFalsa();
             }
@@ -3177,6 +3253,18 @@ public class home_superadmin extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIDCircuito1.getText());
                 cirDao.RestaurarCircuito(id);
+                LimpiarTable();
+                LimpiarTableFalsa();
+                
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+                
+                LimpiarCircuitoEj();
+                LimpiarCircuitoEjFalso();
                 LimpiarTable();
                 LimpiarTableFalsa();
                 LimpiarCircuitoFalso();
@@ -3258,6 +3346,15 @@ public class home_superadmin extends javax.swing.JFrame {
                 ejDao.RestaurarEjercicio(id);
                 LimpiarTable();
                 LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+                
+                LimpiarTable();
+                LimpiarTableFalsa();
                 ListarEjercicio();
                 ListarEjercicioFalso();
                 btnActualizarEjercicios.setEnabled(false);
@@ -3292,9 +3389,27 @@ public class home_superadmin extends javax.swing.JFrame {
                 int id = Integer.parseInt(txtIDRutina2.getText());
                 client.RestaurarRutina(id);
                 LimpiarTable();
-        LimpiarTableFalsa();
-        ListarRutina();
-        ListarRutinaFalsa();
+                
+                LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+                llenarComboBoxEjercicios();
+                llenarComboBoxRutina();
+                llenarComboBoxDieta();
+                llenarComboBoxNombresPlanes();
+                cargarCircuitos();
+                
+                
+                LimpiarRutinaCi();
+                LimpiarRutinaCiFalsa();
+                
+                LimpiarTable();
+                LimpiarTableFalsa();
+                LimpiarTabledos();
+                LimpiarRutina();
+                LimpiarRutinaFalso();
+                
+                ListarRutina();
+                ListarRutinaFalsa();
         btnEditarRutina.setEnabled(false);
         btnBorrarRutina.setEnabled(false);
         btnCrearRutina.setEnabled(true);
@@ -3302,9 +3417,7 @@ public class home_superadmin extends javax.swing.JFrame {
         btnEditarRutina1.setEnabled(false);
         btnBorrarRutina1.setEnabled(false);
         btnBorrarRutina2.setEnabled(false);
-        LimpiarRutina();
-        LimpiarRutinaFalso();
-        LimpiarRutinaCi();
+        
             }
         }
     }//GEN-LAST:event_btnBorrarRutina2ActionPerformed
@@ -3343,7 +3456,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 
                 LimpiarRutinaCi();
                 LimpiarRutinaCiFalsa();
-                LimpiarTable();
+                LimpiarTabledos();
                 LimpiarTableFalsa();
                 btnCrearRutinaCI.setEnabled(false);
                 btnEditarRutina1.setEnabled(false);
@@ -3368,6 +3481,15 @@ public class home_superadmin extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIdDieta1.getText());
                 dieDao.RestaurarDieta(id);
+                LimpiarTable();
+                LimpiarTableFalsa();
+                
+                llenarComboBoxMusculosOcupados();
+        llenarComboBoxEjercicios();
+        llenarComboBoxRutina();
+        llenarComboBoxDieta();
+        llenarComboBoxNombresPlanes();
+        cargarCircuitos();
                 LimpiarTable();
                 LimpiarTableFalsa();
                 LimpiarDieta();
@@ -3409,6 +3531,14 @@ public class home_superadmin extends javax.swing.JFrame {
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIdPlan1.getText());
                 plaDao.RestaurarPlan(id);
+                LimpiarTable();
+                LimpiarTableFalsa();
+                llenarComboBoxMusculosOcupados();
+        llenarComboBoxEjercicios();
+        llenarComboBoxRutina();
+        llenarComboBoxDieta();
+        llenarComboBoxNombresPlanes();
+        cargarCircuitos();
                 LimpiarTable();
                 LimpiarTableFalsa();
                 LimpiarPlan();
