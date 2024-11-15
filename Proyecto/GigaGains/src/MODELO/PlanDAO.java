@@ -107,6 +107,27 @@ public class PlanDAO {
         }
         return listaPla;
     }
+    public List<Plan> ListarPlanFalso() {
+        List<Plan> listaPla = new ArrayList<>();
+        String sql = "SELECT p.ID AS ID, p.tipo AS tipo, d.tipo AS nombre_dieta, r.nombre AS nombre_rutina FROM plan p INNER JOIN dietas d ON p.dieta_id = d.ID INNER JOIN rutinas r ON p.rutina_id = r.ID WHERE p.Estado = FALSE";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Plan pla = new Plan();
+                pla.setId(rs.getInt("ID"));
+                pla.setTipo(rs.getString("tipo"));
+                pla.setNombre_dieta(rs.getString("nombre_dieta"));
+                pla.setNombre_rutina(rs.getString("nombre_rutina"));
+                listaPla.add(pla);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar el plan: " + e.getMessage());
+        }
+        return listaPla;
+    }
     
     /**
      * Cambia el estado de un plan a `FALSE` (en lugar de eliminarlo físicamente de la base de datos).
@@ -116,6 +137,25 @@ public class PlanDAO {
      */
     public boolean EliminarPlan(int id) {
         String sql = "UPDATE plan SET Estado = FALSE WHERE id = ?";  // Cambia el estado a FALSE en lugar de eliminar
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    public boolean RestaurarPlan(int id) {
+        String sql = "UPDATE plan SET Estado = TRUE WHERE id = ?";  // Cambia el estado a FALSE en lugar de eliminar
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);

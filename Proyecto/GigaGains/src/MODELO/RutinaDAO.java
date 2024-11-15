@@ -84,6 +84,32 @@ public class RutinaDAO {
         }
         return ListaCl;
     }
+    public List<Rutina> ListarRutinaFalsa() {
+        List<Rutina> ListaCl = new ArrayList<>();
+        String sql = "SELECT * FROM rutinas WHERE Estado = FALSE";  // Filtra solo rutinas activas
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Rutina cl = new Rutina();
+                cl.setId(rs.getInt("ID"));
+                cl.setNombre(rs.getString("nombre"));
+                ListaCl.add(cl);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+        return ListaCl;
+    }
 
     /**
      * Elimina una rutina cambiando su estado a FALSE (no la elimina físicamente).
@@ -93,6 +119,25 @@ public class RutinaDAO {
      */
     public boolean EliminarRutina(int id) {
         String sql = "UPDATE rutinas SET Estado = FALSE WHERE ID = ?";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+    public boolean RestaurarRutina(int id) {
+        String sql = "UPDATE rutinas SET Estado = TRUE WHERE ID = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -168,6 +213,25 @@ public class RutinaDAO {
     public List<Rutina> obtenerCircuitoporRutina(String nombreRutina) {
         List<Rutina> listaRutinas = new ArrayList<>();
         String sql = "SELECT rc.ID AS idcircuito, rc.circuito_id, c.nombre AS nombrecircuito FROM rutinas_circuitos rc JOIN rutinas r ON rc.rutina_id = r.id JOIN circuitos c ON rc.circuito_id = c.id WHERE r.nombre = ? AND rc.Estado = TRUE";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombreRutina);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Rutina rutina = new Rutina();
+                rutina.setIdru_cir(rs.getInt("idcircuito"));
+                rutina.setNombrecircuito(rs.getString("nombrecircuito"));
+                listaRutinas.add(rutina);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaRutinas;
+    }
+    public List<Rutina> obtenerCircuitoporRutinaFalso(String nombreRutina) {
+        List<Rutina> listaRutinas = new ArrayList<>();
+        String sql = "SELECT rc.ID AS idcircuito, rc.circuito_id, c.nombre AS nombrecircuito FROM rutinas_circuitos rc JOIN rutinas r ON rc.rutina_id = r.id JOIN circuitos c ON rc.circuito_id = c.id WHERE r.nombre = ? AND rc.Estado = FALSE";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -289,6 +353,25 @@ public class RutinaDAO {
      */
     public boolean EliminarRutinasCi(int id) {
         String sql = "UPDATE rutinas_circuitos SET Estado = FALSE WHERE id = ?";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+    public boolean RestaurarRutinasCi(int id) {
+        String sql = "UPDATE rutinas_circuitos SET Estado = TRUE WHERE id = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);

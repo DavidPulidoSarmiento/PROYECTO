@@ -183,6 +183,25 @@ public class CircuitoDAO {
             }
         }
     }
+    public boolean RestaurarCircuitoEj(int id) {
+        String sql = "UPDATE circuitos_ejercicios SET Estado = TRUE WHERE id = ?";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
 
     /**
      * Modifica los datos de un circuito.
@@ -250,6 +269,33 @@ public class CircuitoDAO {
                      "JOIN circuitos c ON ce.circuito_id = c.id " +
                      "JOIN ejercicios e ON ce.ejercicio_id = e.id " +
                      "WHERE c.nombre = ? AND ce.Estado = TRUE";
+
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombreCircuito);  // Filtro por nombre de circuito
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Circuito circuito = new Circuito();
+                circuito.setIDCircuitoEj(rs.getInt("IDCircuitoEj"));
+                circuito.setEjercicio_id(rs.getInt("ejercicio_id"));
+                circuito.setNombre_ejercicio(rs.getString("nombre_ejercicio"));
+                circuito.setSeries(rs.getString("series"));
+                listaEjercicios.add(circuito);  // Agrega a la lista de ejercicios
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaEjercicios;
+    }
+    public List<Circuito> obtenerEjerciciosPorCircuitoFalsos(String nombreCircuito) {
+        List<Circuito> listaEjercicios = new ArrayList<>();
+        String sql = "SELECT ce.ID AS IDCircuitoEj, ce.ejercicio_id, e.nombre AS nombre_ejercicio, ce.series " +
+                     "FROM circuitos_ejercicios ce " +
+                     "JOIN circuitos c ON ce.circuito_id = c.id " +
+                     "JOIN ejercicios e ON ce.ejercicio_id = e.id " +
+                     "WHERE c.nombre = ? AND ce.Estado = FALSE";
 
         try {
             con = cn.getConnection();

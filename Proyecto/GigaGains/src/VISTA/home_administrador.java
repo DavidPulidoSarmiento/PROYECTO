@@ -33,12 +33,20 @@ public class home_administrador extends javax.swing.JFrame {
         llenarComboBoxEjercicios();
         llenarComboBoxRutina();
         llenarComboBoxDieta();
+        llenarComboBoxNombresPlanes();
         cargarCircuitos();
         inicializarEventos();
     }
     
     
-    
+    private void llenarComboBoxNombresPlanes() {
+        List<String> nombres = user.obtenerNombresPlanes();
+        comboxplanes.removeAllItems();  // Limpiar el JComboBox
+
+        for (String nombre : nombres) {
+            comboxplanes.addItem(nombre);  // Agregar cada nombre
+        }
+    }
     public void ListarRutina(){
         List<Rutina> ListarRu = client.ListarRutina();
         modelo = (DefaultTableModel) TableRutina.getModel();
@@ -77,7 +85,7 @@ public class home_administrador extends javax.swing.JFrame {
             ob[7] = ListarUs.get(i).getEstatura();
             ob[8] = ListarUs.get(i).getPeso();
             ob[9] = ListarUs.get(i).getCondicion_especial();
-            ob[10] = ListarUs.get(i).getId_plan();
+            ob[10] = ListarUs.get(i).getNombrePlan();
             modelo.addRow(ob);
         }
         TableUsuario.setModel(modelo);
@@ -329,8 +337,8 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel34 = new javax.swing.JLabel();
         txtCondEspecialUsuario = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
-        txtPlanUsuario = new javax.swing.JTextField();
         txtContraseñaUsuario = new javax.swing.JTextField();
+        comboxplanes = new javax.swing.JComboBox<>();
         jPanel8 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         txtIdDieta = new javax.swing.JTextField();
@@ -1134,68 +1142,69 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(255, 255, 255));
         jLabel32.setText("Genero");
-        jPanel6.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, -1, -1));
+        jPanel6.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 20, -1, -1));
 
         jLabel33.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel33.setForeground(new java.awt.Color(255, 255, 255));
         jLabel33.setText("Contraseña");
-        jPanel6.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, -1, -1));
+        jPanel6.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 20, -1, -1));
 
         txtGeneroUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtGeneroUsuarioKeyTyped(evt);
             }
         });
-        jPanel6.add(txtGeneroUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 40, 110, -1));
+        jPanel6.add(txtGeneroUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 40, 110, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Estatura");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, -1, -1));
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 20, -1, -1));
 
         txtEstaturaUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtEstaturaUsuarioKeyTyped(evt);
             }
         });
-        jPanel6.add(txtEstaturaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 40, 60, -1));
+        jPanel6.add(txtEstaturaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 40, 60, -1));
 
         txtPesoUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPesoUsuarioKeyTyped(evt);
             }
         });
-        jPanel6.add(txtPesoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 40, 60, -1));
+        jPanel6.add(txtPesoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 40, 60, -1));
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("Peso");
-        jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 20, -1, -1));
+        jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 20, -1, -1));
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(255, 255, 255));
         jLabel34.setText("Cond. Especial");
-        jPanel6.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 20, -1, -1));
+        jPanel6.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 20, -1, -1));
 
         txtCondEspecialUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCondEspecialUsuarioKeyTyped(evt);
             }
         });
-        jPanel6.add(txtCondEspecialUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 40, 110, -1));
+        jPanel6.add(txtCondEspecialUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 40, 110, -1));
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Plan");
-        jPanel6.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 20, -1, -1));
+        jPanel6.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 20, -1, -1));
+        jPanel6.add(txtContraseñaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, 110, -1));
 
-        txtPlanUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPlanUsuarioKeyTyped(evt);
+        comboxplanes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboxplanes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboxplanesActionPerformed(evt);
             }
         });
-        jPanel6.add(txtPlanUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 40, 40, -1));
-        jPanel6.add(txtContraseñaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 40, 110, -1));
+        jPanel6.add(comboxplanes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 40, 120, -1));
 
         jTabbedPane1.addTab("", jPanel6);
 
@@ -1674,7 +1683,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdUsuario.getText()) || !"".equals(txtNombreUsuario.getText()) || !"".equals(txtEmailUsuario.getText()) || !"".equals(txtFechaNacimiento.getText()) || !"".equals(txtFechaRegistro.getText()) || !"".equals(txtGeneroUsuario.getText()) || !"".equals(txtContraseñaUsuario.getText()) || !"".equals(txtEstaturaUsuario.getText()) ||  !"".equals(txtPesoUsuario.getText()) || !"".equals(txtCondEspecialUsuario.getText()) || !"".equals(txtPlanUsuario.getText())) {
+            if (!"".equals(txtIdUsuario.getText()) || !"".equals(txtNombreUsuario.getText()) || !"".equals(txtEmailUsuario.getText()) || !"".equals(txtFechaNacimiento.getText()) || !"".equals(txtFechaRegistro.getText()) || !"".equals(txtGeneroUsuario.getText()) || !"".equals(txtContraseñaUsuario.getText()) || !"".equals(txtEstaturaUsuario.getText()) ||  !"".equals(txtPesoUsuario.getText()) || !"".equals(txtCondEspecialUsuario.getText())) {
                 us.setId(Integer.parseInt(txtIdUsuario.getText()));
                 us.setNombre(txtNombreUsuario.getText());
                 us.setEmail(txtEmailUsuario.getText());
@@ -1685,7 +1694,7 @@ public class home_administrador extends javax.swing.JFrame {
                 us.setEstatura(Double.parseDouble(txtEstaturaUsuario.getText()));
                 us.setPeso(Double.parseDouble(txtPesoUsuario.getText()));
                 us.setCondicion_especial(txtCondEspecialUsuario.getText());
-                us.setId_plan(Integer.parseInt(txtPlanUsuario.getText()));
+                us.setNombrePlan((String)comboxplanes.getSelectedItem());
                 user.ModificarUsuario(us);
                 JOptionPane.showMessageDialog(null, "Usuario Modificado");
                 LimpiarTable();
@@ -1825,7 +1834,7 @@ public class home_administrador extends javax.swing.JFrame {
         txtEstaturaUsuario.setText(TableUsuario.getValueAt(fila, 7).toString());
         txtPesoUsuario.setText(TableUsuario.getValueAt(fila, 8).toString());
         txtCondEspecialUsuario.setText(TableUsuario.getValueAt(fila, 9).toString());
-        txtPlanUsuario.setText(TableUsuario.getValueAt(fila, 10).toString());
+        comboxplanes.setSelectedItem(TableUsuario.getValueAt(fila, 10));
     }//GEN-LAST:event_TableUsuarioMouseClicked
 
     private void tableEjerciciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEjerciciosMouseClicked
@@ -2190,15 +2199,6 @@ public class home_administrador extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_txtCondEspecialUsuarioKeyTyped
 
-    private void txtPlanUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlanUsuarioKeyTyped
-        // TODO add your handling code here:
-        char c = evt.getKeyChar();
-    // Verificar si el carácter ingresado no es un número o es un carácter especial
-    if (!Character.isDigit(c)) {
-        evt.consume();  // Descartar el carácter que no sea número
-    }
-    }//GEN-LAST:event_txtPlanUsuarioKeyTyped
-
     private void txtIdPlanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPlanKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
@@ -2405,6 +2405,10 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comborutinanameActionPerformed
 
+    private void comboxplanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboxplanesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboxplanesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2487,6 +2491,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comborutinaname;
     private javax.swing.JComboBox<String> comborutinas;
     private javax.swing.JComboBox<String> comboxcircuito;
+    private javax.swing.JComboBox<String> comboxplanes;
     private javax.swing.JComboBox<String> jComboBoxMusculosOcupados;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
@@ -2567,7 +2572,6 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreRutina;
     private javax.swing.JTextField txtNombreUsuario;
     private javax.swing.JTextField txtPesoUsuario;
-    private javax.swing.JTextField txtPlanUsuario;
     private javax.swing.JTextField txtSeries;
     private javax.swing.JTextField txtTipoDieta;
     private javax.swing.JTextField txtTipoPlan;
@@ -2605,7 +2609,7 @@ public class home_administrador extends javax.swing.JFrame {
         txtEstaturaUsuario.setText("");
         txtPesoUsuario.setText("");
         txtCondEspecialUsuario.setText("");
-        txtPlanUsuario.setText("");
+        comboxplanes.setSelectedItem(null);
     }
     private void LimpiarEjercicio() {
         txtIdEjercicio.setText("");

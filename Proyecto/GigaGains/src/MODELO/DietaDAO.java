@@ -55,6 +55,30 @@ public class DietaDAO {
         }
         return listaDieta;  // Retorna la lista completa de dietas
     }
+    public List<Dieta> ListarDietaFalsa() {
+        List<Dieta> listaDieta = new ArrayList<>();
+        String sql = "SELECT * FROM dietas WHERE Estado = FALSE";  // Filtra por Estado TRUE
+
+        try {
+            con = cn.getConnection();  // Establece la conexión a la base de datos
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Dieta dieta = new Dieta();  // Crear un objeto Dieta por cada resultado
+                dieta.setId(rs.getInt("ID"));
+                dieta.setTipo(rs.getString("tipo"));
+                dieta.setProteinas(rs.getInt("proteinas"));
+                dieta.setCarbohidratos(rs.getInt("carbohidratos"));
+                dieta.setCalorias(rs.getInt("calorias"));
+                // Agregar el objeto a la lista
+                listaDieta.add(dieta);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+        return listaDieta;  // Retorna la lista completa de dietas
+    }
 
     /**
      * Registra una nueva dieta en la base de datos.
@@ -95,6 +119,25 @@ public class DietaDAO {
      */
     public boolean EliminarDieta(int id) {
         String sql = "UPDATE dietas SET Estado = FALSE WHERE ID = ?";  // Cambia el estado a FALSE
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();  // Cierra la conexión a la base de datos
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    public boolean RestaurarDieta(int id) {
+        String sql = "UPDATE dietas SET Estado = TRUE WHERE ID = ?";  // Cambia el estado a FALSE
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);

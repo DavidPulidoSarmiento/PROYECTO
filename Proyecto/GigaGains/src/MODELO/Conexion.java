@@ -24,7 +24,7 @@ public class Conexion {
             String myBD = "jdbc:mysql://localhost:3306/gigagains?serverTimezone=UTC";
             
             // Establece la conexión utilizando el nombre de usuario y la contraseña.
-            con = DriverManager.getConnection(myBD, "root", "#Aprendiz2024");
+            con = DriverManager.getConnection(myBD, "root", "");
             
             // Retorna la conexión establecida.
             return con;

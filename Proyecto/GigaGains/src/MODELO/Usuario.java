@@ -38,6 +38,10 @@ public class Usuario {
     
     /** Identificador del plan asociado al usuario */
     private int id_plan;
+    
+    private String nombrePlan;
+    
+    private int rol_id;
 
     /**
      * Constructor por defecto de la clase Usuario.
@@ -62,7 +66,7 @@ public class Usuario {
      * @param condicion_especial Condiciones especiales del usuario.
      * @param id_plan Identificador del plan de entrenamiento asociado al usuario.
      */
-    public Usuario(int id, String nombre, String email, String fecha_de_nacimiento, String fecha_de_registro, String genero, String contraseña, double estatura, double peso, String condicion_especial, int id_plan) {
+    public Usuario(int id, String nombre, String email, String fecha_de_nacimiento, String fecha_de_registro, String genero, String contraseña, double estatura, double peso, String condicion_especial, int id_plan, String nombrePlan, int rol_id) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -74,6 +78,8 @@ public class Usuario {
         this.peso = peso;
         this.condicion_especial = condicion_especial;
         this.id_plan = id_plan;
+        this.nombrePlan = nombrePlan;
+        this.rol_id = rol_id;
     }
 
     /**
@@ -273,4 +279,22 @@ public class Usuario {
     public void setId_plan(int id_plan) {
         this.id_plan = id_plan;
     }
+
+    public String getNombrePlan() {
+        return nombrePlan;
+    }
+
+    public void setNombrePlan(String nombrePlan) {
+        this.nombrePlan = nombrePlan;
+    }
+
+    public int getRol_id() {
+        return rol_id;
+    }
+
+    public void setRol_id(int rol_id) {
+        this.rol_id = rol_id;
+    }
+    
+    
 }

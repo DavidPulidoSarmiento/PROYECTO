@@ -31,32 +31,72 @@ public class UsuarioDAO {
      * @return Lista de objetos {@link Usuario} que representan los usuarios activos en el sistema.
      */
     public List<Usuario> ListarUsuario() {
-        List<Usuario> ListaUs = new ArrayList<>();
-        String sql = "SELECT * FROM usuario WHERE Estado = TRUE";  // Filtramos solo usuarios activos
-        try {
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Usuario us = new Usuario();
-                us.setId(rs.getInt("id"));
-                us.setNombre(rs.getString("nombre"));
-                us.setEmail(rs.getString("email"));
-                us.setFecha_de_nacimiento(rs.getString("fecha_de_nacimiento"));
-                us.setFecha_de_registro(rs.getString("fecha_de_registro"));
-                us.setGenero(rs.getString("genero"));
-                us.setContraseña(rs.getString("contraseña"));
-                us.setEstatura(rs.getFloat("estatura"));
-                us.setPeso(rs.getFloat("peso"));
-                us.setCondicion_especial(rs.getString("condicion_especial"));
-                us.setId_plan(rs.getInt("id_plan"));
-                ListaUs.add(us);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.toString());
+    List<Usuario> ListaUs = new ArrayList<>();
+    String sql = "SELECT u.id, u.nombre, u.email, u.fecha_de_nacimiento, u.fecha_de_registro, u.genero, " +
+                 "u.contraseña, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
+                 "FROM usuario u " +
+                 "INNER JOIN plan p ON u.id_plan = p.id " +
+                 "WHERE u.Estado = TRUE";  // Filtramos solo usuarios activos
+    
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Usuario us = new Usuario();
+            us.setId(rs.getInt("id"));
+            us.setNombre(rs.getString("nombre"));
+            us.setEmail(rs.getString("email"));
+            us.setFecha_de_nacimiento(rs.getString("fecha_de_nacimiento"));
+            us.setFecha_de_registro(rs.getString("fecha_de_registro"));
+            us.setGenero(rs.getString("genero"));
+            us.setContraseña(rs.getString("contraseña"));
+            us.setEstatura(rs.getFloat("estatura"));
+            us.setPeso(rs.getFloat("peso"));
+            us.setCondicion_especial(rs.getString("condicion_especial"));
+            us.setNombrePlan(rs.getString("nombre_plan"));  // Aquí asignas el nombre del plan al usuario
+            us.setRol_id(rs.getInt("rol_id"));
+            ListaUs.add(us);
         }
-        return ListaUs;
+    } catch (SQLException e) {
+        System.out.println(e.toString());
     }
+    return ListaUs;
+}
+    public List<Usuario> ListarUsuarioFalso() {
+    List<Usuario> ListaUs = new ArrayList<>();
+    String sql = "SELECT u.id, u.nombre, u.email, u.fecha_de_nacimiento, u.fecha_de_registro, u.genero, " +
+                 "u.contraseña, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
+                 "FROM usuario u " +
+                 "INNER JOIN plan p ON u.id_plan = p.id " +
+                 "WHERE u.Estado = FALSE";  // Filtramos solo usuarios activos
+    
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Usuario us = new Usuario();
+            us.setId(rs.getInt("id"));
+            us.setNombre(rs.getString("nombre"));
+            us.setEmail(rs.getString("email"));
+            us.setFecha_de_nacimiento(rs.getString("fecha_de_nacimiento"));
+            us.setFecha_de_registro(rs.getString("fecha_de_registro"));
+            us.setGenero(rs.getString("genero"));
+            us.setContraseña(rs.getString("contraseña"));
+            us.setEstatura(rs.getFloat("estatura"));
+            us.setPeso(rs.getFloat("peso"));
+            us.setCondicion_especial(rs.getString("condicion_especial"));
+            us.setNombrePlan(rs.getString("nombre_plan"));  // Aquí asignas el nombre del plan al usuario
+            us.setRol_id(rs.getInt("rol_id"));
+            ListaUs.add(us);
+        }
+    } catch (SQLException e) {
+        System.out.println(e.toString());
+    }
+    return ListaUs;
+}
+
 
     /**
      * Modifica los datos de un usuario en la base de datos.
@@ -66,10 +106,24 @@ public class UsuarioDAO {
      * @return {@code true} si la modificación fue exitosa, {@code false} si ocurrió un error.
      */
     public boolean ModificarUsuario(Usuario usu) {
-        String sql = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=? WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
-        try {
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+    String sqlPlan = "SELECT id FROM plan WHERE tipo = ?";  // Obtener el id del plan por su nombre
+    String sqlUpdate = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, " +
+                       "genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=? " +
+                       "WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
+    
+    try {
+        con = cn.getConnection();
+
+        // Obtener el ID del plan basado en su nombre
+        ps = con.prepareStatement(sqlPlan);
+        ps.setString(1, usu.getNombrePlan());  // Usamos el nombre del plan que se pasa con el Usuario
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            int idPlan = rs.getInt("id");
+
+            // Ahora que tenemos el id del plan, podemos actualizar el usuario
+            ps = con.prepareStatement(sqlUpdate);
             ps.setString(1, usu.getNombre());
             ps.setString(2, usu.getEmail());
             ps.setString(3, usu.getFecha_de_nacimiento());
@@ -79,21 +133,26 @@ public class UsuarioDAO {
             ps.setDouble(7, usu.getEstatura());
             ps.setDouble(8, usu.getPeso());
             ps.setString(9, usu.getCondicion_especial());
-            ps.setInt(10, usu.getId_plan());
+            ps.setInt(10, idPlan);  // Establecemos el ID del plan
             ps.setInt(11, usu.getId());
-            ps.execute();
+            ps.executeUpdate();
             return true;
-        } catch (SQLException e) {
-            System.out.println(e.toString());
+        } else {
+            System.out.println("Plan no encontrado: " + usu.getNombrePlan());
             return false;
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println(e.toString());
-            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al modificar usuario: " + e.getMessage());
+        return false;
+    } finally {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión: " + e.getMessage());
         }
     }
+}
+
 
     /**
      * "Elimina" un usuario cambiando su estado a {@code FALSE}.
@@ -120,5 +179,43 @@ public class UsuarioDAO {
                 System.out.println(ex.toString());
             }
         }
+    }
+    public boolean RestaurarUsuario(int id) {
+        String sql = "UPDATE usuario SET Estado = TRUE WHERE id = ?";  // Cambiar estado a FALSE en lugar de eliminar físicamente
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    
+    public List<String> obtenerNombresPlanes() {
+        List<String> nombres = new ArrayList<>();
+        String sql = "SELECT tipo FROM plan WHERE Estado = TRUE";
+
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                nombres.add(rs.getString("tipo"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return nombres;
     }
 }

@@ -98,6 +98,31 @@ public class EjercicioDAO {
         }
         return listaEj;
     }
+    public List<Ejercicio> ListarEjercicioFalso() {
+        List<Ejercicio> listaEj = new ArrayList<>();
+        String sql = "SELECT e.ID, e.nombre, e.descripcion, e.visual, m.nombre AS nombre_musculo " +
+                     "FROM ejercicios e " +
+                     "INNER JOIN grupos_musculares m ON e.grupo_muscular_id = m.ID " +
+                     "WHERE e.Estado = FALSE";  // Solo ejercicios con estado TRUE
+
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Ejercicio ej = new Ejercicio();
+                ej.setId(rs.getInt("ID"));
+                ej.setNombre(rs.getString("nombre"));
+                ej.setDescripcion(rs.getString("descripcion"));
+                ej.setVisual(rs.getString("visual"));
+                ej.setNombreMusculo(rs.getString("nombre_musculo"));
+                listaEj.add(ej);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar ejercicios: " + e.getMessage());
+        }
+        return listaEj;
+    }
 
     /**
      * Elimina un ejercicio cambiando su estado a {@code FALSE}.
@@ -116,6 +141,19 @@ public class EjercicioDAO {
             return true;
         } catch (SQLException e) {
             System.out.println("Error al cambiar estado del ejercicio a FALSE: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean RestaurarEjercicio(int id) {
+        String sql = "UPDATE ejercicios SET Estado = TRUE WHERE ID = ?";  // Cambia el estado a FALSE en lugar de eliminar
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar estado del ejercicio a TRUE: " + e.getMessage());
             return false;
         }
     }
