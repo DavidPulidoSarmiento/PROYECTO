@@ -91,41 +91,7 @@ while ($row = $result_completions->fetch_assoc()) {
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/dieta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
-    <style>
-        /* Estilos básicos para botones */
-        .btn {
-            padding: 10px 20px;
-            background-color: #28a745; /* Verde para COMPLETAR */
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .btn.completed {
-            background-color: #6c757d; /* Gris para COMPLETADO */
-            cursor: default;
-        }
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .comida {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .valores-nutricionales {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .valores {
-            flex: 1;
-            text-align: center;
-        }
-    </style>
+   
 </head>
 <body>
     <header>
@@ -146,7 +112,7 @@ while ($row = $result_completions->fetch_assoc()) {
     <section>
         <div class="container">
             <div class="divcomidas">
-                <h1>Tus comidas pendientes son: 3</h1> <!-- Cambia este número si es necesario -->
+                <h1>Tus comidas pendientes son:</h1> <!-- Cambia este número si es necesario -->
                 
                 <!-- Comida #1 (Desayuno) -->
                 <div class="comida">

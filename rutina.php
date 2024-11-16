@@ -1,7 +1,8 @@
-<?php 
-require 'conexion.php';
+<?php
 session_start();
+include('conexion.php');
 
+// Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();
@@ -9,125 +10,53 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-// Obtener el ID del plan del usuario
-$sql_usuario = "SELECT id_plan FROM usuario WHERE ID = ?";
-$stmt = $conexion->prepare($sql_usuario);
+// Obtener fecha de registro para calcular el circuito del día
+$stmt = $conexion->prepare("SELECT fecha_de_registro, id_plan FROM usuario WHERE ID = ?");
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
-$result = $stmt->get_result();
-$user_plan = $result->fetch_assoc();
+$resultado = $stmt->get_result();
 
-if (!$user_plan || !isset($user_plan['id_plan'])) {
-    echo "Datos de usuario no encontrados o incompletos.";
-    exit();
-}
-
-$id_plan = $user_plan['id_plan'];
-
-// Obtener los circuitos asociados al plan
-$sql_circuitos = "SELECT c.ID, c.nombre FROM circuitos c
-                  JOIN rutinas_circuitos rc ON c.ID = rc.circuito_id
-                  JOIN plan p ON p.rutina_id = rc.rutina_id
-                  WHERE p.ID = ?";
-$stmt = $conexion->prepare($sql_circuitos);
-$stmt->bind_param("i", $id_plan);
-$stmt->execute();
-$result = $stmt->get_result();
-$circuitos = [];
-while ($row = $result->fetch_assoc()) {
-    $circuitos[] = $row;
-}
-
-if (count($circuitos) == 0) {
-    echo "No hay circuitos asociados a tu plan.";
-    exit();
-}
-
-// Supongamos que solo hay un circuito por plan
-$circuito_id = $circuitos[0]['ID'];
-
-// Obtener ejercicios del circuito ordenados por ce.ID ASC
-$sql_ejercicios = "SELECT ce.ejercicio_id, e.nombre, ce.series, e.visual
-                   FROM circuitos_ejercicios ce
-                   JOIN ejercicios e ON e.ID = ce.ejercicio_id
-                   WHERE ce.circuito_id = ?
-                   ORDER BY ce.ID ASC";
-$stmt = $conexion->prepare($sql_ejercicios);
-$stmt->bind_param("i", $circuito_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$ejercicios = [];
-while ($row = $result->fetch_assoc()) {
-    $ejercicios[] = $row;
-}
-
-if (count($ejercicios) == 0) {
-    echo "No hay ejercicios en este circuito.";
-    exit();
-}
-
-// Obtener o crear el progreso del usuario
-$sql_progress = "SELECT current_exercise_index, last_routine_date FROM user_routine_progress WHERE usuario_id = ?";
-$stmt = $conexion->prepare($sql_progress);
-$stmt->bind_param("i", $usuario_id);
-$stmt->execute();
-$result_progress = $stmt->get_result();
-
-if ($result_progress->num_rows > 0) {
-    $progress = $result_progress->fetch_assoc();
-    $current_exercise_index = $progress['current_exercise_index'];
-    $last_routine_date = $progress['last_routine_date'];
+if ($resultado->num_rows === 1) {
+    $usuario = $resultado->fetch_assoc();
+    $fecha_de_registro = new DateTime($usuario['fecha_de_registro']);
+    $fecha_actual = new DateTime();
+    $racha_dias = $fecha_actual->diff($fecha_de_registro)->days;
+    $id_plan = $usuario['id_plan'];
     
-    $can_start_new_routine = true;
-    if ($last_routine_date) {
-        $last_routine_datetime = new DateTime($last_routine_date);
-        $current_datetime = new DateTime();
-        $interval = $current_datetime->diff($last_routine_datetime);
-        $hours_passed = ($interval->days * 24) + $interval->h + ($interval->i / 60);
-        
-        if ($hours_passed < 24) {
-            $can_start_new_routine = false;
-        }
+    $dia_circuito = $racha_dias % 5 + 1; // Circuito basado en racha de días
+
+    // Obtener ejercicios del circuito
+    $stmt = $conexion->prepare("
+        SELECT ce.ejercicio_id, e.nombre, ce.series, e.visual
+        FROM circuitos c
+        JOIN rutinas_circuitos rc ON c.ID = rc.circuito_id
+        JOIN circuitos_ejercicios ce ON c.ID = ce.circuito_id
+        JOIN ejercicios e ON ce.ejercicio_id = e.ID
+        WHERE rc.rutina_id = ? AND c.ID = ?
+    ");
+    $stmt->bind_param("ii", $id_plan, $dia_circuito);
+    $stmt->execute();
+    $ejercicios = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    // Manejar el ejercicio actual
+    if (!isset($_SESSION['ejercicio_actual'])) {
+        $_SESSION['ejercicio_actual'] = 0;
     }
-    
-    if ($can_start_new_routine) {
-        // Reset progress
-        $current_exercise_index = 0;
-        $last_routine_date = null;
-        $sql_reset = "UPDATE user_routine_progress SET current_exercise_index = 0, last_routine_date = NULL WHERE usuario_id = ?";
-        $stmt_reset = $conexion->prepare($sql_reset);
-        $stmt_reset->bind_param("i", $usuario_id);
-        $stmt_reset->execute();
+    $ejercicio_actual_idx = $_SESSION['ejercicio_actual'];
+
+    if ($ejercicio_actual_idx < count($ejercicios)) {
+        $ejercicio_actual = $ejercicios[$ejercicio_actual_idx];
+    } else {
+        // Redirigir al finalizar todos los ejercicios
+        header("Location: finrutina.html");
+        exit();
     }
 } else {
-    // Crear una entrada para el usuario
-    $current_exercise_index = 0;
-    $last_routine_date = null;
-    $sql_insert_progress = "INSERT INTO user_routine_progress (usuario_id, current_exercise_index, last_routine_date) VALUES (?, 0, NULL)";
-    $stmt_insert = $conexion->prepare($sql_insert_progress);
-    $stmt_insert->bind_param("i", $usuario_id);
-    $stmt_insert->execute();
-}
-
-// Verificar si el usuario ha completado todos los ejercicios
-if ($current_exercise_index >= count($ejercicios)) {
-    // Rutina completada, actualizar la fecha de completación
-    $current_datetime = new DateTime();
-    $current_datetime_str = $current_datetime->format('Y-m-d H:i:s');
-    
-    $sql_complete_routine = "UPDATE user_routine_progress SET current_exercise_index = 0, last_routine_date = ? WHERE usuario_id = ?";
-    $stmt_complete = $conexion->prepare($sql_complete_routine);
-    $stmt_complete->bind_param("si", $current_datetime_str, $usuario_id);
-    $stmt_complete->execute();
-    
-    // Redirigir al usuario al fin de la rutina
-    header("Location: finrutina.html");
+    echo "Error: Usuario no encontrado.";
     exit();
 }
-
-// Obtener el ejercicio actual
-$ejercicio_actual = $ejercicios[$current_exercise_index];
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -137,18 +66,6 @@ $ejercicio_actual = $ejercicios[$current_exercise_index];
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/traing.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@400;600;700&display=swap"/>
-    <style>
-        /* Estilos básicos */
-        .btn {
-            padding: 10px 20px;
-            background-color: #007bff; /* Azul para SIGUIENTE */
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -157,58 +74,32 @@ $ejercicio_actual = $ejercicios[$current_exercise_index];
     <div class="container">
         <div class="titulo">
             <h1 class="title">Ejercicio</h1>
-            <h1 class="title-ejercicio">#<?php echo htmlspecialchars($ejercicio_actual['ejercicio_id']); ?></h1>
+            <h1 class="title-ejercicio">#<span id="ejercicio-id"><?php echo htmlspecialchars($ejercicio_actual['ejercicio_id']); ?></span></h1>
         </div>
         <div class="contenido">
             <div class="ejercicio">
-                <img src="<?php echo htmlspecialchars($ejercicio_actual['visual']); ?>" alt="gif">
+                <img id="ejercicio-visual" src="<?php echo htmlspecialchars($ejercicio_actual['visual']); ?>" alt="gif">
             </div>
             <div class="datos">
-                <h1><?php echo htmlspecialchars($ejercicio_actual['nombre']); ?></h1>
-                <h1 class="cantidad">Series: <?php echo htmlspecialchars($ejercicio_actual['series']); ?></h1>
+                <h1 id="ejercicio-nombre"><?php echo htmlspecialchars($ejercicio_actual['nombre']); ?></h1>
+                <h1 class="cantidad">Series: <span id="ejercicio-series"><?php echo htmlspecialchars($ejercicio_actual['series']); ?></span></h1>
                 <h1>Descanso 3min</h1>
             </div>
         </div>
         <div class="siguiente">
-            <button class="btn" type="button" onclick="goToNextExercise()">SIGUIENTE</button>
+            <form method="post" action="rutina.php">
+                <button class="btn" type="submit" name="siguiente">SIGUIENTE</button>
+            </form>
         </div>
     </div>
-
-    <script>
-        function goToNextExercise() {
-            // Confirmar la acción
-            if (!confirm(`¿Estás seguro de que deseas marcar este ejercicio como completado?`)) {
-                return;
-            }
-
-            // Enviar solicitud AJAX para avanzar al siguiente ejercicio
-            fetch('update_routine.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest' // Para identificar la solicitud como AJAX
-                },
-                body: JSON.stringify({ action: 'next' })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    if (data.redirect) {
-                        // Redirigir al fin de la rutina
-                        window.location.href = data.redirect;
-                    } else {
-                        // Recargar la página para mostrar el siguiente ejercicio
-                        window.location.reload();
-                    }
-                } else {
-                    alert(data.message || 'Ocurrió un error al avanzar al siguiente ejercicio.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Ocurrió un error al avanzar al siguiente ejercicio.');
-            });
-        }
-    </script>
 </body>
 </html>
+
+<?php
+// Avanzar al siguiente ejercicio al presionar "SIGUIENTE"
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['siguiente'])) {
+    $_SESSION['ejercicio_actual']++;
+    header("Location: rutina.php");
+    exit();
+}
+?>
