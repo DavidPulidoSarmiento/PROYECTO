@@ -15,43 +15,19 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
     // Verificar si hay campos vacíos
     if (!nombre || !correo || !contraseña || !confirmarContraseña || !fechaNacimiento || !estatura || !peso || !condicionEspecial || generoSeleccionado.length === 0) {
         alert("Por favor, completa todos los campos antes de enviar el formulario.");
-        return;
-    }
-
-    // Validación de solo letras en el campo "nombre" y "condicion especial"
-    const soloLetras = /^[a-zA-Z\s]+$/;
-    if (!soloLetras.test(nombre)) {
-        alert("El campo 'nombre' solo debe contener letras.");
-        return;
-    }
-
-    if (!soloLetras.test(condicionEspecial)) {
-        alert("El campo 'condición especial' solo debe contener letras.");
-        return;
-    }
-
-    // Validación de solo números en "estatura" y "peso"
-    const soloNumeros = /^[0-9]+$/;
-    if (!soloNumeros.test(estatura)) {
-        alert("El campo 'estatura' solo debe contener números.");
-        return;
-    }
-
-    if (!soloNumeros.test(peso)) {
-        alert("El campo 'peso' solo debe contener números.");
-        return;
+        event.preventDefault();
     }
 
     // Validación de selección única de género
     if (generoSeleccionado.length !== 1) {
         alert("Por favor, selecciona solo un género.");
-        return;
+        event.preventDefault();
     }
 
     // Validación de contraseñas iguales
     if (contraseña !== confirmarContraseña) {
         alert("Las contraseñas no coinciden.");
-        return;
+        event.preventDefault();
     }
 
     // Enviar los datos del formulario a PHP
@@ -65,6 +41,9 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
             if (data.success) {
                 alert("Usuario registrado exitosamente.");
                 form.reset(); // Limpia el formulario tras el registro exitoso
+
+                // Redirigir a login.php después de registro exitoso
+                window.location.href = "login.php"; // Aquí rediriges al login
             } else {
                 alert("Error: " + data.message);
             }
@@ -88,38 +67,4 @@ document.getElementById("registerForm").estatura.addEventListener("input", funct
 document.getElementById("registerForm").peso.addEventListener("input", function (event) {
     event.target.value = event.target.value.replace(/[^0-9]/g, ""); // Solo permite números
 });
-
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita el envío del formulario por defecto
-
-    const correo = document.getElementById("correo").value;
-    const contraseña = document.getElementById("contraseña").value;
-
-    // Validar que los campos no estén vacíos
-    if (!correo || !contraseña) {
-        alert("Por favor, completa todos los campos.");
-        return;
-    }
-
-    // Enviar los datos al servidor
-    fetch("login.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `correo=${encodeURIComponent(correo)}&contraseña=${encodeURIComponent(contraseña)}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        // Manejar la respuesta del servidor
-        if (data === "success") {
-            window.location.href = "home.php"; // Redirigir a la página principal
-        } else {
-            alert(data); // Mostrar mensaje de error
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
-
-
 
