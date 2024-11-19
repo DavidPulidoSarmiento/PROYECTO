@@ -1,7 +1,8 @@
 document.getElementById("registerForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Evitar el envío del formulario por defecto
-
     const form = event.target;
+    event.preventDefault(); // Evitar el envío del formulario hasta haber hecho todas las validaciones
+
+    // Definir las variables del formulario
     const nombre = form.nombre.value.trim();
     const correo = form.correo.value.trim();
     const contraseña = form.contraseña.value;
@@ -12,25 +13,54 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
     const condicionEspecial = form.condicion_especial.value.trim();
     const generoSeleccionado = Array.from(form["genero[]"]).filter(checkbox => checkbox.checked);
 
-    // Verificar si hay campos vacíos
-    if (!nombre || !correo || !contraseña || !confirmarContraseña || !fechaNacimiento || !estatura || !peso || !condicionEspecial || generoSeleccionado.length === 0) {
-        alert("Por favor, completa todos los campos antes de enviar el formulario.");
-        event.preventDefault();
+    // Variable para saber si alguna validación falló
+    let validacionFallida = false;
+
+    // Verificar campos vacíos
+    if (!nombre) {
+        alert("Por favor, completar los campos.");
+        validacionFallida = true;
+    } else if (!correo) {
+        alert("Por favor, completa el campo de correo.");
+        validacionFallida = true;
+    }else if (!contraseña) {
+        alert("Por favor, completa el campo de contraseña.");
+        validacionFallida = true;
+    }else if (!fechaNacimiento) {
+        alert("Por favor, completa el campo de fecha de nacimiento.");
+        validacionFallida = true;
+    }else if (!estatura) {
+        alert("Por favor, completa el campo de estatura.");
+        validacionFallida = true;
+    }else if (!peso) {
+        alert("Por favor, completa el campo de peso.");
+        validacionFallida = true;
+    }else if (!condicionEspecial) {
+        alert("Por favor, completa el campo de condición especial.");
+        validacionFallida = true;
+    }else if (generoSeleccionado.length === 0) {
+        alert("Por favor, selecciona un género.");
+        validacionFallida = true;
     }
 
     // Validación de selección única de género
-    if (generoSeleccionado.length !== 1) {
+    if (generoSeleccionado.length >= 1) {
         alert("Por favor, selecciona solo un género.");
-        event.preventDefault();
+        validacionFallida = true;
     }
 
     // Validación de contraseñas iguales
     if (contraseña !== confirmarContraseña) {
         alert("Las contraseñas no coinciden.");
-        event.preventDefault();
+        validacionFallida = true;
     }
 
-    // Enviar los datos del formulario a PHP
+    // Si alguna validación falló, no enviamos el formulario
+    if (validacionFallida) {
+        return; // Sale de la función sin enviar el formulario
+    }
+
+    // Si todo está bien, se envían los datos del formulario a PHP
     const formData = new FormData(form);
     fetch("register.php", {
         method: "POST",
@@ -67,4 +97,3 @@ document.getElementById("registerForm").estatura.addEventListener("input", funct
 document.getElementById("registerForm").peso.addEventListener("input", function (event) {
     event.target.value = event.target.value.replace(/[^0-9]/g, ""); // Solo permite números
 });
-
