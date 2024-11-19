@@ -18,7 +18,7 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
 
     // Verificar campos vacíos
     if (!nombre) {
-        alert("Por favor, completar los campos.");
+        alert("Por favor, completa el campo de nombre.");
         validacionFallida = true;
     } else if (!correo) {
         alert("Por favor, completa el campo de correo.");
@@ -43,8 +43,15 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
         validacionFallida = true;
     }
 
+    // Validación de formato de correo electrónico
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(correo)) {
+        alert("Por favor, ingresa un correo electrónico válido (ejemplo@dominio.com).");
+        validacionFallida = true;
+    }
+    
     // Validación de selección única de género
-    if (generoSeleccionado.length >= 1) {
+    if (generoSeleccionado.length !== 1) {
         alert("Por favor, selecciona solo un género.");
         validacionFallida = true;
     }

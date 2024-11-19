@@ -17,13 +17,23 @@ $peso = $_POST['peso'];
 $condicion_especial = $_POST['condicion_especial'];
 $genero = isset($_POST['genero']) ? implode(", ", $_POST['genero']) : '';
 
-// Insertar en la base de datos
-$sql = "INSERT INTO usuario (nombre, email, contraseña, fecha_de_nacimiento, estatura, peso, condicion_especial, genero) VALUES ('$nombre', '$correo', '$contraseña', '$fecha_nacimiento', '$estatura', '$peso', '$condicion_especial', '$genero')";
+// Verificar si el correo ya está registrado
+$query = "SELECT * FROM usuario WHERE email = '$correo'";
+$result = $conexion->query($query);
 
-if ($conexion->query($sql) === TRUE) {
-    echo json_encode(["success" => true]);
+if ($result->num_rows > 0) {
+    // Si el correo ya está registrado, enviar un mensaje de error
+    echo json_encode(["success" => false, "message" => "El correo electrónico ya está registrado."]);
 } else {
-    echo json_encode(["success" => false, "message" => "Error: " . $conexion->error]);
+    // Si el correo no está registrado, proceder con la inserción
+    $sql = "INSERT INTO usuario (nombre, email, contraseña, fecha_de_nacimiento, estatura, peso, condicion_especial, genero) 
+            VALUES ('$nombre', '$correo', '$contraseña', '$fecha_nacimiento', '$estatura', '$peso', '$condicion_especial', '$genero')";
+
+    if ($conexion->query($sql) === TRUE) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Error: " . $conexion->error]);
+    }
 }
 
 // Cerrar la conexión
