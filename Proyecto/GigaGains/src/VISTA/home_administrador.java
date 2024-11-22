@@ -1603,7 +1603,7 @@ public class home_administrador extends javax.swing.JFrame {
                 cl.setId(Integer.parseInt(txtIDRutina.getText()));
                 cl.setNombre(txtNombreRutina.getText());
                 client.ModificarRutina(cl);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Rutina Modificada");
                 LimpiarTable();
                 LimpiarRutina();
                 ListarRutina();
@@ -1902,7 +1902,7 @@ public class home_administrador extends javax.swing.JFrame {
             cl.setNombre((String) comborutinas.getSelectedItem());
             cl.setNombrecircuito((String) combocircuito.getSelectedItem());
             client.RegistrarRutina_Circuito(cl);
-            JOptionPane.showMessageDialog(null, "Ejercicio registrado");
+            JOptionPane.showMessageDialog(null, "Circuito registrado");
 
             // Limpiar los campos después de registrar
             LimpiarRutinaCi();
@@ -2247,7 +2247,7 @@ public class home_administrador extends javax.swing.JFrame {
                 cl.setNombre((String) comborutinas.getSelectedItem());
                 cl.setNombrecircuito((String) combocircuito.getSelectedItem());
                 client.ModificarRutina_circuito(cl);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Circuito Modificado");
                 LimpiarRutinaCi();
                 LimpiarTable();
                 btnCrearRutinaCI.setEnabled(false);
