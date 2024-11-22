@@ -12,15 +12,13 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 
 // Recuperar los datos del usuario desde la base de datos
-$query = "SELECT * FROM usuario WHERE id = ?";
+$query = "SELECT * FROM usuario WHERE id = :id";
 $stmt = $conexion->prepare($query);
-$stmt->bind_param("i", $usuario_id);
+$stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-} else {
+if (!$user) {
     echo "Usuario no encontrado";
     exit;
 }
@@ -102,22 +100,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Actualizar los datos en la base de datos
-    $update_query = "UPDATE usuario SET nombre = ?, email = ?, fecha_de_nacimiento = ?, estatura = ?, peso = ?, condicion_especial = ?, genero = ? WHERE id = ?";
+    $update_query = "UPDATE usuario 
+                     SET nombre = :nombre, email = :email, fecha_de_nacimiento = :fecha_de_nacimiento, 
+                         estatura = :estatura, peso = :peso, condicion_especial = :condicion_especial, 
+                         genero = :genero 
+                     WHERE id = :id";
+
     $stmt = $conexion->prepare($update_query);
-    if ($stmt === false) {
-        echo "Error en la preparación de la consulta: " . htmlspecialchars($conexion->error);
-        exit;
-    }
-    $stmt->bind_param("sssssssi", $nombre, $email, $fecha_de_nacimiento, $estatura, $peso, $condicion_especial, $genero, $usuario_id);
-    
+    $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':fecha_de_nacimiento', $fecha_de_nacimiento, PDO::PARAM_STR);
+    $stmt->bindParam(':estatura', $estatura, PDO::PARAM_STR);
+    $stmt->bindParam(':peso', $peso, PDO::PARAM_STR);
+    $stmt->bindParam(':condicion_especial', $condicion_especial, PDO::PARAM_STR);
+    $stmt->bindParam(':genero', $genero, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
+
     if ($stmt->execute()) {
         echo "Datos actualizados con éxito";
     } else {
-        echo "Error al actualizar los datos: " . htmlspecialchars($stmt->error);
+        echo "Error al actualizar los datos.";
     }
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

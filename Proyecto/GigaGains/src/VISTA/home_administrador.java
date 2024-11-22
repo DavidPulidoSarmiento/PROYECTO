@@ -387,13 +387,13 @@ public class home_administrador extends javax.swing.JFrame {
         btnCircuito.setBackground(new java.awt.Color(144, 12, 63));
         btnCircuito.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         btnCircuito.setForeground(new java.awt.Color(255, 255, 255));
-        btnCircuito.setText("CIRCUITO");
+        btnCircuito.setText("CIRCUITOS");
         btnCircuito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCircuitoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCircuito, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 50, -1, -1));
+        jPanel2.add(btnCircuito, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 50, -1, -1));
 
         btnEjercicios.setBackground(new java.awt.Color(144, 12, 63));
         btnEjercicios.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -404,23 +404,23 @@ public class home_administrador extends javax.swing.JFrame {
                 btnEjerciciosActionPerformed(evt);
             }
         });
-        jPanel2.add(btnEjercicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, -1, -1));
+        jPanel2.add(btnEjercicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, -1, -1));
 
         btnRutina.setBackground(new java.awt.Color(144, 12, 63));
         btnRutina.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         btnRutina.setForeground(new java.awt.Color(255, 255, 255));
-        btnRutina.setText("RUTINA");
+        btnRutina.setText("RUTINAS");
         btnRutina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRutinaActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRutina, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, -1, -1));
+        jPanel2.add(btnRutina, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 50, -1, -1));
 
         btnUsuario.setBackground(new java.awt.Color(144, 12, 63));
         btnUsuario.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         btnUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        btnUsuario.setText("USUARIO");
+        btnUsuario.setText("USUARIOS");
         btnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsuarioActionPerformed(evt);
@@ -431,24 +431,24 @@ public class home_administrador extends javax.swing.JFrame {
         btnPlan.setBackground(new java.awt.Color(144, 12, 63));
         btnPlan.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         btnPlan.setForeground(new java.awt.Color(255, 255, 255));
-        btnPlan.setText("PLAN");
+        btnPlan.setText("PLANES");
         btnPlan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPlanActionPerformed(evt);
             }
         });
-        jPanel2.add(btnPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 50, -1, -1));
+        jPanel2.add(btnPlan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, -1, -1));
 
         btnDieta.setBackground(new java.awt.Color(144, 12, 63));
         btnDieta.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         btnDieta.setForeground(new java.awt.Color(255, 255, 255));
-        btnDieta.setText("DIETA");
+        btnDieta.setText("DIETAS");
         btnDieta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDietaActionPerformed(evt);
             }
         });
-        jPanel2.add(btnDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 50, -1, -1));
+        jPanel2.add(btnDieta, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 50, -1, -1));
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(0, 0, 1350, 130);
@@ -1583,7 +1583,7 @@ public class home_administrador extends javax.swing.JFrame {
                 ej.setVisual(txtVisualEjercicio.getText());
                 ej.setNombreMusculo((String)jComboBoxMusculosOcupados.getSelectedItem());
                 ejDao.ModificarEjercicio(ej);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Ejercicio Modificado");
                 LimpiarEjercicio();
                 LimpiarTable();
                 ListarEjercicio();
@@ -1928,7 +1928,7 @@ public class home_administrador extends javax.swing.JFrame {
             cir.setId(Integer.parseInt(txtIDCircuito.getText()));
             cir.setNombre(txtNombreCircuito.getText());
             cirDao.RegistrarCircuito(cir);
-            JOptionPane.showMessageDialog(null, "Ejercicio registrado");
+            JOptionPane.showMessageDialog(null, "Circuito registrado");
 
             // Limpiar los campos después de registrar
             LimpiarTable();
@@ -1950,7 +1950,7 @@ public class home_administrador extends javax.swing.JFrame {
                 cir.setId(Integer.parseInt(txtIDCircuito.getText()));
                 cir.setNombre(txtNombreCircuito.getText());
                 cirDao.ModificarCircuito(cir);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Circuito Modificado");
                 LimpiarTable();
                 LimpiarCircuito();
                 ListarCircuito();
@@ -2224,7 +2224,7 @@ public class home_administrador extends javax.swing.JFrame {
                 cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
                 cir.setNombre((String) comboxcircuito.getSelectedItem());
                 cirDao.ModificarCircuito_Ejercicio(cir);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Ejercicio Modificado");
                 LimpiarCircuitoEj();
                 LimpiarTable();
                 btnCrearCiEj.setEnabled(false);

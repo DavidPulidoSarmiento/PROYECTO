@@ -10,11 +10,10 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 
 // Obtener el peso del usuario y el tipo de dieta (ID del plan de dieta)
-$stmt = $conexion->prepare("SELECT peso, id_plan FROM usuario WHERE ID = ?");
-$stmt->bind_param("i", $usuario_id);
+$stmt = $conexion->prepare("SELECT peso, id_plan FROM usuario WHERE ID = :usuario_id");
+$stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
 $stmt->execute();
-$resultado_usuario = $stmt->get_result();
-$usuario = $resultado_usuario->fetch_assoc();
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Asegurarnos de que el usuario tiene un peso y un plan de dieta asociado
 if (!$usuario || !isset($usuario['peso']) || !isset($usuario['id_plan'])) {
@@ -26,49 +25,46 @@ if (!$usuario || !isset($usuario['peso']) || !isset($usuario['id_plan'])) {
 $tipo_dieta = $usuario['id_plan'];
 
 // Obtener los valores nutricionales de la dieta basada en el tipo
-$stmt = $conexion->prepare("SELECT proteinas, carbohidratos, calorias FROM dietas WHERE ID = ?");
-$stmt->bind_param("i", $tipo_dieta);
+$stmt = $conexion->prepare("SELECT proteinas, carbohidratos, calorias FROM dietas WHERE ID = :id_plan");
+$stmt->bindParam(':id_plan', $tipo_dieta, PDO::PARAM_INT);
 $stmt->execute();
-$resultado_dieta = $stmt->get_result();
+$dieta = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($resultado_dieta->num_rows === 1) {
-    $dieta = $resultado_dieta->fetch_assoc();
-    
-    // Calcular las cantidades de nutrientes por comida
-    $proteinas_por_kg = $dieta['proteinas']; // en gramos por kg
-    $carbohidratos_por_kg = $dieta['carbohidratos']; // en gramos por kg
-    $calorias_por_kg = $dieta['calorias']; // en calorías por kg
-
-    $peso_usuario = $usuario['peso']; // Peso en kg
-    
-    // Calcular los nutrientes totales según el peso del usuario
-    $proteinas_totales = $proteinas_por_kg * $peso_usuario;
-    $carbohidratos_totales = $carbohidratos_por_kg * $peso_usuario;
-    $calorias_totales = $calorias_por_kg * $peso_usuario;
-    
-    // Distribuir los nutrientes por comida según los porcentajes
-    $proteinas_desayuno = $proteinas_totales * 0.40;
-    $carbohidratos_desayuno = $carbohidratos_totales * 0.40;
-    $calorias_desayuno = $calorias_totales * 0.40;
-    
-    $proteinas_almuerzo = $proteinas_totales * 0.35;
-    $carbohidratos_almuerzo = $carbohidratos_totales * 0.35;
-    $calorias_almuerzo = $calorias_totales * 0.35;
-    
-    $proteinas_cena = $proteinas_totales * 0.25;
-    $carbohidratos_cena = $carbohidratos_totales * 0.25;
-    $calorias_cena = $calorias_totales * 0.25;
-    
-} else {
+if (!$dieta) {
     echo "Dieta no encontrada.";
     exit();
 }
 
+// Calcular las cantidades de nutrientes por comida
+$proteinas_por_kg = $dieta['proteinas']; // en gramos por kg
+$carbohidratos_por_kg = $dieta['carbohidratos']; // en gramos por kg
+$calorias_por_kg = $dieta['calorias']; // en calorías por kg
+
+$peso_usuario = $usuario['peso']; // Peso en kg
+
+// Calcular los nutrientes totales según el peso del usuario
+$proteinas_totales = $proteinas_por_kg * $peso_usuario;
+$carbohidratos_totales = $carbohidratos_por_kg * $peso_usuario;
+$calorias_totales = $calorias_por_kg * $peso_usuario;
+
+// Distribuir los nutrientes por comida según los porcentajes
+$proteinas_desayuno = $proteinas_totales * 0.40;
+$carbohidratos_desayuno = $carbohidratos_totales * 0.40;
+$calorias_desayuno = $calorias_totales * 0.40;
+
+$proteinas_almuerzo = $proteinas_totales * 0.35;
+$carbohidratos_almuerzo = $carbohidratos_totales * 0.35;
+$calorias_almuerzo = $calorias_totales * 0.35;
+
+$proteinas_cena = $proteinas_totales * 0.25;
+$carbohidratos_cena = $carbohidratos_totales * 0.25;
+$calorias_cena = $calorias_totales * 0.25;
+
 // Obtener las últimas completaciones de comidas del usuario
-$stmt = $conexion->prepare("SELECT meal, last_completed FROM meal_completions WHERE usuario_id = ?");
-$stmt->bind_param("i", $usuario_id);
+$stmt = $conexion->prepare("SELECT meal, last_completed FROM meal_completions WHERE usuario_id = :usuario_id");
+$stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
 $stmt->execute();
-$result_completions = $stmt->get_result();
+$result_completions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Inicializar un array para almacenar las últimas completaciones
 $completions = [
@@ -78,10 +74,11 @@ $completions = [
 ];
 
 // Llenar el array con los datos obtenidos
-while ($row = $result_completions->fetch_assoc()) {
+foreach ($result_completions as $row) {
     $completions[$row['meal']] = $row['last_completed'];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

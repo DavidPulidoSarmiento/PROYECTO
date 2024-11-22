@@ -1,12 +1,12 @@
 document.getElementById("registerForm").addEventListener("submit", function (event) {
     const form = event.target;
     event.preventDefault(); // Evitar el envío del formulario hasta haber hecho todas las validaciones
-
+    console.log("Formulario enviado");
     // Definir las variables del formulario
     const nombre = form.nombre.value.trim();
     const correo = form.correo.value.trim();
-    const contraseña = form.contraseña.value;
-    const confirmarContraseña = form.confirmar_contraseña.value;
+    const contrasena = form.contrasena.value;
+    const confirmarContrasena = form.confirmar_contrasena.value;
     const fechaNacimiento = form.fecha_nacimiento.value;
     const estatura = form.estatura.value.trim();
     const peso = form.peso.value.trim();
@@ -23,7 +23,7 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
     } else if (!correo) {
         alert("Por favor, completa el campo de correo.");
         validacionFallida = true;
-    }else if (!contraseña) {
+    }else if (!contrasena) {
         alert("Por favor, completa el campo de contraseña.");
         validacionFallida = true;
     }else if (!fechaNacimiento) {
@@ -57,7 +57,7 @@ document.getElementById("registerForm").addEventListener("submit", function (eve
     }
 
     // Validación de contraseñas iguales
-    if (contraseña !== confirmarContraseña) {
+    if (contrasena !== confirmarContrasena) {
         alert("Las contraseñas no coinciden.");
         validacionFallida = true;
     }

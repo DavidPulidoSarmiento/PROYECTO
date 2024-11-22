@@ -17,9 +17,9 @@ public class Login extends javax.swing.JFrame {
 
     public void validar() {
         String usuario = Usuario.getText();
-        String contraseña = String.valueOf(Contraseña.getPassword());
-        if (!"".equals(usuario) && !"".equals(contraseña)) {
-            lg = loginDAO.log(usuario, contraseña);
+        String contrasena = String.valueOf(Contrasena.getPassword());
+        if (!"".equals(usuario) && !"".equals(contrasena)) {
+            lg = loginDAO.log(usuario, contrasena);
             if (lg.getUsuario() != null) {
                 if ("3".equals(lg.getRol())) {
                     home_superadmin superAdminHome = new home_superadmin();
@@ -57,7 +57,7 @@ public class Login extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         Eliminar = new javax.swing.JButton();
         Iniciar = new javax.swing.JButton();
-        Contraseña = new javax.swing.JPasswordField();
+        Contrasena = new javax.swing.JPasswordField();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,7 +85,7 @@ public class Login extends javax.swing.JFrame {
         Usuario.setBounds(110, 220, 370, 40);
 
         jLabel2.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel2.setText("Usuario:");
+        jLabel2.setText("Correo:");
         jPanel2.add(jLabel2);
         jLabel2.setBounds(110, 190, 80, 26);
 
@@ -117,15 +117,15 @@ public class Login extends javax.swing.JFrame {
         jPanel2.add(Iniciar);
         Iniciar.setBounds(170, 460, 240, 40);
 
-        Contraseña.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 12, 63), 3));
-        Contraseña.setSelectionColor(new java.awt.Color(0, 0, 0));
-        Contraseña.addActionListener(new java.awt.event.ActionListener() {
+        Contrasena.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 12, 63), 3));
+        Contrasena.setSelectionColor(new java.awt.Color(0, 0, 0));
+        Contrasena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ContraseñaActionPerformed(evt);
+                ContrasenaActionPerformed(evt);
             }
         });
-        jPanel2.add(Contraseña);
-        Contraseña.setBounds(110, 340, 370, 40);
+        jPanel2.add(Contrasena);
+        Contrasena.setBounds(110, 340, 370, 40);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(400, 10, 590, 660);
@@ -149,9 +149,9 @@ public class Login extends javax.swing.JFrame {
         validar();
     }//GEN-LAST:event_IniciarActionPerformed
 
-    private void ContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContraseñaActionPerformed
+    private void ContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContrasenaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ContraseñaActionPerformed
+    }//GEN-LAST:event_ContrasenaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,7 +189,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField Contraseña;
+    private javax.swing.JPasswordField Contrasena;
     private javax.swing.JButton Eliminar;
     private javax.swing.JButton Iniciar;
     private javax.swing.JTextField Usuario;

@@ -33,7 +33,7 @@ public class UsuarioDAO {
     public List<Usuario> ListarUsuario() {
     List<Usuario> ListaUs = new ArrayList<>();
     String sql = "SELECT u.id, u.nombre, u.email, u.fecha_de_nacimiento, u.fecha_de_registro, u.genero, " +
-                 "u.contraseña, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
+                 "u.contrasena, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
                  "FROM usuario u " +
                  "INNER JOIN plan p ON u.id_plan = p.id " +
                  "WHERE u.Estado = TRUE";  // Filtramos solo usuarios activos
@@ -50,7 +50,7 @@ public class UsuarioDAO {
             us.setFecha_de_nacimiento(rs.getString("fecha_de_nacimiento"));
             us.setFecha_de_registro(rs.getString("fecha_de_registro"));
             us.setGenero(rs.getString("genero"));
-            us.setContraseña(rs.getString("contraseña"));
+            us.setContraseña(rs.getString("contrasena"));
             us.setEstatura(rs.getFloat("estatura"));
             us.setPeso(rs.getFloat("peso"));
             us.setCondicion_especial(rs.getString("condicion_especial"));
@@ -66,7 +66,7 @@ public class UsuarioDAO {
     public List<Usuario> ListarUsuarioFalso() {
     List<Usuario> ListaUs = new ArrayList<>();
     String sql = "SELECT u.id, u.nombre, u.email, u.fecha_de_nacimiento, u.fecha_de_registro, u.genero, " +
-                 "u.contraseña, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
+                 "u.contrasena, u.estatura, u.peso, u.condicion_especial, u.rol_id, p.tipo AS nombre_plan " +
                  "FROM usuario u " +
                  "INNER JOIN plan p ON u.id_plan = p.id " +
                  "WHERE u.Estado = FALSE";  // Filtramos solo usuarios activos
@@ -83,7 +83,7 @@ public class UsuarioDAO {
             us.setFecha_de_nacimiento(rs.getString("fecha_de_nacimiento"));
             us.setFecha_de_registro(rs.getString("fecha_de_registro"));
             us.setGenero(rs.getString("genero"));
-            us.setContraseña(rs.getString("contraseña"));
+            us.setContraseña(rs.getString("contrasena"));
             us.setEstatura(rs.getFloat("estatura"));
             us.setPeso(rs.getFloat("peso"));
             us.setCondicion_especial(rs.getString("condicion_especial"));
@@ -108,7 +108,7 @@ public class UsuarioDAO {
     public boolean ModificarUsuario(Usuario usu) {
     String sqlPlan = "SELECT id FROM plan WHERE tipo = ?";  // Obtener el id del plan por su nombre
     String sqlUpdate = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, " +
-                       "genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=? " +
+                       "genero=?, contrasena=?, estatura=?, peso=?, condicion_especial=?, id_plan=? " +
                        "WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
     
     try {
@@ -155,7 +155,7 @@ public class UsuarioDAO {
     public boolean ModificarUsuarioADMIN(Usuario usu) {
     String sqlPlan = "SELECT id FROM plan WHERE tipo = ?";  // Obtener el id del plan por su nombre
     String sqlUpdate = "UPDATE usuario SET nombre=?, email=?, fecha_de_nacimiento=?, fecha_de_registro=?, " +
-                       "genero=?, contraseña=?, estatura=?, peso=?, condicion_especial=?, id_plan=?, rol_id=? " +
+                       "genero=?, contrasena=?, estatura=?, peso=?, condicion_especial=?, id_plan=?, rol_id=? " +
                        "WHERE id=? AND Estado = TRUE";  // Solo puede modificar usuarios activos
     
     try {

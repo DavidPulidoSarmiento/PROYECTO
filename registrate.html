@@ -12,7 +12,8 @@
     <div class="container">
         <div class="login-box">
             <h2>Regístrate</h2>
-            <form id="registerForm" novalidate>
+            <form id="registerForm" novalidate action="register.php" method="POST">
+
                 <div class="textbox">
                     <input type="text" name="nombre" placeholder="nombre" required > 
                 </div>
@@ -20,10 +21,10 @@
                     <input type="email" name="correo" placeholder="correo" required >
                 </div>
                 <div class="textbox">
-                    <input type="password" name="contraseña" placeholder="contraseña" required  >
+                    <input type="password" name="contrasena" placeholder="contraseña" required  >
                 </div>
                 <div class="textbox">
-                    <input type="password" name="confirmar_contraseña" placeholder="confirmar contraseña" required  >
+                    <input type="password" name="confirmar_contrasena" placeholder="confirmar contraseña" required  >
                 </div>
                 <div class="textbox">
                     <input type="date" name="fecha_nacimiento" required  >

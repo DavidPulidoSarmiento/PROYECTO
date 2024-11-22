@@ -10,7 +10,7 @@ public class login {
     private String usuario;
     
     /** Contraseña asociada al usuario */
-    private String contraseña;
+    private String contrasena;
     
     /** Rol del usuario (e.g., "administrador", "usuario", etc.) */
     private String rol;
@@ -32,7 +32,7 @@ public class login {
      */
     public login(String usuario, String contraseña, String rol) {
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasena = contraseña;
         this.rol = rol;
     }
 
@@ -60,7 +60,7 @@ public class login {
      * @return La contraseña del usuario.
      */
     public String getPass() {
-        return contraseña;
+        return contrasena;
     }
 
     /**
@@ -69,7 +69,7 @@ public class login {
      * @param contraseña La contraseña del usuario.
      */
     public void setPass(String contraseña) {
-        this.contraseña = contraseña;
+        this.contrasena = contraseña;
     }
 
     /**

@@ -36,45 +36,37 @@ if (!in_array($meal, $valid_meals)) {
 }
 
 // Obtener la última completación de la comida
-$stmt = $conexion->prepare("SELECT last_completed FROM meal_completions WHERE usuario_id = ? AND meal = ?");
-$stmt->bind_param("is", $usuario_id, $meal);
+$stmt = $conexion->prepare("SELECT last_completed FROM meal_completions WHERE usuario_id = :usuario_id AND meal = :meal");
+$stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+$stmt->bindParam(':meal', $meal, PDO::PARAM_STR);
 $stmt->execute();
-$result = $stmt->get_result();
 $last_completed = null;
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $last_completed = new DateTime($row['last_completed']);
 } else {
     // Si no existe un registro, crear uno
-    $stmt_insert = $conexion->prepare("INSERT INTO meal_completions (usuario_id, meal, last_completed) VALUES (?, ?, ?)");
-    $current_time = (new DateTime())->format('Y-m-d H:i:s');
-    $stmt_insert->bind_param("iss", $usuario_id, $meal, $current_time);
-    if ($stmt_insert->execute()) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Error al registrar la completación.']);
-    }
+    $stmt_insert = $conexion->prepare("INSERT INTO meal_completions (usuario_id, meal, last_completed) VALUES (:usuario_id, :meal, NOW())");
+    $stmt_insert->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+    $stmt_insert->bindParam(':meal', $meal, PDO::PARAM_STR);
+    $stmt_insert->execute();
+    echo json_encode(['success' => true, 'message' => 'Comida marcada como completada.']);
     exit();
 }
 
-// Verificar si han pasado 24 horas desde la última completación
 $current_time = new DateTime();
 $interval = $current_time->diff($last_completed);
 $hours_passed = ($interval->days * 24) + $interval->h + ($interval->i / 60);
 
-if ($hours_passed < 24) {
-    echo json_encode(['success' => false, 'message' => 'Debes esperar 24 horas para completar nuevamente esta comida.']);
-    exit();
-}
-
-// Actualizar la fecha de completación
-$stmt_update = $conexion->prepare("UPDATE meal_completions SET last_completed = ? WHERE usuario_id = ? AND meal = ?");
-$current_time_str = $current_time->format('Y-m-d H:i:s');
-$stmt_update->bind_param("sis", $current_time_str, $usuario_id, $meal);
-if ($stmt_update->execute()) {
-    echo json_encode(['success' => true]);
+if ($hours_passed >= 24) {
+    // Actualizar la hora de la última completación
+    $stmt_update = $conexion->prepare("UPDATE meal_completions SET last_completed = NOW() WHERE usuario_id = :usuario_id AND meal = :meal");
+    $stmt_update->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+    $stmt_update->bindParam(':meal', $meal, PDO::PARAM_STR);
+    $stmt_update->execute();
+    echo json_encode(['success' => true, 'message' => 'Comida marcada como completada.']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Error al actualizar la completación.']);
+    echo json_encode(['success' => false, 'message' => 'No puedes completar esta comida aún.']);
 }
 ?>

@@ -10,47 +10,61 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-// Obtener la fecha de registro del usuario
-$stmt = $conexion->prepare("SELECT fecha_de_registro FROM usuario WHERE ID = ?");
-$stmt->bind_param("i", $usuario_id);
-$stmt->execute();
-$resultado = $stmt->get_result();
-
-if ($resultado->num_rows === 1) {
-    $usuario = $resultado->fetch_assoc();
-    $fecha_de_registro = new DateTime($usuario['fecha_de_registro']);
-    $fecha_actual = new DateTime();
-
-    // Calcular la racha de días
-    $racha_dias = $fecha_actual->diff($fecha_de_registro)->days;
-
-    // Obtener el ID del plan del usuario
-    $stmt = $conexion->prepare("SELECT id_plan FROM usuario WHERE ID = ?");
-    $stmt->bind_param("i", $usuario_id);
+try {
+    // Obtener la fecha de registro del usuario
+    $stmt = $conexion->prepare("SELECT fecha_de_registro FROM usuario WHERE ID = :id");
+    $stmt->bindParam(':id', $usuario_id, PDO::PARAM_INT);
     $stmt->execute();
-    $resultado_plan = $stmt->get_result();
-    $plan = $resultado_plan->fetch_assoc();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Determinar el circuito correspondiente basado en la racha de días
-    $dia_circuito = $racha_dias % 5 + 1; // Ciclo de 1 a 5 (Dia 1 a Dia 5)
+    if ($usuario) {
+        $fecha_de_registro = new DateTime($usuario['fecha_de_registro']);
+        $fecha_actual = new DateTime();
 
-    // Obtener la rutina y los ejercicios para el circuito correspondiente
-    $stmt = $conexion->prepare("
-        SELECT r.nombre AS rutina_nombre, ce.series, e.nombre AS ejercicio_nombre, e.visual 
-        FROM rutinas r
-        JOIN rutinas_circuitos rc ON r.ID = rc.rutina_id
-        JOIN circuitos c ON rc.circuito_id = c.ID
-        JOIN circuitos_ejercicios ce ON c.ID = ce.circuito_id
-        JOIN ejercicios e ON ce.ejercicio_id = e.ID
-        WHERE r.ID = ? AND c.ID = ? 
-        LIMIT 4
-    ");
-    $stmt->bind_param("ii", $plan['id_plan'], $dia_circuito);
-    $stmt->execute();
-    $resultado_ejercicios = $stmt->get_result();
-} else {
-    // Manejar el caso en que no se encuentra el usuario
-    echo "Error: Usuario no encontrado.";
+        // Calcular la racha de días
+        $racha_dias = $fecha_actual->diff($fecha_de_registro)->days;
+
+        // Obtener el ID del plan del usuario
+        $stmt_plan = $conexion->prepare("SELECT id_plan FROM usuario WHERE ID = :id");
+        $stmt_plan->bindParam(':id', $usuario_id, PDO::PARAM_INT);
+        $stmt_plan->execute();
+        $plan = $stmt_plan->fetch(PDO::FETCH_ASSOC);
+
+        if ($plan) {
+            // Determinar el circuito correspondiente basado en la racha de días
+            $dia_circuito = $racha_dias % 5 + 1; // Ciclo de 1 a 5 (Dia 1 a Dia 5)
+
+            // Obtener la rutina y los ejercicios para el circuito correspondiente
+            $stmt_ejercicios = $conexion->prepare("
+                SELECT r.nombre AS rutina_nombre, ce.series, e.nombre AS ejercicio_nombre, e.visual 
+                FROM rutinas r
+                JOIN rutinas_circuitos rc ON r.ID = rc.rutina_id
+                JOIN circuitos c ON rc.circuito_id = c.ID
+                JOIN circuitos_ejercicios ce ON c.ID = ce.circuito_id
+                JOIN ejercicios e ON ce.ejercicio_id = e.ID
+                WHERE r.ID = :plan_id AND c.ID = :dia_circuito 
+                LIMIT 4
+            ");
+            $stmt_ejercicios->bindParam(':plan_id', $plan['id_plan'], PDO::PARAM_INT);
+            $stmt_ejercicios->bindParam(':dia_circuito', $dia_circuito, PDO::PARAM_INT);
+            $stmt_ejercicios->execute();
+            $ejercicios = $stmt_ejercicios->fetchAll(PDO::FETCH_ASSOC);
+
+            // Obtener el nombre del circuito
+            $stmt_circuito = $conexion->prepare("SELECT nombre AS circuito_nombre FROM circuitos WHERE ID = :dia_circuito");
+            $stmt_circuito->bindParam(':dia_circuito', $dia_circuito, PDO::PARAM_INT);
+            $stmt_circuito->execute();
+            $circuito = $stmt_circuito->fetch(PDO::FETCH_ASSOC);
+        } else {
+            echo "Error: Plan no encontrado.";
+            exit();
+        }
+    } else {
+        echo "Error: Usuario no encontrado.";
+        exit();
+    }
+} catch (PDOException $e) {
+    echo "Error en la base de datos: " . $e->getMessage();
     exit();
 }
 ?>
@@ -87,37 +101,20 @@ if ($resultado->num_rows === 1) {
         <div class="container">
             <div class="sectionuno-uno">
                 <h1>Bienvenido, llevas una racha de <?php echo $racha_dias; ?> días</h1>
-                <h2> 
-<?php
-    // Obtener el nombre del circuito
-    $stmt = $conexion->prepare("SELECT c.nombre AS circuito_nombre 
-                                 FROM circuitos c 
-                                 WHERE c.ID = ?");
-    $stmt->bind_param("i", $dia_circuito);
-    $stmt->execute();
-    $resultado_circuito = $stmt->get_result();
-    
-    if ($resultado_circuito->num_rows === 1) {
-        $circuito = $resultado_circuito->fetch_assoc();
-        echo $circuito['circuito_nombre'] . ': ';
-    }
-
-    
-?>
-            </h2>
+                <h2>
+                    <?php
+                    if ($circuito) {
+                        echo htmlspecialchars($circuito['circuito_nombre']) . ': ';
+                    }
+                    ?>
+                </h2>
             </div>
             <div class="sectionuno-img">
                 <?php
-                // Reseteamos el cursor del resultado a la primera fila
-                $resultado_ejercicios->data_seek(0);
-                $counter = 0;
-                while ($ejercicio = $resultado_ejercicios->fetch_assoc()) {
-                    if ($counter < 4) { // Limitar a 4 ejercicios
-                        echo '<div class="imageneswiwi">';
-                        echo '<img src="' . htmlspecialchars($ejercicio['visual']) . '" class="img" alt="' . htmlspecialchars($ejercicio['ejercicio_nombre']) . '">';
-                        echo '</div>';
-                    }
-                    $counter++;
+                foreach ($ejercicios as $ejercicio) {
+                    echo '<div class="imageneswiwi">';
+                    echo '<img src="' . htmlspecialchars($ejercicio['visual']) . '" class="img" alt="' . htmlspecialchars($ejercicio['ejercicio_nombre']) . '">';
+                    echo '</div>';
                 }
                 ?>
             </div>
