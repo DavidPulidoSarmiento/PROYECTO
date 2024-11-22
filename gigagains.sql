@@ -328,7 +328,7 @@ CREATE TABLE `usuario` (
   `fecha_de_nacimiento` date NOT NULL,
   `fecha_de_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   `genero` enum('Masculino','Femenino','Otro') NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
+  `contrasena` varchar(255) NOT NULL,
   `estatura` decimal(5,2) NOT NULL,
   `peso` decimal(5,2) NOT NULL,
   `condicion_especial` varchar(255) DEFAULT NULL,
@@ -341,7 +341,7 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de_registro`, `genero`, `contraseña`, `estatura`, `peso`, `condicion_especial`, `id_plan`, `rol_id`, `Estado`) VALUES
+INSERT INTO `usuario` (`ID`, `nombre`, `email`, `fecha_de_nacimiento`, `fecha_de_registro`, `genero`, `contrasena`, `estatura`, `peso`, `condicion_especial`, `id_plan`, `rol_id`, `Estado`) VALUES
 (1, 'David Alfredo', 'david@gmail.com', '2006-07-07', '2024-10-30 15:01:39', 'Masculino', '$2y$10$wafSeIQIUH0uPoA8Kii3hO6sZ40z7cRt/9ClreAfUza5ETBUnnq1C', 178.00, 80.00, 'ninguna', 1, 3, 1),
 (2, 'Zannian', 'zannian@gmail.com', '2005-07-07', '2024-10-30 15:01:04', 'Masculino', '$2y$10$QXldkRJ9zkahwa3Y2pm3.OvqU9P5ypsI7pNHAceZtuzIl29/iETfy', 178.00, 80.00, 'ninguna', 10, 2, 1),
 (4, 'Pablo', 'pablo@gmail.com', '2006-07-07', '2024-11-03 16:11:26', 'Masculino', '$2y$10$GNyeiyq9kKBKgjw7R1sAh.lEiykrUtTr.IGZaKb4oq3JZ9n3649oq', 178.00, 78.00, 'ninguna', 2, 1, 1),
