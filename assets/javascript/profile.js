@@ -2,14 +2,14 @@ document.getElementById("userProfileForm").addEventListener("submit", function(e
     event.preventDefault(); // Evita el envío del formulario hasta que pase todas las validaciones.
 
     // Obtén los valores de los campos del formulario y elige el género seleccionado
-    var nombre = document.getElementById("name").value.trim();
-    var email = document.getElementById("email").value.trim();
-    var fecha_de_nacimiento = document.getElementById("date").value.trim();
-    var estatura = document.getElementById("stature").value.trim();
-    var peso = document.getElementById("weight").value.trim();
-    var condicion_especial = document.getElementById("special-condition").value.trim();
-    var generoElement = document.querySelector('input[name="genero"]:checked');
-    var genero = generoElement ? generoElement.value : '';
+    let nombre = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let fecha_de_nacimiento = document.getElementById("date").value.trim();
+    let estatura = document.getElementById("stature").value.trim();
+    let peso = document.getElementById("weight").value.trim();
+    let condicion_especial = document.getElementById("special-condition").value.trim();
+    let generoElement = document.querySelector('input[name="genero"]:checked');
+    let genero = generoElement ? generoElement.value : '';
 
     // Inicia con una bandera de error como `false` y cámbiala a `true` si se encuentra un error
     let formIsValid = true;

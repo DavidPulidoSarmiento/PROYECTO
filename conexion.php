@@ -8,7 +8,7 @@ $host = 'localhost'; // Cambia si es necesario
 $usuario = 'DavidPulido_2696521'; // Tu usuario de la base de datos
 
 // Contraseña del usuario de la base de datos. Este es el password asociado con el usuario para acceder a la base de datos
-$contraseña = 'DavidPulido_2696521'; // Tu contraseña de la base de datos
+$contraseña = 'DavidPulido'; // Tu contraseña de la base de datos
 
 // El nombre de la base de datos a la que te quieres conectar
 $base_de_datos = 'gigagains'; // Tu base de datos
