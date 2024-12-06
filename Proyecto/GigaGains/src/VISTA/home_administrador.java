@@ -1576,7 +1576,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdEjercicio.getText()) || !"".equals(txtNombreEjercicio.getText()) || !"".equals(txtDescripcionEjercicio.getText()) || !"".equals(txtVisualEjercicio.getText())) {
+            if (!"".equals(txtIdEjercicio.getText()) && !"".equals(txtNombreEjercicio.getText()) && !"".equals(txtDescripcionEjercicio.getText()) && !"".equals(txtVisualEjercicio.getText())) {
                 ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
                 ej.setNombre(txtNombreEjercicio.getText());
                 ej.setDescripcion(txtDescripcionEjercicio.getText());
@@ -1599,7 +1599,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIDRutina.getText()) || !"".equals(txtNombreRutina.getText())) {
+            if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())) {
                 cl.setId(Integer.parseInt(txtIDRutina.getText()));
                 cl.setNombre(txtNombreRutina.getText());
                 client.ModificarRutina(cl);
@@ -1671,6 +1671,8 @@ public class home_administrador extends javax.swing.JFrame {
                 LimpiarTable();
                 ListarUsuario();
                 LimpiarUsuario();
+                btnEditarUsuario.setEnabled(false);
+                btnBorrarUsuario.setEnabled(false);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione una fila");
@@ -1683,7 +1685,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdUsuario.getText()) || !"".equals(txtNombreUsuario.getText()) || !"".equals(txtEmailUsuario.getText()) || !"".equals(txtFechaNacimiento.getText()) || !"".equals(txtFechaRegistro.getText()) || !"".equals(txtGeneroUsuario.getText()) || !"".equals(txtContraseñaUsuario.getText()) || !"".equals(txtEstaturaUsuario.getText()) ||  !"".equals(txtPesoUsuario.getText()) || !"".equals(txtCondEspecialUsuario.getText())) {
+            if (!"".equals(txtIdUsuario.getText()) && !"".equals(txtNombreUsuario.getText()) && !"".equals(txtEmailUsuario.getText()) && !"".equals(txtFechaNacimiento.getText()) && !"".equals(txtFechaRegistro.getText()) && !"".equals(txtGeneroUsuario.getText()) && !"".equals(txtContraseñaUsuario.getText()) && !"".equals(txtEstaturaUsuario.getText()) &&  !"".equals(txtPesoUsuario.getText()) && !"".equals(txtCondEspecialUsuario.getText())) {
                 us.setId(Integer.parseInt(txtIdUsuario.getText()));
                 us.setNombre(txtNombreUsuario.getText());
                 us.setEmail(txtEmailUsuario.getText());
@@ -1700,6 +1702,8 @@ public class home_administrador extends javax.swing.JFrame {
                 LimpiarTable();
                 LimpiarUsuario();
                 ListarUsuario();
+                btnEditarUsuario.setEnabled(false);
+                btnBorrarUsuario.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
             }
@@ -1709,6 +1713,8 @@ public class home_administrador extends javax.swing.JFrame {
     private void Iniciar18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Iniciar18ActionPerformed
         // TODO add your handling code here:
         LimpiarUsuario();
+        btnEditarUsuario.setEnabled(false);
+        btnBorrarUsuario.setEnabled(false);
     }//GEN-LAST:event_Iniciar18ActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
@@ -1745,13 +1751,13 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPlanActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIdPlan.getText()) || !"".equals(txtTipoPlan.getText())){
+        if (!"".equals(txtIdPlan.getText()) &&  !"".equals(txtTipoPlan.getText())){
             pla.setId(Integer.parseInt(txtIdPlan.getText()));
             pla.setTipo(txtTipoPlan.getText());
             pla.setNombre_dieta((String) combodietaname.getSelectedItem());
             pla.setNombre_rutina((String) comborutinaname.getSelectedItem());
             plaDao.RegistrarPlan(pla);
-            JOptionPane.showMessageDialog(null, "Rutina registrada");
+            JOptionPane.showMessageDialog(null, "Plan registrado");
             
             LimpiarPlan();
             LimpiarTable();
@@ -1769,13 +1775,13 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdPlan.getText()) || !"".equals(txtTipoPlan.getText())) {
+            if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())) {
                 pla.setId(Integer.parseInt(txtIdPlan.getText()));
                 pla.setTipo(txtTipoPlan.getText());
                 pla.setNombre_rutina((String)comborutinaname.getSelectedItem());
                 pla.setNombre_dieta((String)combodietaname.getSelectedItem());
                 plaDao.ModificarPlan(pla);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Plan Modificado");
                 LimpiarTable();
                 LimpiarPlan();
                 ListarPlan();
@@ -1998,7 +2004,7 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCiEjActionPerformed
         // TODO add your handling code here:
-        if (!txtIDCircuitoEj.getText().isEmpty() || 
+        if (!txtIDCircuitoEj.getText().isEmpty() && 
         !txtSeries.getText().isEmpty()) {
             
             cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
@@ -2218,7 +2224,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIDCircuitoEj.getText()) || !"".equals(txtSeries.getText())) {
+            if (!"".equals(txtIDCircuitoEj.getText()) && !"".equals(txtSeries.getText())) {
                 cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
                 cir.setSeries(txtSeries.getText());
                 cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
@@ -2307,7 +2313,7 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearDietaActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIdDieta.getText()) || !"".equals(txtTipoDieta.getText()) || !"".equals(txtIdDietaPlan1.getText()) || !"".equals(txtIdDietaPlan2.getText()) || !"".equals(txtIdDietaPlan3.getText())){
+        if (!"".equals(txtIdDieta.getText()) && !"".equals(txtTipoDieta.getText()) && !"".equals(txtIdDietaPlan1.getText()) && !"".equals(txtIdDietaPlan2.getText()) && !"".equals(txtIdDietaPlan3.getText())){
             die.setId(Integer.parseInt(txtIdDieta.getText()));
             die.setTipo(txtTipoDieta.getText());
             die.setProteinas(Integer.parseInt(txtIdDietaPlan1.getText()));
@@ -2331,7 +2337,7 @@ public class home_administrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "seleccione una fila");
         } else {
 
-            if (!"".equals(txtIdDieta.getText()) || !"".equals(txtTipoDieta.getText()) || !"".equals(txtIdDietaPlan1.getText()) || !"".equals(txtIdDietaPlan2.getText()) || !"".equals(txtIdDietaPlan3.getText())) {
+            if (!"".equals(txtIdDieta.getText()) && !"".equals(txtTipoDieta.getText()) && !"".equals(txtIdDietaPlan1.getText()) && !"".equals(txtIdDietaPlan2.getText()) && !"".equals(txtIdDietaPlan3.getText())) {
                 die.setId(Integer.parseInt(txtIdDieta.getText()));
                 die.setTipo(txtTipoDieta.getText());
                 die.setProteinas(Integer.parseInt(txtIdDietaPlan1.getText()));

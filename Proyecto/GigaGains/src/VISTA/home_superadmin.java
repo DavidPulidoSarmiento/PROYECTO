@@ -2305,7 +2305,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 ej.setVisual(txtVisualEjercicio.getText());
                 ej.setNombreMusculo((String)jComboBoxMusculosOcupados.getSelectedItem());
                 ejDao.ModificarEjercicio(ej);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Ejercicio Modificado");
                 LimpiarEjercicio();
                 LimpiarTable();
                 ListarEjercicio();
@@ -2325,7 +2325,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 cl.setId(Integer.parseInt(txtIDRutina.getText()));
                 cl.setNombre(txtNombreRutina.getText());
                 client.ModificarRutina(cl);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Rutina Modificada");
                 LimpiarTable();
                 LimpiarRutina();
                 ListarRutina();
@@ -2552,7 +2552,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 pla.setNombre_rutina((String)comborutinaname.getSelectedItem());
                 pla.setNombre_dieta((String)combodietaname.getSelectedItem());
                 plaDao.ModificarPlan(pla);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Plan Modificado");
                 LimpiarTable();
                 LimpiarPlan();
                 ListarPlan();
@@ -2745,7 +2745,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 cir.setId(Integer.parseInt(txtIDCircuito.getText()));
                 cir.setNombre(txtNombreCircuito.getText());
                 cirDao.ModificarCircuito(cir);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Circuito Modificado");
                 LimpiarTable();
                 LimpiarCircuito();
                 ListarCircuito();
@@ -3040,7 +3040,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 cir.setNombre_ejercicio((String) combocejercicio.getSelectedItem());
                 cir.setNombre((String) comboxcircuito.getSelectedItem());
                 cirDao.ModificarCircuito_Ejercicio(cir);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Circuito Modificado");
                 LimpiarCircuitoEj();
                 LimpiarTable();
                 btnCrearCiEj.setEnabled(false);
@@ -3063,7 +3063,7 @@ public class home_superadmin extends javax.swing.JFrame {
                 cl.setNombre((String) comborutinas.getSelectedItem());
                 cl.setNombrecircuito((String) combocircuito.getSelectedItem());
                 client.ModificarRutina_circuito(cl);
-                JOptionPane.showMessageDialog(null, "Cliente Modificado");
+                JOptionPane.showMessageDialog(null, "Rutina Modificado");
                 LimpiarRutinaCi();
                 LimpiarTabledos();
                 btnCrearRutinaCI.setEnabled(false);
