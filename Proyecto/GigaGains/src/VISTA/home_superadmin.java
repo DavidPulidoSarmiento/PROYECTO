@@ -2264,7 +2264,14 @@ public class home_superadmin extends javax.swing.JFrame {
         if (!txtIdEjercicio.getText().isEmpty() && 
         !txtNombreEjercicio.getText().isEmpty() && 
         !txtDescripcionEjercicio.getText().isEmpty() && 
-        !txtVisualEjercicio.getText().isEmpty()) {
+        !txtVisualEjercicio.getText().isEmpty()
+                &&jComboBoxMusculosOcupados.getSelectedItem() != null) {
+            
+        int idEjercicio = Integer.parseInt(txtIdEjercicio.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (ejDao.existeId(idEjercicio)) {
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+        } else {
             
             ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
             ej.setNombre(txtNombreEjercicio.getText());
@@ -2278,7 +2285,13 @@ public class home_superadmin extends javax.swing.JFrame {
             LimpiarEjercicio();
             LimpiarTable();
             ListarEjercicio();
-        
+        llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
+        }
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
     }
@@ -2309,6 +2322,12 @@ public class home_superadmin extends javax.swing.JFrame {
                 LimpiarEjercicio();
                 LimpiarTable();
                 ListarEjercicio();
+                llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
             }
@@ -2346,10 +2365,27 @@ public class home_superadmin extends javax.swing.JFrame {
     private void btnCrearRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutinaActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())){
+            
+            int idRutina = Integer.parseInt(txtIDRutina.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (client.existeId(idRutina)) {
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+        } else {
+           
             cl.setId(Integer.parseInt(txtIDRutina.getText()));
             cl.setNombre(txtNombreRutina.getText());
             client.RegistrarRutina(cl);
             JOptionPane.showMessageDialog(null, "Rutina registrada");
+            LimpiarTable();
+            LimpiarRutina();
+            ListarRutina();
+            
+            llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+        } 
         } else {
             JOptionPane.showMessageDialog(null, "Los campos estan vacios");
         }
@@ -2522,18 +2558,32 @@ public class home_superadmin extends javax.swing.JFrame {
 
     private void btnCrearPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPlanActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())){
+        if (!"".equals(txtIdPlan.getText()) &&  !"".equals(txtTipoPlan.getText())
+&&combodietaname.getSelectedItem() != null 
+        &&comborutinaname.getSelectedItem() != null) {
+            
+        int idPlan = Integer.parseInt(txtIdPlan.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (plaDao.existeId(idPlan)) {
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+        } else {
             pla.setId(Integer.parseInt(txtIdPlan.getText()));
             pla.setTipo(txtTipoPlan.getText());
             pla.setNombre_dieta((String) combodietaname.getSelectedItem());
             pla.setNombre_rutina((String) comborutinaname.getSelectedItem());
             plaDao.RegistrarPlan(pla);
-            JOptionPane.showMessageDialog(null, "Rutina registrada");
+            JOptionPane.showMessageDialog(null, "Plan registrado");
             
             LimpiarPlan();
             LimpiarTable();
             ListarPlan();
-        
+        llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
+        }
             
         } else {
             JOptionPane.showMessageDialog(null, "Los campos estan vacios");
@@ -2556,6 +2606,12 @@ public class home_superadmin extends javax.swing.JFrame {
                 LimpiarTable();
                 LimpiarPlan();
                 ListarPlan();
+                llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
             }
@@ -2719,7 +2775,11 @@ public class home_superadmin extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!txtIDCircuito.getText().isEmpty() && 
         !txtNombreCircuito.getText().isEmpty()){
-            
+            int idCircuito = Integer.parseInt(txtIDCircuito.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (cirDao.existeId(idCircuito)) {
+            JOptionPane.showMessageDialog(null, "El ID ya está registrado. Usa otro ID.");
+        } else {
             cir.setId(Integer.parseInt(txtIDCircuito.getText()));
             cir.setNombre(txtNombreCircuito.getText());
             cirDao.RegistrarCircuito(cir);
@@ -2729,7 +2789,8 @@ public class home_superadmin extends javax.swing.JFrame {
             LimpiarTable();
             LimpiarCircuito();
             ListarCircuito();
-        
+            cargarCircuitos();
+        }
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
     }
@@ -3128,6 +3189,12 @@ public class home_superadmin extends javax.swing.JFrame {
     private void btnCrearDietaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearDietaActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtIdDieta.getText()) && !"".equals(txtTipoDieta.getText()) && !"".equals(txtIdDietaPlan1.getText()) && !"".equals(txtIdDietaPlan2.getText()) && !"".equals(txtIdDietaPlan3.getText())){
+            int idDieta = Integer.parseInt(txtIdDieta.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (dieDao.existeId(idDieta)) {
+            JOptionPane.showMessageDialog(null, "El ID ya está registrado. Usa otro ID.");
+        } else {
+           
             die.setId(Integer.parseInt(txtIdDieta.getText()));
             die.setTipo(txtTipoDieta.getText());
             die.setProteinas(Integer.parseInt(txtIdDietaPlan1.getText()));
@@ -3138,8 +3205,14 @@ public class home_superadmin extends javax.swing.JFrame {
             
             LimpiarTable();
             LimpiarDieta();
-            LimpiarPlan();
             ListarDieta();
+            llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
+        }
         } else {
             JOptionPane.showMessageDialog(null, "Los campos estan vacios");
         }
@@ -3160,8 +3233,15 @@ public class home_superadmin extends javax.swing.JFrame {
                 dieDao.ModificarDieta(die);
                 JOptionPane.showMessageDialog(null, "Dieta Modificada");
                 LimpiarTable();
-                LimpiarDieta();
-                ListarDieta();
+            LimpiarDieta();
+            ListarDieta();
+            llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
+            cargarCircuitos();
+        
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
             }

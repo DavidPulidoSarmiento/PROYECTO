@@ -67,6 +67,23 @@ public class EjercicioDAO {
             return false;
         }
     }
+    
+    public boolean existeId(int id) {
+    String sql = "SELECT COUNT(*) FROM ejercicios WHERE id = ?";
+    try {
+        con = cn.getConnection();
+            // Obtener el ID del grupo muscular
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Si el conteo es mayor a 0, el ID ya existe
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false; // Si ocurre un error o no se encuentra, devolver false
+}
 
     /**
      * Obtiene una lista de los ejercicios cuyo estado es {@code TRUE}.
