@@ -1984,7 +1984,13 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void btnCrearRutinaCIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutinaCIActionPerformed
         // TODO add your handling code here:
-        if (!txtIDRutina1.getText().isEmpty()) {
+        if (!txtIDRutina1.getText().isEmpty() && combocircuito.getSelectedItem() != null) {
+            
+        int idEjercicio = Integer.parseInt(txtIDRutina1.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (client.existeIdRutinaCI(idEjercicio)) {
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+        } else {
             
             cl.setIdru_cir(Integer.parseInt(txtIDRutina1.getText()));
             cl.setNombre((String) comborutinas.getSelectedItem());
@@ -1994,7 +2000,7 @@ public class home_administrador extends javax.swing.JFrame {
 
             // Limpiar los campos después de registrar
             LimpiarRutinaCi();
-        
+        }
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
     }
@@ -2096,7 +2102,13 @@ public class home_administrador extends javax.swing.JFrame {
     private void btnCrearCiEjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCiEjActionPerformed
         // TODO add your handling code here:
         if (!txtIDCircuitoEj.getText().isEmpty() && 
-        !txtSeries.getText().isEmpty()) {
+        !txtSeries.getText().isEmpty() && combocejercicio.getSelectedItem() != null) {
+            
+        int idEjercicio = Integer.parseInt(txtIDCircuitoEj.getText());
+        // Verificar si el ID ya existe en la base de datos
+        if (cirDao.existeIdCiEj(idEjercicio)) {
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+        } else {
             
             cir.setIDCircuitoEj(Integer.parseInt(txtIDCircuitoEj.getText()));
             cir.setSeries(txtSeries.getText());
@@ -2107,7 +2119,7 @@ public class home_administrador extends javax.swing.JFrame {
 
             // Limpiar los campos después de registrar
             LimpiarCircuitoEj();
-        
+        }
     } else {
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
     }
