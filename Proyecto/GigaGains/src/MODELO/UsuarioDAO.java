@@ -265,4 +265,36 @@ public class UsuarioDAO {
 
         return nombres;
     }
+    
+    public List<Rutina> ListarRutinaPorPlan(Usuario us) {
+    List<Rutina> ListaRutinas = new ArrayList<>();
+    String sql = "SELECT r.ID, r.nombre " +
+                 "FROM rutinas r " +
+                 "INNER JOIN plan p ON r.id = p.rutina_id " +
+                 "WHERE p.tipo = ?";  // Usamos ? para filtrar por el nombre del plan
+
+    try {
+        // Conectamos a la base de datos
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        
+        // Establecemos el nombre del plan como parámetro de la consulta
+        ps.setString(1, us.getNombrePlan());  // Asumimos que us.getNombrePlan() tiene el nombre del plan
+        
+        rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Rutina rutina = new Rutina();
+            rutina.setId(rs.getInt("id"));
+            rutina.setNombre(rs.getString("nombre"));
+            ListaRutinas.add(rutina);  // Agregar la rutina a la lista
+        }
+    } catch (SQLException e) {
+        System.out.println(e.toString());
+    }
+    return ListaRutinas;  // Retornamos la lista de rutinas asociadas al plan
 }
+
+}
+
+

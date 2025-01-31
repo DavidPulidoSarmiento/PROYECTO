@@ -189,9 +189,15 @@ public class home_administrador extends javax.swing.JFrame {
                 actualizarTablaCircuitos(nombreCircuitoSeleccionado);
                 btnCrearRutinaCI.setEnabled(true);
             }
-        });
+        });  
     }
+    private void abrirVistaPlanes() {
+    // Crear la instancia de la vista de planes
+    planes vistaPlanes = new planes();  // Asegúrate de que Planes sea una clase de JFrame o similar
     
+    // Hacer visible la vista
+        vistaPlanes.setVisible(true);
+    }
     private void actualizarTablaEjercicios(String nombreCircuito) {
         
         List<Circuito> listaEjercicios = cirDao.obtenerEjerciciosPorCircuito(nombreCircuito);
@@ -339,6 +345,7 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         txtContraseñaUsuario = new javax.swing.JTextField();
         comboxplanes = new javax.swing.JComboBox<>();
+        MasInfoPlanBtn = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         txtIdDieta = new javax.swing.JTextField();
@@ -1196,6 +1203,12 @@ public class home_administrador extends javax.swing.JFrame {
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Plan");
         jPanel6.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 20, -1, -1));
+
+        txtContraseñaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtContraseñaUsuarioActionPerformed(evt);
+            }
+        });
         jPanel6.add(txtContraseñaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, 110, -1));
 
         comboxplanes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -1205,6 +1218,16 @@ public class home_administrador extends javax.swing.JFrame {
             }
         });
         jPanel6.add(comboxplanes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 40, 120, -1));
+
+        MasInfoPlanBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        MasInfoPlanBtn.setForeground(new java.awt.Color(144, 12, 63));
+        MasInfoPlanBtn.setText("MAS INFO");
+        MasInfoPlanBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MasInfoPlanBtnActionPerformed(evt);
+            }
+        });
+        jPanel6.add(MasInfoPlanBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 70, -1, -1));
 
         jTabbedPane1.addTab("", jPanel6);
 
@@ -1785,6 +1808,7 @@ public class home_administrador extends javax.swing.JFrame {
         ListarUsuario();
         btnEditarUsuario.setEnabled(false);
         btnBorrarUsuario.setEnabled(false);
+        txtContraseñaUsuario.setEnabled(false);
         LimpiarUsuario();
         jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_btnUsuarioActionPerformed
@@ -2544,6 +2568,17 @@ public class home_administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboxplanesActionPerformed
 
+    private void txtContraseñaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaUsuarioActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtContraseñaUsuarioActionPerformed
+
+    private void MasInfoPlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasInfoPlanBtnActionPerformed
+        // TODO add your handling code here:
+        us.setNombrePlan((String)comboxplanes.getSelectedItem());
+        abrirVistaPlanes();
+    }//GEN-LAST:event_MasInfoPlanBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2580,6 +2615,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JButton Iniciar14;
     private javax.swing.JButton Iniciar15;
     private javax.swing.JButton Iniciar18;
+    private javax.swing.JButton MasInfoPlanBtn;
     private javax.swing.JTable TableCircuito;
     private javax.swing.JTable TableCircuitoEjercicio;
     private javax.swing.JTable TableDieta;
