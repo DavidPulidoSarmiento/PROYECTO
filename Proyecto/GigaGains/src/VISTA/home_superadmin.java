@@ -247,7 +247,20 @@ public class home_superadmin extends javax.swing.JFrame {
             combocircuito.addItem(nombre);
         }
     }
+    private void abrirVistaPlanes() {
+    // Crear la instancia de la vista de planes
+    planes vistaPlanes = new planes();  // Asegúrate de que Planes sea una clase de JFrame o similar
     
+    // Hacer visible la vista
+        vistaPlanes.setVisible(true);
+    }
+    private void abrirVistaProgreso() {
+    // Crear la instancia de la vista de planes
+    Progreso vistaPlanes = new Progreso();  // Asegúrate de que Planes sea una clase de JFrame o similar
+    
+    // Hacer visible la vista
+        vistaPlanes.setVisible(true);
+    }
     private void llenarComboBoxRutina() {
         List<String> nombres = client.obtenerNombresRutinas();
         comborutinas.removeAllItems(); 
@@ -510,6 +523,8 @@ public class home_superadmin extends javax.swing.JFrame {
         txtRol = new javax.swing.JTextField();
         jScrollPane18 = new javax.swing.JScrollPane();
         TableUsuario1 = new javax.swing.JTable();
+        MasInfoPlanBtn = new javax.swing.JButton();
+        MasInfoPlanBtn1 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         txtIdDieta = new javax.swing.JTextField();
@@ -555,16 +570,13 @@ public class home_superadmin extends javax.swing.JFrame {
         btnBorrarPlan1 = new javax.swing.JButton();
         btnCancelarPlan1 = new javax.swing.JButton();
 
-        jFrame1.getContentPane().setLayout(new java.awt.BorderLayout());
-
-        jFrame2.getContentPane().setLayout(new java.awt.BorderLayout());
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(144, 12, 63));
         setSize(new java.awt.Dimension(1350, 725));
         getContentPane().setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/logoGiGa.png"))); // NOI18N
@@ -1781,6 +1793,26 @@ public class home_superadmin extends javax.swing.JFrame {
 
         jPanel6.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 1290, 180));
 
+        MasInfoPlanBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        MasInfoPlanBtn.setForeground(new java.awt.Color(144, 12, 63));
+        MasInfoPlanBtn.setText("MAS INFO");
+        MasInfoPlanBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MasInfoPlanBtnActionPerformed(evt);
+            }
+        });
+        jPanel6.add(MasInfoPlanBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 70, -1, -1));
+
+        MasInfoPlanBtn1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        MasInfoPlanBtn1.setForeground(new java.awt.Color(144, 12, 63));
+        MasInfoPlanBtn1.setText("PROGRESO");
+        MasInfoPlanBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MasInfoPlanBtn1ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(MasInfoPlanBtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 70, -1, -1));
+
         jTabbedPane1.addTab("", jPanel6);
 
         jPanel8.setBackground(new java.awt.Color(144, 12, 63));
@@ -2529,6 +2561,7 @@ public class home_superadmin extends javax.swing.JFrame {
         btnEditarUsuario.setEnabled(false);
         btnBorrarUsuario.setEnabled(false);
         btnBorrarUsuario1.setEnabled(false);
+        txtContraseñaUsuario.setEnabled(false);
         LimpiarUsuario();
         LimpiarUsuarioFalso();
         jTabbedPane1.setSelectedIndex(3);
@@ -3689,6 +3722,18 @@ public class home_superadmin extends javax.swing.JFrame {
         txtIdUsuario1.setText(TableUsuario1.getValueAt(fila, 0).toString());
     }//GEN-LAST:event_TableUsuario1MouseClicked
 
+    private void MasInfoPlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasInfoPlanBtnActionPerformed
+        // TODO add your handling code here:
+        us.setNombrePlan((String)comboxplanes.getSelectedItem());
+        abrirVistaPlanes();
+    }//GEN-LAST:event_MasInfoPlanBtnActionPerformed
+
+    private void MasInfoPlanBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasInfoPlanBtn1ActionPerformed
+        // TODO add your handling code here:
+
+        abrirVistaProgreso();
+    }//GEN-LAST:event_MasInfoPlanBtn1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3731,6 +3776,8 @@ public class home_superadmin extends javax.swing.JFrame {
     private javax.swing.JButton Iniciar17;
     private javax.swing.JButton Iniciar18;
     private javax.swing.JButton Iniciar19;
+    private javax.swing.JButton MasInfoPlanBtn;
+    private javax.swing.JButton MasInfoPlanBtn1;
     private javax.swing.JTable TableCircuito;
     private javax.swing.JTable TableCircuito1;
     private javax.swing.JTable TableCircuitoEjercicio;

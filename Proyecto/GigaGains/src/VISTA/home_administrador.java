@@ -198,6 +198,13 @@ public class home_administrador extends javax.swing.JFrame {
     // Hacer visible la vista
         vistaPlanes.setVisible(true);
     }
+    private void abrirVistaProgreso() {
+    // Crear la instancia de la vista de planes
+    Progreso vistaPlanes = new Progreso();  // Asegúrate de que Planes sea una clase de JFrame o similar
+    
+    // Hacer visible la vista
+        vistaPlanes.setVisible(true);
+    }
     private void actualizarTablaEjercicios(String nombreCircuito) {
         
         List<Circuito> listaEjercicios = cirDao.obtenerEjerciciosPorCircuito(nombreCircuito);
@@ -346,6 +353,7 @@ public class home_administrador extends javax.swing.JFrame {
         txtContraseñaUsuario = new javax.swing.JTextField();
         comboxplanes = new javax.swing.JComboBox<>();
         MasInfoPlanBtn = new javax.swing.JButton();
+        MasInfoPlanBtn1 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         txtIdDieta = new javax.swing.JTextField();
@@ -1228,6 +1236,16 @@ public class home_administrador extends javax.swing.JFrame {
             }
         });
         jPanel6.add(MasInfoPlanBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 70, -1, -1));
+
+        MasInfoPlanBtn1.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        MasInfoPlanBtn1.setForeground(new java.awt.Color(144, 12, 63));
+        MasInfoPlanBtn1.setText("PROGRESO");
+        MasInfoPlanBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MasInfoPlanBtn1ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(MasInfoPlanBtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 70, -1, -1));
 
         jTabbedPane1.addTab("", jPanel6);
 
@@ -2575,9 +2593,15 @@ public class home_administrador extends javax.swing.JFrame {
 
     private void MasInfoPlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasInfoPlanBtnActionPerformed
         // TODO add your handling code here:
-        us.setNombrePlan((String)comboxplanes.getSelectedItem());
+        
         abrirVistaPlanes();
     }//GEN-LAST:event_MasInfoPlanBtnActionPerformed
+
+    private void MasInfoPlanBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasInfoPlanBtn1ActionPerformed
+        // TODO add your handling code here:
+        
+        abrirVistaProgreso();
+    }//GEN-LAST:event_MasInfoPlanBtn1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2616,6 +2640,7 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JButton Iniciar15;
     private javax.swing.JButton Iniciar18;
     private javax.swing.JButton MasInfoPlanBtn;
+    private javax.swing.JButton MasInfoPlanBtn1;
     private javax.swing.JTable TableCircuito;
     private javax.swing.JTable TableCircuitoEjercicio;
     private javax.swing.JTable TableDieta;

@@ -14,7 +14,10 @@ public class planes extends javax.swing.JFrame {
     UsuarioDAO user = new UsuarioDAO();
     PlanesVer pla = new PlanesVer();
     PlanesVerDAO plaDao = new PlanesVerDAO();
-    DefaultTableModel modelo = new DefaultTableModel();
+    DefaultTableModel modelo1 = new DefaultTableModel();
+    DefaultTableModel modelo2 = new DefaultTableModel();
+    DefaultTableModel modelo3 = new DefaultTableModel();
+    DefaultTableModel modelo4 = new DefaultTableModel();
     
     public planes() {
         initComponents();
@@ -38,31 +41,38 @@ public class planes extends javax.swing.JFrame {
         comboxplanes.addActionListener(e -> {
             String nombrePlanSeleccionado = (String) comboxplanes.getSelectedItem();
             if (nombrePlanSeleccionado != null) {
+                LimpiarTable1();
+                LimpiarTable2();
+                LimpiarTable3();
+                LimpiarTable4();
                 actualizarTablaRutina(nombrePlanSeleccionado); 
                 actualizarTablaDieta(nombrePlanSeleccionado);
+                actualizarTablaCircuito(nombrePlanSeleccionado);
+                actualizarTablaEjercicio(nombrePlanSeleccionado);
             }
         });  
     }
     private void actualizarTablaRutina(String nombreRutina) {
         List<PlanesVer> listaRutinas = plaDao.obtenerRutinaPorPlan(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
-        modelo = (DefaultTableModel) TableRutina.getModel();
-        modelo.setRowCount(0);
+        modelo1 = (DefaultTableModel) TableRutina.getModel();
+        modelo1.setRowCount(0);
         // Agregar filas con datos de los ejercicios
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
             rutina.getRutina_id(),
             rutina.getNombre_rutina()
         };
-            modelo.addRow(fila);
+            modelo1.addRow(fila);
         }
+        
     }
     
     private void actualizarTablaDieta(String nombreDieta) {
         List<PlanesVer> listaRutinas = plaDao.obtenerDietaPorPlan(nombreDieta);
         // Limpiar la tabla antes de agregar nuevos datos
-        modelo = (DefaultTableModel) TableDieta.getModel();
-        modelo.setRowCount(0);
+        modelo2 = (DefaultTableModel) TableDieta.getModel();
+        modelo2.setRowCount(0);
         // Agregar filas con datos de los ejercicios
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
@@ -72,11 +82,66 @@ public class planes extends javax.swing.JFrame {
             rutina.getCarbohidratos(),
             rutina.getCalorias()
         };
-            modelo.addRow(fila);
+            modelo2.addRow(fila);
         }
     }
     
+    private void actualizarTablaCircuito(String nombreRutina) {
+        List<PlanesVer> listaRutinas = plaDao.obtenerCircuitoPorPlan(nombreRutina);
+        // Limpiar la tabla antes de agregar nuevos datos
+        modelo3 = (DefaultTableModel) TableCircuito.getModel();
+        modelo3.setRowCount(0);
+        // Agregar filas con datos de los ejercicios
+        for (PlanesVer rutina : listaRutinas) {
+        Object[] fila = {
+            rutina.getCircuito_id(),
+            rutina.getNombre_circuito()
+        };
+            modelo3.addRow(fila);
+        }
+    }
     
+    private void actualizarTablaEjercicio(String nombreRutina) {
+        List<PlanesVer> listaRutinas = plaDao.obtenerEjercicioPorPlan(nombreRutina);
+        // Limpiar la tabla antes de agregar nuevos datos
+        modelo4 = (DefaultTableModel) TableEjercicio.getModel();
+        modelo4.setRowCount(0);
+        // Agregar filas con datos de los ejercicios
+        for (PlanesVer rutina : listaRutinas) {
+        Object[] fila = {
+            rutina.getEjercicio_id(),
+            rutina.getNombre_id(),
+            rutina.getSeries(),
+            rutina.getNombre_circuito()
+        };
+            modelo4.addRow(fila);
+        }
+    }
+    
+    public void LimpiarTable1() {
+        for (int i = 0; i < modelo1.getRowCount(); i++) {
+            modelo1.removeRow(i);
+            i = i - 1;
+        }
+    }
+    public void LimpiarTable2() {
+        for (int i = 0; i < modelo2.getRowCount(); i++) {
+            modelo2.removeRow(i);
+            i = i - 1;
+        }
+    }
+    public void LimpiarTable3() {
+        for (int i = 0; i < modelo3.getRowCount(); i++) {
+            modelo3.removeRow(i);
+            i = i - 1;
+        }
+    }
+    public void LimpiarTable4() {
+        for (int i = 0; i < modelo4.getRowCount(); i++) {
+            modelo4.removeRow(i);
+            i = i - 1;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,10 +160,10 @@ public class planes extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
-        TableCircuito2 = new javax.swing.JTable();
+        TableCircuito = new javax.swing.JTable();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane10 = new javax.swing.JScrollPane();
-        TableCircuito3 = new javax.swing.JTable();
+        TableEjercicio = new javax.swing.JTable();
         jScrollPane11 = new javax.swing.JScrollPane();
         TableDieta = new javax.swing.JTable();
         comboxplanes = new javax.swing.JComboBox<>();
@@ -163,7 +228,7 @@ public class planes extends javax.swing.JFrame {
         jLabel13.setText("Circuitos:");
         jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
-        TableCircuito2.setModel(new javax.swing.table.DefaultTableModel(
+        TableCircuito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -171,16 +236,16 @@ public class planes extends javax.swing.JFrame {
                 "ID", "Nombre"
             }
         ));
-        TableCircuito2.addMouseListener(new java.awt.event.MouseAdapter() {
+        TableCircuito.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TableCircuito2MouseClicked(evt);
+                TableCircuitoMouseClicked(evt);
             }
         });
-        jScrollPane9.setViewportView(TableCircuito2);
-        if (TableCircuito2.getColumnModel().getColumnCount() > 0) {
-            TableCircuito2.getColumnModel().getColumn(0).setMinWidth(100);
-            TableCircuito2.getColumnModel().getColumn(0).setPreferredWidth(100);
-            TableCircuito2.getColumnModel().getColumn(0).setMaxWidth(100);
+        jScrollPane9.setViewportView(TableCircuito);
+        if (TableCircuito.getColumnModel().getColumnCount() > 0) {
+            TableCircuito.getColumnModel().getColumn(0).setMinWidth(100);
+            TableCircuito.getColumnModel().getColumn(0).setPreferredWidth(100);
+            TableCircuito.getColumnModel().getColumn(0).setMaxWidth(100);
         }
 
         jPanel2.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 620, 80));
@@ -190,27 +255,27 @@ public class planes extends javax.swing.JFrame {
         jLabel14.setText("Ejercicios:");
         jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
 
-        TableCircuito3.setModel(new javax.swing.table.DefaultTableModel(
+        TableEjercicio.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Nombre", "Series"
+                "ID", "Nombre", "Series", "Circuito"
             }
         ));
-        TableCircuito3.addMouseListener(new java.awt.event.MouseAdapter() {
+        TableEjercicio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TableCircuito3MouseClicked(evt);
+                TableEjercicioMouseClicked(evt);
             }
         });
-        jScrollPane10.setViewportView(TableCircuito3);
-        if (TableCircuito3.getColumnModel().getColumnCount() > 0) {
-            TableCircuito3.getColumnModel().getColumn(0).setMinWidth(100);
-            TableCircuito3.getColumnModel().getColumn(0).setPreferredWidth(100);
-            TableCircuito3.getColumnModel().getColumn(0).setMaxWidth(100);
-            TableCircuito3.getColumnModel().getColumn(2).setMinWidth(200);
-            TableCircuito3.getColumnModel().getColumn(2).setPreferredWidth(200);
-            TableCircuito3.getColumnModel().getColumn(2).setMaxWidth(200);
+        jScrollPane10.setViewportView(TableEjercicio);
+        if (TableEjercicio.getColumnModel().getColumnCount() > 0) {
+            TableEjercicio.getColumnModel().getColumn(0).setMinWidth(100);
+            TableEjercicio.getColumnModel().getColumn(0).setPreferredWidth(100);
+            TableEjercicio.getColumnModel().getColumn(0).setMaxWidth(100);
+            TableEjercicio.getColumnModel().getColumn(2).setMinWidth(100);
+            TableEjercicio.getColumnModel().getColumn(2).setPreferredWidth(100);
+            TableEjercicio.getColumnModel().getColumn(2).setMaxWidth(100);
         }
 
         jPanel2.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 620, 80));
@@ -263,13 +328,13 @@ public class planes extends javax.swing.JFrame {
 
     }//GEN-LAST:event_TableRutinaMouseClicked
 
-    private void TableCircuito2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableCircuito2MouseClicked
+    private void TableCircuitoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableCircuitoMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_TableCircuito2MouseClicked
+    }//GEN-LAST:event_TableCircuitoMouseClicked
 
-    private void TableCircuito3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableCircuito3MouseClicked
+    private void TableEjercicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableEjercicioMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_TableCircuito3MouseClicked
+    }//GEN-LAST:event_TableEjercicioMouseClicked
 
     private void TableDietaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableDietaMouseClicked
         // TODO add your handling code here:
@@ -315,9 +380,9 @@ public class planes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable TableCircuito2;
-    private javax.swing.JTable TableCircuito3;
+    private javax.swing.JTable TableCircuito;
     private javax.swing.JTable TableDieta;
+    private javax.swing.JTable TableEjercicio;
     private javax.swing.JTable TableRutina;
     private javax.swing.JComboBox<String> comboxplanes;
     private javax.swing.JLabel jLabel10;

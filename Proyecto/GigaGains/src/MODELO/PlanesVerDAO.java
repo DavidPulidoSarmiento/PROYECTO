@@ -70,11 +70,9 @@ public class PlanesVerDAO {
         return listaRutina;
     }
     
-    aqui quede
     public List<PlanesVer> obtenerCircuitoPorPlan(String nombrePlan) {
         List<PlanesVer> listaRutina = new ArrayList<>();
-        String sql = "SELECT r.id, r.nombre FROM plan p JOIN rutinas r ON p.rutina_id = r.id WHERE p.tipo = ?";
-
+        String sql = "SELECT c.id, c.nombre FROM plan p JOIN rutinas r ON p.rutina_id = r.ID JOIN rutinas_circuitos rc ON rc.rutina_id = r.ID JOIN circuitos c ON rc.circuito_id = c.ID WHERE p.tipo = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -83,8 +81,31 @@ public class PlanesVerDAO {
 
             while (rs.next()) {
                 PlanesVer pla = new PlanesVer();
-                pla.setRutina_id(rs.getInt("ID"));
-                pla.setNombre_rutina(rs.getString("nombre"));
+                pla.setCircuito_id(rs.getInt("ID"));
+                pla.setNombre_circuito(rs.getString("nombre"));
+                listaRutina.add(pla);  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaRutina;
+    }
+    
+    public List<PlanesVer> obtenerEjercicioPorPlan(String nombrePlan) {
+        List<PlanesVer> listaRutina = new ArrayList<>();
+        String sql = "SELECT e.ID AS ejercicio_id,  e.nombre AS ejercicio_nombre, ce.series AS serie, c.nombre AS circuito_nombre FROM plan p JOIN rutinas r ON p.rutina_id = r.ID JOIN rutinas_circuitos rc ON rc.rutina_id = r.ID JOIN circuitos c ON rc.circuito_id = c.ID JOIN circuitos_ejercicios ce ON ce.circuito_id = c.ID JOIN ejercicios e ON ce.ejercicio_id = e.ID WHERE p.tipo = ?";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombrePlan);  // Filtro por nombre de circuito
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                PlanesVer pla = new PlanesVer();
+                pla.setEjercicio_id(rs.getInt("ejercicio_id"));
+                pla.setNombre_id(rs.getString("ejercicio_nombre"));
+                pla.setSeries(rs.getString("serie"));
+                pla.setNombre_circuito(rs.getString("circuito_nombre"));
                 listaRutina.add(pla);  
             }
         } catch (SQLException e) {
