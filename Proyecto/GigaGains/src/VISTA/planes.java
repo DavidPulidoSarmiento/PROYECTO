@@ -9,137 +9,180 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class planes extends javax.swing.JFrame {
-    
+    // Instancia de objetos relacionados con usuarios y planes
     Usuario us = new Usuario();
     UsuarioDAO user = new UsuarioDAO();
     PlanesVer pla = new PlanesVer();
     PlanesVerDAO plaDao = new PlanesVerDAO();
+    // Modelos de las tablas para mostrar la información
     DefaultTableModel modelo1 = new DefaultTableModel();
     DefaultTableModel modelo2 = new DefaultTableModel();
     DefaultTableModel modelo3 = new DefaultTableModel();
     DefaultTableModel modelo4 = new DefaultTableModel();
-    
+    /**
+     * Constructor de la clase 'planes'. Inicializa la ventana y los componentes.
+     */
     public planes() {
         initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setBounds(0,0,650,460);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        llenarComboBoxNombresPlanes();
-        inicializarEventos();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cerrar ventana sin cerrar la aplicación
+        this.setBounds(0, 0, 650, 460);  // Establecer tamaño de la ventana
+        this.setLocationRelativeTo(null);  // Centrar la ventana
+        this.setResizable(false);  // Deshabilitar el cambio de tamaño
+        llenarComboBoxNombresPlanes();  // Llenar el ComboBox con los nombres de los planes
+        inicializarEventos();  // Inicializar eventos asociados a los componentes
     }
-    
+    /**
+     * Llenar el JComboBox con los nombres de los planes obtenidos del DAO.
+     */
     private void llenarComboBoxNombresPlanes() {
-        List<String> nombres = user.obtenerNombresPlanes();
+        List<String> nombres = user.obtenerNombresPlanes();  // Obtener los nombres de los planes
         comboxplanes.removeAllItems();  // Limpiar el JComboBox
 
         for (String nombre : nombres) {
             comboxplanes.addItem(nombre);  // Agregar cada nombre
         }
-    }    
+    }  
+    /**
+     * Inicializa los eventos de los componentes, en particular la acción de selección del ComboBox.
+     */
     private void inicializarEventos() {
         comboxplanes.addActionListener(e -> {
-            String nombrePlanSeleccionado = (String) comboxplanes.getSelectedItem();
+             String nombrePlanSeleccionado = (String) comboxplanes.getSelectedItem();  // Obtener el nombre del plan seleccionado
             if (nombrePlanSeleccionado != null) {
+                // Limpiar las tablas antes de mostrar los nuevos datos
                 LimpiarTable1();
                 LimpiarTable2();
                 LimpiarTable3();
                 LimpiarTable4();
-                actualizarTablaRutina(nombrePlanSeleccionado); 
+                
+                // Actualizar las tablas con los datos correspondientes al plan seleccionado
+                actualizarTablaRutina(nombrePlanSeleccionado);  
                 actualizarTablaDieta(nombrePlanSeleccionado);
                 actualizarTablaCircuito(nombrePlanSeleccionado);
                 actualizarTablaEjercicio(nombrePlanSeleccionado);
             }
         });  
     }
+    /**
+     * Actualiza la tabla de rutinas con los datos correspondientes al nombre del plan seleccionado.
+     * 
+     * @param nombreRutina El nombre del plan seleccionado.
+     */
     private void actualizarTablaRutina(String nombreRutina) {
         List<PlanesVer> listaRutinas = plaDao.obtenerRutinaPorPlan(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
         modelo1 = (DefaultTableModel) TableRutina.getModel();
-        modelo1.setRowCount(0);
+        modelo1.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
         // Agregar filas con datos de los ejercicios
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
-            rutina.getRutina_id(),
-            rutina.getNombre_rutina()
-        };
-            modelo1.addRow(fila);
+            rutina.getRutina_id(),  // ID de la rutina
+                rutina.getNombre_rutina()  // Nombre de la rutina
+            };
+            modelo1.addRow(fila);  // Agregar la fila a la tabla
         }
         
     }
-    
+    /**
+     * Actualiza la tabla de dietas con los datos correspondientes al nombre del plan seleccionado.
+     * 
+     * @param nombreDieta El nombre del plan seleccionado.
+     */
     private void actualizarTablaDieta(String nombreDieta) {
         List<PlanesVer> listaRutinas = plaDao.obtenerDietaPorPlan(nombreDieta);
         // Limpiar la tabla antes de agregar nuevos datos
         modelo2 = (DefaultTableModel) TableDieta.getModel();
-        modelo2.setRowCount(0);
+        modelo2.setRowCount(0);  // Limpiar la tabla antes de agregar nuevos datos
         // Agregar filas con datos de los ejercicios
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
-            rutina.getDieta_id(),
-            rutina.getTipo_dieta(),
-            rutina.getProteinas(),
-            rutina.getCarbohidratos(),
-            rutina.getCalorias()
-        };
-            modelo2.addRow(fila);
+            rutina.getDieta_id(),  // ID de la dieta
+                rutina.getTipo_dieta(),  // Tipo de dieta
+                rutina.getProteinas(),  // Cantidad de proteínas
+                rutina.getCarbohidratos(),  // Cantidad de carbohidratos
+                rutina.getCalorias()  // Cantidad de calorías
+            };
+            modelo2.addRow(fila);  // Agregar la fila a la tabla
         }
     }
-    
+    /**
+     * Actualiza la tabla de circuitos con los datos correspondientes al nombre del plan seleccionado.
+     * 
+     * @param nombreRutina El nombre del plan seleccionado.
+     */
     private void actualizarTablaCircuito(String nombreRutina) {
         List<PlanesVer> listaRutinas = plaDao.obtenerCircuitoPorPlan(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
         modelo3 = (DefaultTableModel) TableCircuito.getModel();
-        modelo3.setRowCount(0);
-        // Agregar filas con datos de los ejercicios
+        modelo3.setRowCount(0);// Limpiar la tabla antes de agregar nuevos datos
+        
+        // Agregar las filas con los datos de los circuitos
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
-            rutina.getCircuito_id(),
-            rutina.getNombre_circuito()
-        };
-            modelo3.addRow(fila);
+                rutina.getCircuito_id(),  // ID del circuito
+                rutina.getNombre_circuito()  // Nombre del circuito
+            };
+            modelo3.addRow(fila);  // Agregar la fila a la tabla
         }
     }
-    
+    /**
+     * Actualiza la tabla de ejercicios con los datos correspondientes al nombre del plan seleccionado.
+     * 
+     * @param nombreRutina El nombre del plan seleccionado.
+     */
     private void actualizarTablaEjercicio(String nombreRutina) {
         List<PlanesVer> listaRutinas = plaDao.obtenerEjercicioPorPlan(nombreRutina);
         // Limpiar la tabla antes de agregar nuevos datos
         modelo4 = (DefaultTableModel) TableEjercicio.getModel();
-        modelo4.setRowCount(0);
+        modelo4.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
         // Agregar filas con datos de los ejercicios
         for (PlanesVer rutina : listaRutinas) {
         Object[] fila = {
-            rutina.getEjercicio_id(),
-            rutina.getNombre_id(),
-            rutina.getSeries(),
-            rutina.getNombre_circuito()
-        };
-            modelo4.addRow(fila);
+                rutina.getEjercicio_id(),  // ID del ejercicio
+                rutina.getNombre_id(),  // Nombre del ejercicio
+                rutina.getSeries(),  // Número de series
+                rutina.getNombre_circuito()  // Nombre del circuito
+            };
+            modelo4.addRow(fila);  // Agregar la fila a la tabla
         }
     }
-    
+    /**
+     * Limpia todos los datos de la primera tabla (TablaRutina).
+     */
     public void LimpiarTable1() {
         for (int i = 0; i < modelo1.getRowCount(); i++) {
             modelo1.removeRow(i);
-            i = i - 1;
+            i = i - 1;  // Ajustar el índice después de eliminar la fila
         }
     }
+    
+    /**
+     * Limpia todos los datos de la segunda tabla (TablaDieta).
+     */
     public void LimpiarTable2() {
         for (int i = 0; i < modelo2.getRowCount(); i++) {
             modelo2.removeRow(i);
-            i = i - 1;
+            i = i - 1;  // Ajustar el índice después de eliminar la fila
         }
     }
+    
+    /**
+     * Limpia todos los datos de la tercera tabla (TablaCircuito).
+     */
     public void LimpiarTable3() {
         for (int i = 0; i < modelo3.getRowCount(); i++) {
             modelo3.removeRow(i);
-            i = i - 1;
+            i = i - 1;  // Ajustar el índice después de eliminar la fila
         }
     }
+    
+    /**
+     * Limpia todos los datos de la cuarta tabla (TablaEjercicio).
+     */
     public void LimpiarTable4() {
         for (int i = 0; i < modelo4.getRowCount(); i++) {
             modelo4.removeRow(i);
-            i = i - 1;
+            i = i - 1;  // Ajustar el índice después de eliminar la fila
         }
     }
     /**

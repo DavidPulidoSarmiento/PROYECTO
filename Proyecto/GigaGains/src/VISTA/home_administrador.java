@@ -7,8 +7,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
+/**
+ * Clase que representa la interfaz de administrador del sistema.
+ * Permite la gestión de usuarios, rutinas, circuitos, dietas y planes.
+ */
 public class home_administrador extends javax.swing.JFrame {
+    // Instancias de modelos y DAOs para la gestión de datos
     Rutina cl = new Rutina();
     RutinaDAO client = new RutinaDAO();
     Usuario us = new Usuario();
@@ -22,13 +26,16 @@ public class home_administrador extends javax.swing.JFrame {
     Dieta die = new Dieta();
     DietaDAO dieDao = new DietaDAO();
     DefaultTableModel modelo = new DefaultTableModel();
-    
-    
+    /**
+     * Constructor de la ventana de administrador.
+     * Inicializa componentes y carga datos en los ComboBox y tablas.
+     */
     public home_administrador() {
         initComponents();
         this.setBounds(0,0,1350,725);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        // Llenado de ComboBox y carga de datos
         llenarComboBoxMusculosOcupados();
         llenarComboBoxEjercicios();
         llenarComboBoxRutina();
@@ -38,7 +45,9 @@ public class home_administrador extends javax.swing.JFrame {
         inicializarEventos();
     }
     
-    
+    /**
+     * Llena el ComboBox con los nombres de los planes registrados en la base de datos.
+     */
     private void llenarComboBoxNombresPlanes() {
         List<String> nombres = user.obtenerNombresPlanes();
         comboxplanes.removeAllItems();  // Limpiar el JComboBox
@@ -47,6 +56,9 @@ public class home_administrador extends javax.swing.JFrame {
             comboxplanes.addItem(nombre);  // Agregar cada nombre
         }
     }
+    /**
+     * Lista todas las rutinas en la tabla correspondiente.
+     */
     public void ListarRutina(){
         List<Rutina> ListarRu = client.ListarRutina();
         modelo = (DefaultTableModel) TableRutina.getModel();
@@ -58,6 +70,9 @@ public class home_administrador extends javax.swing.JFrame {
         }
         TableRutina.setModel(modelo);
     }
+    /**
+     * Lista todos los circuitos en la tabla correspondiente.
+     */
     public void ListarCircuito() {
         List<Circuito> ListarCir = cirDao.ListarCircuitos();
         modelo = (DefaultTableModel) TableCircuito.getModel();
@@ -70,6 +85,9 @@ public class home_administrador extends javax.swing.JFrame {
         
         TableCircuito.setModel(modelo);
     }
+    /**
+    * Lista los usuarios en la tabla de la interfaz gráfica.
+    */
     public void ListarUsuario(){
         List<Usuario> ListarUs = user.ListarUsuario();
         modelo = (DefaultTableModel) TableUsuario.getModel();
@@ -90,7 +108,9 @@ public class home_administrador extends javax.swing.JFrame {
         }
         TableUsuario.setModel(modelo);
     }
-    
+    /**
+    * Lista los ejercicios disponibles en la tabla de la interfaz gráfica.
+    */
     public void ListarEjercicio() {
     List<Ejercicio> ListarEj = ejDao.ListarEjercicio();
     modelo = (DefaultTableModel) tableEjercicios.getModel();
@@ -105,6 +125,9 @@ public class home_administrador extends javax.swing.JFrame {
     }
     tableEjercicios.setModel(modelo);
     }
+    /**
+    * Lista las dietas disponibles en la tabla de la interfaz gráfica.
+    */
     public void ListarDieta(){
         List<Dieta> ListarDie = dieDao.ListarDieta();
         modelo = (DefaultTableModel) TableDieta.getModel();
@@ -119,6 +142,9 @@ public class home_administrador extends javax.swing.JFrame {
         }
         TableDieta.setModel(modelo);
     }
+    /**
+    * Lista los planes de entrenamiento en la tabla de la interfaz gráfica.
+    */
     public void ListarPlan(){
         List<Plan> ListarPla = plaDao.ListarPlan();
         modelo = (DefaultTableModel) TablePlan.getModel();
@@ -132,6 +158,9 @@ public class home_administrador extends javax.swing.JFrame {
         }
         TablePlan.setModel(modelo);
     }
+    /**
+    * Llena el ComboBox con los nombres de los músculos ocupados.
+    */
     private void llenarComboBoxMusculosOcupados() {
         List<String> nombres = ejDao.obtenerNombresMusculosOcupados();
         jComboBoxMusculosOcupados.removeAllItems();  // Limpiar el JComboBox
@@ -140,6 +169,9 @@ public class home_administrador extends javax.swing.JFrame {
             jComboBoxMusculosOcupados.addItem(nombre);  // Agregar cada nombre
         }
     }
+    /**
+    * Llena el ComboBox con los nombres de los ejercicios disponibles.
+    */
     private void llenarComboBoxEjercicios() {
         List<String> nombres = cirDao.obtenerNombresEjercicios();
         combocejercicio.removeAllItems(); 
@@ -148,6 +180,9 @@ public class home_administrador extends javax.swing.JFrame {
             combocejercicio.addItem(nombre);
         }
     }
+    /**
+    * Carga los circuitos en los ComboBox correspondientes.
+    */
     private void cargarCircuitos() {
         List<String> nombresCircuitos = cirDao.obtenerNombresCircuitos();
         comboxcircuito.removeAllItems(); 
@@ -157,7 +192,9 @@ public class home_administrador extends javax.swing.JFrame {
             combocircuito.addItem(nombre);
         }
     }
-    
+    /**
+     * Llena el ComboBox con las rutinas disponibles.
+     */
     private void llenarComboBoxRutina() {
         List<String> nombres = client.obtenerNombresRutinas();
         comborutinas.removeAllItems(); 
@@ -167,6 +204,9 @@ public class home_administrador extends javax.swing.JFrame {
             comborutinaname.addItem(nombre);
         }
     }
+    /**
+     * Llena el ComboBox con las dietas disponibles.
+     */
     private void llenarComboBoxDieta() {
         List<String> nombres = plaDao.obtenerNombresDietas();
         combodietaname.removeAllItems(); 
@@ -175,6 +215,9 @@ public class home_administrador extends javax.swing.JFrame {
             combodietaname.addItem(nombre);
         }
     }
+    /**
+     * Inicializa los eventos de los ComboBox para actualizar tablas dinámicamente.
+     */
     private void inicializarEventos() {
         comboxcircuito.addActionListener(e -> {
             String nombreCircuitoSeleccionado = (String) comboxcircuito.getSelectedItem();
@@ -191,6 +234,9 @@ public class home_administrador extends javax.swing.JFrame {
             }
         });  
     }
+    /**
+     * Abre la vista de planes.
+     */
     private void abrirVistaPlanes() {
     // Crear la instancia de la vista de planes
     planes vistaPlanes = new planes();  // Asegúrate de que Planes sea una clase de JFrame o similar
@@ -198,6 +244,9 @@ public class home_administrador extends javax.swing.JFrame {
     // Hacer visible la vista
         vistaPlanes.setVisible(true);
     }
+    /**
+     * Abre la vista de progreso.
+     */
     private void abrirVistaProgreso() {
     // Crear la instancia de la vista de planes
     Progreso vistaPlanes = new Progreso();  // Asegúrate de que Planes sea una clase de JFrame o similar
@@ -205,6 +254,9 @@ public class home_administrador extends javax.swing.JFrame {
     // Hacer visible la vista
         vistaPlanes.setVisible(true);
     }
+    /**
+    * Actualiza la tabla de ejercicios según el circuito seleccionado.
+    */
     private void actualizarTablaEjercicios(String nombreCircuito) {
         
         List<Circuito> listaEjercicios = cirDao.obtenerEjerciciosPorCircuito(nombreCircuito);
@@ -221,6 +273,9 @@ public class home_administrador extends javax.swing.JFrame {
             modelo.addRow(fila);
         }
     }
+    /**
+    * Actualiza la tabla de ejercicios según el circuito seleccionado.
+    */
     private void actualizarTablaCircuitos(String nombreRutina) {
         
         List<Rutina> listaRutinas = client.obtenerCircuitoporRutina(nombreRutina);
@@ -1528,85 +1583,169 @@ public class home_administrador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
-        LimpiarTable();
-        LimpiarPlan();
-        ListarPlan();
-        btnEditarPlan.setEnabled(false);
-        btnBorrarPlan.setEnabled(false);
-        btnCrearPlan.setEnabled(true);
-        jTabbedPane1.setSelectedIndex(5);
+        /**
+ * Método que limpia las filas de la tabla.
+ * Elimina todas las filas de la tabla actual.
+ */
+LimpiarTable();
+
+/**
+ * Método que limpia o restablece los datos del plan actual.
+ * Generalmente se utiliza para borrar la información visual del plan en los campos de entrada.
+ */
+LimpiarPlan();
+
+/**
+ * Método que lista los planes disponibles en la interfaz.
+ * Este método obtiene los planes existentes y los agrega a un componente visual,
+ * como un JComboBox, para que el usuario pueda ver y seleccionar entre ellos.
+ */
+ListarPlan();
+
+/**
+ * Desactiva el botón de edición de plan.
+ * Después de ejecutar este comando, el botón 'Editar Plan' se desactivará, 
+ * indicando que la edición no está permitida en el momento.
+ */
+btnEditarPlan.setEnabled(false);
+
+/**
+ * Desactiva el botón de borrar plan.
+ * Después de ejecutar este comando, el botón 'Borrar Plan' se desactivará, 
+ * indicando que la eliminación no está permitida en el momento.
+ */
+btnBorrarPlan.setEnabled(false);
+
+/**
+ * Activa el botón de creación de plan.
+ * Después de ejecutar este comando, el botón 'Crear Plan' se habilitará, 
+ * permitiendo que el usuario cree un nuevo plan.
+ */
+btnCrearPlan.setEnabled(true);
+
+/**
+ * Cambia a la pestaña correspondiente dentro del componente 'jTabbedPane1'.
+ * Establece el índice de la pestaña seleccionada como el valor 5, lo que significa que 
+ * la sexta pestaña (índice basado en 0) será la que se mostrará al usuario.
+ */
+jTabbedPane1.setSelectedIndex(5);
+
     }//GEN-LAST:event_btnPlanActionPerformed
 
     private void btnCircuitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCircuitoActionPerformed
-        // TODO add your handling code here:
-        LimpiarTable();
-        ListarCircuito();
-        LimpiarCircuitoEj();
-        btnEditarCircuito.setEnabled(false);
-        btnBorrarCircuito.setEnabled(false);
-        btnCrearCircuito.setEnabled(true);
-        btnCrearCiEj.setEnabled(false);
-        btnEditarCircuito1.setEnabled(false);
-        btnBorrarCiEj.setEnabled(false);
-        LimpiarCircuito();
-        jTabbedPane1.setSelectedIndex(0);
+        // Limpiar la tabla de la vista
+    LimpiarTable();
+    
+    // Listar los circuitos disponibles
+    ListarCircuito();
+    
+    // Limpiar los campos relacionados con el circuito
+    LimpiarCircuitoEj();
+    
+    // Deshabilitar los botones de edición y eliminación de circuito
+    btnEditarCircuito.setEnabled(false);
+    btnBorrarCircuito.setEnabled(false);
+    
+    // Habilitar el botón de creación de circuito
+    btnCrearCircuito.setEnabled(true);
+    
+    // Deshabilitar los botones de creación y edición de ejercicio en circuito
+    btnCrearCiEj.setEnabled(false);
+    btnEditarCircuito1.setEnabled(false);
+    btnBorrarCiEj.setEnabled(false);
+    
+    // Limpiar los campos de circuito
+    LimpiarCircuito();
+    
+    // Cambiar a la pestaña de "Circuitos" (índice 0)
+    jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_btnCircuitoActionPerformed
 
     private void btnRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutinaActionPerformed
-        // TODO add your handling code here:
-        LimpiarTable();
-        ListarRutina();
-        btnEditarRutina.setEnabled(false);
-        btnBorrarRutina.setEnabled(false);
-        btnCrearRutina.setEnabled(true);
-        btnCrearRutinaCI.setEnabled(false);
-        btnEditarRutina1.setEnabled(false);
-        btnBorrarRutina1.setEnabled(false);
-        LimpiarRutina();
-        LimpiarRutinaCi();
-        jTabbedPane1.setSelectedIndex(2);
+        // Limpiar la tabla de la vista
+    LimpiarTable();
+    
+    // Listar las rutinas disponibles
+    ListarRutina();
+    
+    // Deshabilitar los botones de edición y eliminación de rutina
+    btnEditarRutina.setEnabled(false);
+    btnBorrarRutina.setEnabled(false);
+    
+    // Habilitar el botón de creación de rutina
+    btnCrearRutina.setEnabled(true);
+    
+    // Deshabilitar los botones de creación y edición de rutina en circuito
+    btnCrearRutinaCI.setEnabled(false);
+    btnEditarRutina1.setEnabled(false);
+    btnBorrarRutina1.setEnabled(false);
+    
+    // Limpiar los campos relacionados con las rutinas
+    LimpiarRutina();
+    LimpiarRutinaCi();
+    
+    // Cambiar a la pestaña de "Rutinas" (índice 2)
+    jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_btnRutinaActionPerformed
 
     private void btnEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjerciciosActionPerformed
-        // TODO add your handling code here:
-        LimpiarTable();
-        ListarEjercicio();
-        btnActualizarEjercicios.setEnabled(false);
-        btnBorrarEjercicios.setEnabled(false);
-        btnCrearEjercicios.setEnabled(true);
-        LimpiarEjercicio();
-        jTabbedPane1.setSelectedIndex(1);
+        // Limpiar la tabla de la vista
+    LimpiarTable();
+    
+    // Listar los ejercicios disponibles
+    ListarEjercicio();
+    
+    // Deshabilitar los botones de actualización y eliminación de ejercicios
+    btnActualizarEjercicios.setEnabled(false);
+    btnBorrarEjercicios.setEnabled(false);
+    
+    // Habilitar el botón de creación de ejercicios
+    btnCrearEjercicios.setEnabled(true);
+    
+    // Limpiar los campos relacionados con los ejercicios
+    LimpiarEjercicio();
+    
+    // Cambiar a la pestaña de "Ejercicios" (índice 1)
+    jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_btnEjerciciosActionPerformed
 
     private void btnCrearEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearEjerciciosActionPerformed
-        // TODO add your handling code here:
-        if (!txtIdEjercicio.getText().isEmpty() && 
+        // Verificar si todos los campos del formulario están completos
+    if (!txtIdEjercicio.getText().isEmpty() && 
         !txtNombreEjercicio.getText().isEmpty() && 
         !txtDescripcionEjercicio.getText().isEmpty() && 
-        !txtVisualEjercicio.getText().isEmpty() 
-                
-            &&jComboBoxMusculosOcupados.getSelectedItem() != null) {
-            
+        !txtVisualEjercicio.getText().isEmpty() && 
+        jComboBoxMusculosOcupados.getSelectedItem() != null) {
+        
+        // Convertir el ID de ejercicio a un número entero
         int idEjercicio = Integer.parseInt(txtIdEjercicio.getText());
+        
         // Verificar si el ID ya existe en la base de datos
         if (ejDao.existeId(idEjercicio)) {
+            // Mostrar mensaje si el ID ya está registrado
             JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
         } else {
-            
-            
+            // Crear y establecer los valores del nuevo ejercicio
             ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
             ej.setNombre(txtNombreEjercicio.getText());
             ej.setDescripcion(txtDescripcionEjercicio.getText());
             ej.setVisual(txtVisualEjercicio.getText());
             ej.setNombreMusculo((String) jComboBoxMusculosOcupados.getSelectedItem());
+            
+            // Registrar el ejercicio en la base de datos
             ejDao.RegistrarEjercicio(ej);
+            
+            // Mostrar mensaje de confirmación
             JOptionPane.showMessageDialog(null, "Ejercicio registrado");
-
-            // Limpiar los campos después de registrar
+            
+            // Limpiar los campos después de registrar el ejercicio
             LimpiarEjercicio();
             LimpiarTable();
+            
+            // Listar nuevamente los ejercicios registrados
             ListarEjercicio();
             
+            // Actualizar los combos con la lista de ejercicios y otros elementos
             llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
@@ -1615,220 +1754,232 @@ public class home_administrador extends javax.swing.JFrame {
             cargarCircuitos();
         }
     } else {
+        // Mostrar mensaje si algún campo está vacío
         JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
     }
     }//GEN-LAST:event_btnCrearEjerciciosActionPerformed
 
     private void btnCancelarEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarEjerciciosActionPerformed
-        // TODO add your handling code here:
-        LimpiarEjercicio();
-        btnActualizarEjercicios.setEnabled(false);
-        btnBorrarEjercicios.setEnabled(false);
-        btnCrearEjercicios.setEnabled(true);
+         // Cancela la acción actual de ejercicios y limpia los campos del formulario.
+    LimpiarEjercicio(); // Limpia los campos de entrada de ejercicio.
+    btnActualizarEjercicios.setEnabled(false); // Desactiva el botón de actualizar ejercicios.
+    btnBorrarEjercicios.setEnabled(false); // Desactiva el botón de borrar ejercicios.
+    btnCrearEjercicios.setEnabled(true); // Activa el botón de crear ejercicios.
     }//GEN-LAST:event_btnCancelarEjerciciosActionPerformed
 
     private void btnActualizarEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEjerciciosActionPerformed
-        // TODO add your handling code here:
-        if ("".equals(txtIdEjercicio.getText())) {
-            JOptionPane.showMessageDialog(null, "seleccione una fila");
-        } else {
-
-            if (!"".equals(txtIdEjercicio.getText()) && !"".equals(txtNombreEjercicio.getText()) && !"".equals(txtDescripcionEjercicio.getText()) && !"".equals(txtVisualEjercicio.getText())) {
-                ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
-                ej.setNombre(txtNombreEjercicio.getText());
-                ej.setDescripcion(txtDescripcionEjercicio.getText());
-                ej.setVisual(txtVisualEjercicio.getText());
-                ej.setNombreMusculo((String)jComboBoxMusculosOcupados.getSelectedItem());
-                ejDao.ModificarEjercicio(ej);
-                JOptionPane.showMessageDialog(null, "Ejercicio Modificado");
-                LimpiarEjercicio();
-                LimpiarTable();
-                ListarEjercicio();
-                
-                llenarComboBoxMusculosOcupados();
+        // Actualiza los datos del ejercicio seleccionado.
+    if ("".equals(txtIdEjercicio.getText())) {
+        JOptionPane.showMessageDialog(null, "seleccione una fila"); // Solicita seleccionar una fila si no hay datos.
+    } else {
+        // Verifica que todos los campos estén llenos antes de proceder con la actualización.
+        if (!"".equals(txtIdEjercicio.getText()) && !"".equals(txtNombreEjercicio.getText()) && !"".equals(txtDescripcionEjercicio.getText()) && !"".equals(txtVisualEjercicio.getText())) {
+            ej.setId(Integer.parseInt(txtIdEjercicio.getText()));
+            ej.setNombre(txtNombreEjercicio.getText());
+            ej.setDescripcion(txtDescripcionEjercicio.getText());
+            ej.setVisual(txtVisualEjercicio.getText());
+            ej.setNombreMusculo((String) jComboBoxMusculosOcupados.getSelectedItem());
+            ejDao.ModificarEjercicio(ej); // Modifica el ejercicio en la base de datos.
+            JOptionPane.showMessageDialog(null, "Ejercicio Modificado"); // Notifica al usuario que la actualización fue exitosa.
+            LimpiarEjercicio(); // Limpia los campos de entrada.
+            LimpiarTable(); // Limpia la tabla.
+            ListarEjercicio(); // Vuelve a listar los ejercicios actualizados.
+            
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
+            llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
             cargarCircuitos();
-            
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
-            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos estan vacios"); // Informa si los campos están vacíos.
         }
+    }
     }//GEN-LAST:event_btnActualizarEjerciciosActionPerformed
 
     private void btnEditarRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarRutinaActionPerformed
-        // TODO add your handling code here:
-        if ("".equals(txtIDRutina.getText())) {
-            JOptionPane.showMessageDialog(null, "seleccione una fila");
-        } else {
-
-            if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())) {
-                cl.setId(Integer.parseInt(txtIDRutina.getText()));
-                cl.setNombre(txtNombreRutina.getText());
-                client.ModificarRutina(cl);
-                JOptionPane.showMessageDialog(null, "Rutina Modificada");
-                LimpiarTable();
-            LimpiarRutina();
-            ListarRutina();
+        // Edita los datos de una rutina seleccionada.
+    if ("".equals(txtIDRutina.getText())) {
+        JOptionPane.showMessageDialog(null, "seleccione una fila"); // Solicita seleccionar una fila si no hay datos.
+    } else {
+        // Verifica que los campos esenciales estén llenos antes de proceder con la edición.
+        if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())) {
+            cl.setId(Integer.parseInt(txtIDRutina.getText()));
+            cl.setNombre(txtNombreRutina.getText());
+            client.ModificarRutina(cl); // Modifica la rutina en la base de datos.
+            JOptionPane.showMessageDialog(null, "Rutina Modificada"); // Notifica que la rutina fue modificada.
+            LimpiarTable(); // Limpia la tabla.
+            LimpiarRutina(); // Limpia los campos de entrada de rutina.
+            ListarRutina(); // Vuelve a listar las rutinas actualizadas.
             
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
             llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
-        
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
-            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos estan vacios"); // Informa si los campos están vacíos.
         }
+    }
     }//GEN-LAST:event_btnEditarRutinaActionPerformed
 
     private void Iniciar14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Iniciar14ActionPerformed
-        // TODO add your handling code here:
-        LimpiarRutina();
-        btnEditarRutina.setEnabled(false);
-        btnBorrarRutina.setEnabled(false);
-        btnCrearRutina.setEnabled(true);
+        // Cancela la acción actual de rutina y limpia los campos del formulario.
+    LimpiarRutina(); // Limpia los campos de entrada de rutina.
+    btnEditarRutina.setEnabled(false); // Desactiva el botón de editar rutina.
+    btnBorrarRutina.setEnabled(false); // Desactiva el botón de borrar rutina.
+    btnCrearRutina.setEnabled(true); // Activa el botón de crear rutina.
     }//GEN-LAST:event_Iniciar14ActionPerformed
 
     private void btnCrearRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutinaActionPerformed
-        // TODO add your handling code here:
-        if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())){
-            
-            int idRutina = Integer.parseInt(txtIDRutina.getText());
-        // Verificar si el ID ya existe en la base de datos
+        // Crea una nueva rutina.
+    if (!"".equals(txtIDRutina.getText()) && !"".equals(txtNombreRutina.getText())) {
+        int idRutina = Integer.parseInt(txtIDRutina.getText());
+        // Verifica si el ID ya existe en la base de datos.
         if (client.existeId(idRutina)) {
-            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
+            JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID."); // Informa que el ID ya está registrado.
         } else {
-            
             cl.setId(Integer.parseInt(txtIDRutina.getText()));
             cl.setNombre(txtNombreRutina.getText());
-            client.RegistrarRutina(cl);
-            JOptionPane.showMessageDialog(null, "Rutina registrada");
+            client.RegistrarRutina(cl); // Registra la nueva rutina en la base de datos.
+            JOptionPane.showMessageDialog(null, "Rutina registrada"); // Notifica que la rutina fue registrada.
             
-            LimpiarTable();
-            LimpiarRutina();
-            ListarRutina();
+            LimpiarTable(); // Limpia la tabla.
+            LimpiarRutina(); // Limpia los campos de entrada de rutina.
+            ListarRutina(); // Vuelve a listar las rutinas actualizadas.
             
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
             llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
-        }   
-        } else {
-            JOptionPane.showMessageDialog(null, "Los campos estan vacios");
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Los campos estan vacios"); // Informa si los campos están vacíos.
+    }
     }//GEN-LAST:event_btnCrearRutinaActionPerformed
 
     private void btnBorrarEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarEjerciciosActionPerformed
-        // TODO add your handling code here:
-        if (!"".equals(txtIdEjercicio.getText())) {
-            int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar");
-            if (pregunta == 0) {
-                int id = Integer.parseInt(txtIdEjercicio.getText());
-                ejDao.EliminarEjercicio(id);
-                LimpiarTable();
-                LimpiarEjercicio();
-                ListarEjercicio();
-                llenarComboBoxMusculosOcupados();
+        // Elimina un ejercicio seleccionado.
+    if (!"".equals(txtIdEjercicio.getText())) {
+        int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar"); // Pregunta si está seguro de eliminar.
+        if (pregunta == 0) {
+            int id = Integer.parseInt(txtIdEjercicio.getText());
+            ejDao.EliminarEjercicio(id); // Elimina el ejercicio en la base de datos.
+            LimpiarTable(); // Limpia la tabla.
+            LimpiarEjercicio(); // Limpia los campos de entrada de ejercicio.
+            ListarEjercicio(); // Vuelve a listar los ejercicios actualizados.
+            
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
+            llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
             cargarCircuitos();
-            }
         }
+    }
     }//GEN-LAST:event_btnBorrarEjerciciosActionPerformed
 
     private void btnBorrarRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarRutinaActionPerformed
-        // TODO add your handling code here:
-        if (!"".equals(txtIDRutina.getText())) {
-            int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar");
-            if (pregunta == 0) {
-                int id = Integer.parseInt(txtIDRutina.getText());
-                client.EliminarRutina(id);
-                LimpiarTable();
-            LimpiarRutina();
-            ListarRutina();
+        // Elimina una rutina seleccionada.
+    if (!"".equals(txtIDRutina.getText())) {
+        int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar"); // Pregunta si está seguro de eliminar.
+        if (pregunta == 0) {
+            int id = Integer.parseInt(txtIDRutina.getText());
+            client.EliminarRutina(id); // Elimina la rutina en la base de datos.
+            LimpiarTable(); // Limpia la tabla.
+            LimpiarRutina(); // Limpia los campos de entrada de rutina.
+            ListarRutina(); // Vuelve a listar las rutinas actualizadas.
             
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
             llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
-        
-            }
         }
+    }
     }//GEN-LAST:event_btnBorrarRutinaActionPerformed
 
     private void btnBorrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarUsuarioActionPerformed
-        // TODO add your handling code here:
-        if (!"".equals(txtIdUsuario.getText())) {
-            int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar");
-            if (pregunta == 0) {
-                int id = Integer.parseInt(txtIdUsuario.getText());
-                user.EliminarUsuario(id);
-                LimpiarTable();
-                ListarUsuario();
-                LimpiarUsuario();
-                btnEditarUsuario.setEnabled(false);
-                btnBorrarUsuario.setEnabled(false);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        // Elimina un usuario seleccionado.
+    if (!"".equals(txtIdUsuario.getText())) {
+        int pregunta = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar"); // Pregunta si está seguro de eliminar.
+        if (pregunta == 0) {
+            int id = Integer.parseInt(txtIdUsuario.getText());
+            user.EliminarUsuario(id); // Elimina el usuario de la base de datos.
+            LimpiarTable(); // Limpia la tabla.
+            ListarUsuario(); // Vuelve a listar los usuarios actualizados.
+            LimpiarUsuario(); // Limpia los campos de entrada de usuario.
+            btnEditarUsuario.setEnabled(false); // Desactiva el botón de editar usuario.
+            btnBorrarUsuario.setEnabled(false); // Desactiva el botón de borrar usuario.
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Seleccione una fila"); // Informa que debe seleccionar una fila para eliminar.
+    }
     }//GEN-LAST:event_btnBorrarUsuarioActionPerformed
 
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
-        // TODO add your handling code here:
-        if ("".equals(txtIdUsuario.getText())) {
-            JOptionPane.showMessageDialog(null, "seleccione una fila");
+        // Edita un usuario seleccionado.
+    if ("".equals(txtIdUsuario.getText())) {
+        JOptionPane.showMessageDialog(null, "seleccione una fila"); // Solicita seleccionar una fila si no hay datos.
+    } else {
+        // Verifica que todos los campos estén llenos antes de proceder con la edición.
+        if (!"".equals(txtIdUsuario.getText()) && !"".equals(txtNombreUsuario.getText()) && !"".equals(txtEmailUsuario.getText()) && !"".equals(txtFechaNacimiento.getText()) && !"".equals(txtFechaRegistro.getText()) && !"".equals(txtGeneroUsuario.getText()) && !"".equals(txtContraseñaUsuario.getText()) && !"".equals(txtEstaturaUsuario.getText()) &&  !"".equals(txtPesoUsuario.getText()) && !"".equals(txtCondEspecialUsuario.getText())) {
+            us.setId(Integer.parseInt(txtIdUsuario.getText()));
+            us.setNombre(txtNombreUsuario.getText());
+            us.setEmail(txtEmailUsuario.getText());
+            us.setFecha_de_nacimiento(txtFechaNacimiento.getText());
+            us.setFecha_de_registro(txtFechaRegistro.getText());
+            us.setGenero(txtGeneroUsuario.getText());
+            us.setContraseña(txtContraseñaUsuario.getText());
+            us.setEstatura(Double.parseDouble(txtEstaturaUsuario.getText()));
+            us.setPeso(Double.parseDouble(txtPesoUsuario.getText()));
+            us.setCondicion_especial(txtCondEspecialUsuario.getText());
+            user.ModificarUsuario(us); // Modifica los datos del usuario en la base de datos.
+            JOptionPane.showMessageDialog(null, "Usuario modificado"); // Informa que el usuario fue modificado.
+            
+            LimpiarTable(); // Limpia la tabla.
+            LimpiarUsuario(); // Limpia los campos de entrada de usuario.
+            ListarUsuario(); // Vuelve a listar los usuarios actualizados.
+            
+            // Vuelve a llenar los ComboBoxes con los datos más recientes.
+            llenarComboBoxMusculosOcupados();
+            llenarComboBoxEjercicios();
+            llenarComboBoxRutina();
+            llenarComboBoxDieta();
+            llenarComboBoxNombresPlanes();
         } else {
-
-            if (!"".equals(txtIdUsuario.getText()) && !"".equals(txtNombreUsuario.getText()) && !"".equals(txtEmailUsuario.getText()) && !"".equals(txtFechaNacimiento.getText()) && !"".equals(txtFechaRegistro.getText()) && !"".equals(txtGeneroUsuario.getText()) && !"".equals(txtContraseñaUsuario.getText()) && !"".equals(txtEstaturaUsuario.getText()) &&  !"".equals(txtPesoUsuario.getText()) && !"".equals(txtCondEspecialUsuario.getText())) {
-                us.setId(Integer.parseInt(txtIdUsuario.getText()));
-                us.setNombre(txtNombreUsuario.getText());
-                us.setEmail(txtEmailUsuario.getText());
-                us.setFecha_de_nacimiento(txtFechaNacimiento.getText());
-                us.setFecha_de_registro(txtFechaRegistro.getText());
-                us.setGenero(txtGeneroUsuario.getText());
-                us.setContraseña(txtContraseñaUsuario.getText());
-                us.setEstatura(Double.parseDouble(txtEstaturaUsuario.getText()));
-                us.setPeso(Double.parseDouble(txtPesoUsuario.getText()));
-                us.setCondicion_especial(txtCondEspecialUsuario.getText());
-                us.setNombrePlan((String)comboxplanes.getSelectedItem());
-                user.ModificarUsuario(us);
-                JOptionPane.showMessageDialog(null, "Usuario Modificado");
-                LimpiarTable();
-                LimpiarUsuario();
-                ListarUsuario();
-                btnEditarUsuario.setEnabled(false);
-                btnBorrarUsuario.setEnabled(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
-            }
+            JOptionPane.showMessageDialog(null, "Los campos estan vacios"); // Informa si los campos están vacíos.
         }
+    }
     }//GEN-LAST:event_btnEditarUsuarioActionPerformed
 
     private void Iniciar18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Iniciar18ActionPerformed
-        // TODO add your handling code here:
-        LimpiarUsuario();
-        btnEditarUsuario.setEnabled(false);
-        btnBorrarUsuario.setEnabled(false);
+        // Limpia los campos relacionados al usuario
+    LimpiarUsuario();
+    // Desactiva los botones de editar y borrar usuario
+    btnEditarUsuario.setEnabled(false);
+    btnBorrarUsuario.setEnabled(false);
     }//GEN-LAST:event_Iniciar18ActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // TODO add your handling code here:
-        LimpiarTable();
-        ListarUsuario();
-        btnEditarUsuario.setEnabled(false);
-        btnBorrarUsuario.setEnabled(false);
-        txtContraseñaUsuario.setEnabled(false);
-        LimpiarUsuario();
-        jTabbedPane1.setSelectedIndex(3);
+        // Limpia la tabla de usuarios y la lista de usuarios
+    LimpiarTable();
+    ListarUsuario();
+    // Desactiva los botones de editar y borrar usuario
+    btnEditarUsuario.setEnabled(false);
+    btnBorrarUsuario.setEnabled(false);
+    // Desactiva el campo de contraseña
+    txtContraseñaUsuario.setEnabled(false);
+    // Limpia los campos de usuario
+    LimpiarUsuario();
+    // Cambia la vista al panel correspondiente
+    jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
     private void txtNombreRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreRutinaActionPerformed
@@ -1836,13 +1987,15 @@ public class home_administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreRutinaActionPerformed
 
     private void TableRutinaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableRutinaMouseClicked
-        // TODO add your handling code here:
-        btnEditarRutina.setEnabled(true);
-        btnBorrarRutina.setEnabled(true);
-        btnCrearRutina.setEnabled(false);
-        int fila = TableRutina.rowAtPoint(evt.getPoint());
-        txtIDRutina.setText(TableRutina.getValueAt(fila, 0).toString());
-        txtNombreRutina.setText(TableRutina.getValueAt(fila, 1).toString());
+    // Habilita los botones de editar y borrar rutina
+    btnEditarRutina.setEnabled(true);
+    btnBorrarRutina.setEnabled(true);
+    // Desactiva el botón de crear rutina
+    btnCrearRutina.setEnabled(false);
+    // Obtiene la fila seleccionada y muestra los datos de la rutina
+    int fila = TableRutina.rowAtPoint(evt.getPoint());
+    txtIDRutina.setText(TableRutina.getValueAt(fila, 0).toString());
+    txtNombreRutina.setText(TableRutina.getValueAt(fila, 1).toString());
     }//GEN-LAST:event_TableRutinaMouseClicked
 
     private void jComboBoxMusculosOcupadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMusculosOcupadosActionPerformed
@@ -1854,65 +2007,73 @@ public class home_administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTipoPlanActionPerformed
 
     private void btnCrearPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPlanActionPerformed
-        // TODO add your handling code here:
-        if (!"".equals(txtIdPlan.getText()) &&  !"".equals(txtTipoPlan.getText())
-&&combodietaname.getSelectedItem() != null 
-        &&comborutinaname.getSelectedItem() != null) {
-            
+        // Verifica que los campos no estén vacíos y que los elementos seleccionados en los combo box sean válidos
+    if (!"".equals(txtIdPlan.getText()) &&  !"".equals(txtTipoPlan.getText()) 
+        && combodietaname.getSelectedItem() != null 
+        && comborutinaname.getSelectedItem() != null) {
+        
         int idPlan = Integer.parseInt(txtIdPlan.getText());
-        // Verificar si el ID ya existe en la base de datos
+        // Verifica si el ID del plan ya existe en la base de datos
         if (plaDao.existeId(idPlan)) {
             JOptionPane.showMessageDialog(null, "El ID está registrado. Usa otro ID.");
         } else {
+            // Asigna los valores al objeto 'pla' para registrar el plan
             pla.setId(Integer.parseInt(txtIdPlan.getText()));
             pla.setTipo(txtTipoPlan.getText());
             pla.setNombre_dieta((String) combodietaname.getSelectedItem());
             pla.setNombre_rutina((String) comborutinaname.getSelectedItem());
+            // Registra el plan en la base de datos
             plaDao.RegistrarPlan(pla);
             JOptionPane.showMessageDialog(null, "Plan registrado");
-            
+
+            // Limpia los campos de plan, la tabla y lista de planes
             LimpiarPlan();
             LimpiarTable();
             ListarPlan();
-        llenarComboBoxMusculosOcupados();
+            // Actualiza los combo boxes y circuitos
+            llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
             cargarCircuitos();
         }
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "Los campos estan vacios");
-        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Los campos están vacíos");
+    }
     }//GEN-LAST:event_btnCrearPlanActionPerformed
 
     private void btnEditarPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPlanActionPerformed
-        // TODO add your handling code here:
-        if ("".equals(txtIdPlan.getText())) {
-            JOptionPane.showMessageDialog(null, "seleccione una fila");
-        } else {
-
-            if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())) {
-                pla.setId(Integer.parseInt(txtIdPlan.getText()));
-                pla.setTipo(txtTipoPlan.getText());
-                pla.setNombre_rutina((String)comborutinaname.getSelectedItem());
-                pla.setNombre_dieta((String)combodietaname.getSelectedItem());
-                plaDao.ModificarPlan(pla);
-                JOptionPane.showMessageDialog(null, "Plan Modificado");
-                LimpiarTable();
-                LimpiarPlan();
-                ListarPlan();
-                llenarComboBoxMusculosOcupados();
+        // Verifica que el campo de ID del plan no esté vacío
+    if ("".equals(txtIdPlan.getText())) {
+        JOptionPane.showMessageDialog(null, "Seleccione una fila");
+    } else {
+        // Verifica que los campos de ID y tipo de plan no estén vacíos
+        if (!"".equals(txtIdPlan.getText()) && !"".equals(txtTipoPlan.getText())) {
+            // Asigna los valores al objeto 'pla' para modificar el plan
+            pla.setId(Integer.parseInt(txtIdPlan.getText()));
+            pla.setTipo(txtTipoPlan.getText());
+            pla.setNombre_rutina((String) comborutinaname.getSelectedItem());
+            pla.setNombre_dieta((String) combodietaname.getSelectedItem());
+            // Modifica el plan en la base de datos
+            plaDao.ModificarPlan(pla);
+            JOptionPane.showMessageDialog(null, "Plan Modificado");
+            // Limpia la tabla y los campos de plan
+            LimpiarTable();
+            LimpiarPlan();
+            // Vuelve a listar los planes
+            ListarPlan();
+            // Actualiza los combo boxes y circuitos
+            llenarComboBoxMusculosOcupados();
             llenarComboBoxEjercicios();
             llenarComboBoxRutina();
             llenarComboBoxDieta();
             llenarComboBoxNombresPlanes();
             cargarCircuitos();
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos estan vacios");
-            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos están vacíos");
         }
+    }
     }//GEN-LAST:event_btnEditarPlanActionPerformed
 
     private void btnBorrarPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarPlanActionPerformed
@@ -2775,56 +2936,98 @@ public class home_administrador extends javax.swing.JFrame {
     private javax.swing.JLabel xd;
     private javax.swing.JLabel xd1;
     // End of variables declaration//GEN-END:variables
-    private void LimpiarCircuito() {
-        txtIDCircuito.setText("");
-        txtNombreCircuito.setText("");
-    }
-    private void LimpiarCircuitoEj() {
-        comboxcircuito.setSelectedItem(null);
-        txtIDCircuitoEj.setText("");
-        combocejercicio.setSelectedItem(null);
-        txtSeries.setText("");
-    }
-    private void LimpiarRutina() {
-        txtIDRutina.setText("");
-        txtNombreRutina.setText("");
-    }
-    private void LimpiarRutinaCi() {
-        comborutinas.setSelectedItem(null);
-        txtIDRutina1.setText("");
-        combocircuito.setSelectedItem(null);
-    }
-    private void LimpiarUsuario() {
-        txtIdUsuario.setText("");
-        txtNombreUsuario.setText("");
-        txtEmailUsuario.setText("");
-        txtFechaNacimiento.setText("");
-        txtFechaRegistro.setText("");
-        txtGeneroUsuario.setText("");
-        txtContraseñaUsuario.setText("");
-        txtEstaturaUsuario.setText("");
-        txtPesoUsuario.setText("");
-        txtCondEspecialUsuario.setText("");
-        comboxplanes.setSelectedItem(null);
-    }
-    private void LimpiarEjercicio() {
-        txtIdEjercicio.setText("");
-        txtNombreEjercicio.setText("");
-        txtDescripcionEjercicio.setText("");
-        txtVisualEjercicio.setText("");
-        jComboBoxMusculosOcupados.setSelectedItem(null);
-    }
-    private void LimpiarPlan() {
-        txtIdPlan.setText("");
-        txtTipoPlan.setText("");
-        combodietaname.setSelectedItem(null);
-        comborutinaname.setSelectedItem(null);
-    }
-    private void LimpiarDieta() {
-        txtIdDieta.setText("");
-        txtTipoDieta.setText("");
-        txtIdDietaPlan1.setText("");
-        txtIdDietaPlan2.setText("");
-        txtIdDietaPlan3.setText("");
-    }
+    /**
+ * Limpia los campos de texto y restablece los valores de los controles asociados al circuito.
+ * Borra el ID y el nombre del circuito.
+ */
+private void LimpiarCircuito() {
+    txtIDCircuito.setText("");  // Limpia el campo de texto para el ID del circuito
+    txtNombreCircuito.setText("");  // Limpia el campo de texto para el nombre del circuito
+}
+
+/**
+ * Limpia los campos relacionados con el circuito y su ejercicio.
+ * Restablece la selección del combo box para el circuito, 
+ * limpia el ID del circuito, el ejercicio y las series.
+ */
+private void LimpiarCircuitoEj() {
+    comboxcircuito.setSelectedItem(null);  // Restablece el combo box para seleccionar el circuito
+    txtIDCircuitoEj.setText("");  // Limpia el campo de texto para el ID del circuito
+    combocejercicio.setSelectedItem(null);  // Restablece el combo box para seleccionar el ejercicio
+    txtSeries.setText("");  // Limpia el campo de texto para las series
+}
+
+/**
+ * Limpia los campos relacionados con la rutina.
+ * Borra el ID y el nombre de la rutina.
+ */
+private void LimpiarRutina() {
+    txtIDRutina.setText("");  // Limpia el campo de texto para el ID de la rutina
+    txtNombreRutina.setText("");  // Limpia el campo de texto para el nombre de la rutina
+}
+
+/**
+ * Limpia los campos relacionados con la rutina y el circuito asignado.
+ * Restablece la selección del combo box para las rutinas y los circuitos, 
+ * y limpia el ID de la rutina.
+ */
+private void LimpiarRutinaCi() {
+    comborutinas.setSelectedItem(null);  // Restablece el combo box para seleccionar la rutina
+    txtIDRutina1.setText("");  // Limpia el campo de texto para el ID de la rutina
+    combocircuito.setSelectedItem(null);  // Restablece el combo box para seleccionar el circuito
+}
+
+/**
+ * Limpia los campos relacionados con el usuario.
+ * Borra todos los campos de información personal del usuario, como ID, nombre, email, 
+ * fecha de nacimiento, registro, género, contraseña, estatura, peso, condiciones especiales y plan.
+ */
+private void LimpiarUsuario() {
+    txtIdUsuario.setText("");  // Limpia el campo de texto para el ID del usuario
+    txtNombreUsuario.setText("");  // Limpia el campo de texto para el nombre del usuario
+    txtEmailUsuario.setText("");  // Limpia el campo de texto para el email del usuario
+    txtFechaNacimiento.setText("");  // Limpia el campo de texto para la fecha de nacimiento
+    txtFechaRegistro.setText("");  // Limpia el campo de texto para la fecha de registro
+    txtGeneroUsuario.setText("");  // Limpia el campo de texto para el género del usuario
+    txtContraseñaUsuario.setText("");  // Limpia el campo de texto para la contraseña del usuario
+    txtEstaturaUsuario.setText("");  // Limpia el campo de texto para la estatura del usuario
+    txtPesoUsuario.setText("");  // Limpia el campo de texto para el peso del usuario
+    txtCondEspecialUsuario.setText("");  // Limpia el campo de texto para condiciones especiales
+    comboxplanes.setSelectedItem(null);  // Restablece el combo box para seleccionar el plan
+}
+
+/**
+ * Limpia los campos relacionados con el ejercicio.
+ * Borra el ID, nombre, descripción, visualización y músculo ocupado.
+ */
+private void LimpiarEjercicio() {
+    txtIdEjercicio.setText("");  // Limpia el campo de texto para el ID del ejercicio
+    txtNombreEjercicio.setText("");  // Limpia el campo de texto para el nombre del ejercicio
+    txtDescripcionEjercicio.setText("");  // Limpia el campo de texto para la descripción del ejercicio
+    txtVisualEjercicio.setText("");  // Limpia el campo de texto para la visualización del ejercicio
+    jComboBoxMusculosOcupados.setSelectedItem(null);  // Restablece el combo box para seleccionar los músculos ocupados
+}
+
+/**
+ * Limpia los campos relacionados con el plan.
+ * Borra el ID del plan, tipo de plan y las selecciones de dieta y rutina.
+ */
+private void LimpiarPlan() {
+    txtIdPlan.setText("");  // Limpia el campo de texto para el ID del plan
+    txtTipoPlan.setText("");  // Limpia el campo de texto para el tipo de plan
+    combodietaname.setSelectedItem(null);  // Restablece el combo box para seleccionar la dieta
+    comborutinaname.setSelectedItem(null);  // Restablece el combo box para seleccionar la rutina
+}
+
+/**
+ * Limpia los campos relacionados con la dieta.
+ * Borra el ID de la dieta, tipo de dieta y los ID de los planes asociados.
+ */
+private void LimpiarDieta() {
+    txtIdDieta.setText("");  // Limpia el campo de texto para el ID de la dieta
+    txtTipoDieta.setText("");  // Limpia el campo de texto para el tipo de dieta
+    txtIdDietaPlan1.setText("");  // Limpia el campo de texto para el ID del primer plan asociado
+    txtIdDietaPlan2.setText("");  // Limpia el campo de texto para el ID del segundo plan asociado
+    txtIdDietaPlan3.setText("");  // Limpia el campo de texto para el ID del tercer plan asociado
+}
 }

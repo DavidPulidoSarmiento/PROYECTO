@@ -3,35 +3,47 @@ package VISTA;
 import MODELO.LoginDAO;
 import MODELO.login;
 import javax.swing.JOptionPane;
-
+/**
+ * Clase Login que representa la interfaz de inicio de sesión.
+ */
 public class Login extends javax.swing.JFrame {
+    // Instancias de los modelos para manejar los datos de login
     login lg = new login();
     LoginDAO loginDAO = new LoginDAO(); 
-
+    /**
+     * Constructor de la clase Login.
+     * Configura la ventana y sus propiedades.
+    */
     public Login() {
-        initComponents();
-        this.setBounds(0,0,1350,725);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        initComponents(); // Inicializa los componentes gráficos
+        this.setBounds(0, 0, 1350, 725); // Define el tamaño de la ventana
+        this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
+        this.setResizable(false); // Impide que la ventana sea redimensionada
     }
-
+    /**
+     * Método para validar el inicio de sesión del usuario.
+     * Obtiene las credenciales ingresadas y verifica si son correctas.
+     */
     public void validar() {
-        String usuario = Usuario.getText();
-        String contrasena = String.valueOf(Contrasena.getPassword());
-        if (!"".equals(usuario) && !"".equals(contrasena)) {
-            lg = loginDAO.log(usuario, contrasena);
-            if (lg.getUsuario() != null) {
-                if ("3".equals(lg.getRol())) {
-                    home_superadmin superAdminHome = new home_superadmin();
-                    superAdminHome.setVisible(true);
-                } else if ("2".equals(lg.getRol())) {
-                    home_administrador adminHome = new home_administrador();
-                    adminHome.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Acceso denegado: Rol no autorizado");
-                    return;
+        String usuario = Usuario.getText(); // Obtiene el usuario ingresado
+        String contrasena = String.valueOf(Contrasena.getPassword()); // Obtiene la contraseña ingresada
+        if (!"".equals(usuario) && !"".equals(contrasena)) { // Verifica que los campos no estén vacíos
+            lg = loginDAO.log(usuario, contrasena); // Consulta en la base de datos
+            if (lg.getUsuario() != null) { // Si el usuario existe
+                switch (lg.getRol()) { // Verifica el rol del usuario
+                    case "3": // Si es superadministrador
+                        home_superadmin superAdminHome = new home_superadmin();
+                        superAdminHome.setVisible(true);
+                        break;
+                    case "2": // Si es administrador
+                        home_administrador adminHome = new home_administrador();
+                        adminHome.setVisible(true);
+                        break;
+                    default: // Si el rol no está autorizado
+                        JOptionPane.showMessageDialog(null, "Acceso denegado: Rol no autorizado");
+                        return;
                 }
-                dispose();
+                dispose(); // Cierra la ventana de login tras iniciar sesión
             } else {
                 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta");
             }
@@ -39,7 +51,6 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.");
         }
     }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.

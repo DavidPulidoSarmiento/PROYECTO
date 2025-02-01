@@ -6,46 +6,59 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+/**
+ * Clase Progreso que representa la ventana de seguimiento de progreso de los usuarios.
+ */
 public class Progreso extends javax.swing.JFrame {
-
+// Instancias de los modelos para manejar los datos de progreso
     progreso pro = new progreso();
     ProgresoDAO proDAO = new ProgresoDAO();
     DefaultTableModel modelo1 = new DefaultTableModel();
-    
+     /**
+     * Constructor de la clase Progreso.
+     * Configura la ventana y sus propiedades.
+     */
     public Progreso() {
-        initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setBounds(0,0,650,460);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        llenarComboBoxNombresUsuarios();
-        inicializarEventos();
+        initComponents(); // Inicializa los componentes gráficos
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Permite cerrar solo esta ventana sin afectar la aplicación
+        this.setBounds(0, 0, 650, 460); // Define el tamaño de la ventana
+        this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
+        this.setResizable(false); // Evita que la ventana sea redimensionada
+        llenarComboBoxNombresUsuarios(); // Llena el ComboBox con los nombres de usuarios
+        inicializarEventos(); // Inicializa los eventos
     }
-
+    /**
+     * Método para llenar el ComboBox con los nombres de los usuarios registrados.
+     */
      private void llenarComboBoxNombresUsuarios() {
-        List<String> nombres = proDAO.obtenerNombresUsuarios();
-        comboxusuario.removeAllItems();  // Limpiar el JComboBox
+        List<String> nombres = proDAO.obtenerNombresUsuarios(); // Obtiene la lista de nombres de usuarios
+        comboxusuario.removeAllItems(); // Limpia el ComboBox antes de agregar nuevos elementos
 
         for (String nombre : nombres) {
-            comboxusuario.addItem(nombre);  // Agregar cada nombre
+            comboxusuario.addItem(nombre); // Agrega cada nombre al ComboBox
         }
     } 
+    /**
+    * Método para inicializar los eventos del ComboBox.
+    * Al seleccionar un usuario, se actualiza la tabla con su progreso.
+    */
     private void inicializarEventos() {
         comboxusuario.addActionListener(e -> {
             String nombreUsuarioSeleccionado = (String) comboxusuario.getSelectedItem();
             if (nombreUsuarioSeleccionado != null) {
-                LimpiarTable1();
-                actualizarTablaUSUARIOS(nombreUsuarioSeleccionado); 
+                LimpiarTable1(); // Limpia la tabla antes de cargar nuevos datos
+                actualizarTablaUSUARIOS(nombreUsuarioSeleccionado); // Actualiza la tabla con la información del usuario seleccionado
             }
         });  
     }
-    
+    /**
+     * Método para actualizar la tabla con el progreso del usuario seleccionado.
+     * @param nombreUsuario Nombre del usuario del que se desea obtener el progreso.
+     */
     private void actualizarTablaUSUARIOS(String nombreUsuario) {
-        List<progreso> listaUsuario = proDAO.obtenerProgresoUsuarios(nombreUsuario);
-        // Limpiar la tabla antes de agregar nuevos datos
-        modelo1 = (DefaultTableModel) TableRutina.getModel();
-        modelo1.setRowCount(0);
+        List<progreso> listaUsuario = proDAO.obtenerProgresoUsuarios(nombreUsuario); // Obtiene la lista de progresos
+        modelo1 = (DefaultTableModel) TableRutina.getModel(); // Obtiene el modelo de la tabla
+        modelo1.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
         // Agregar filas con datos de los ejercicios
         for (progreso rutina : listaUsuario) {
         Object[] fila = {
@@ -58,7 +71,9 @@ public class Progreso extends javax.swing.JFrame {
         }
         
     }
-    
+    /**
+     * Método para limpiar la tabla de progreso.
+     */
     public void LimpiarTable1() {
         for (int i = 0; i < modelo1.getRowCount(); i++) {
             modelo1.removeRow(i);
